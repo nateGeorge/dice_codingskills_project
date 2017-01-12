@@ -3,6 +3,9 @@ import json
 import re
 from bs4 import BeautifulSoup as bs
 from lxml import html
+import pandas as pd
+import numpy as np
+from collections import Counter
 
 BASE_URL = 'http://service.dice.com/api/rest/jobsearch/v1/simple.json?text='
 page = 1 # page number, 1-indexed
@@ -50,7 +53,7 @@ def segment_jobs(job_postings):
     non_ds_jobs = []
     for j in job_postings:
         title = str.lower(j['jobTitle'].encode('ascii', 'ignore'))
-        if 'data scientist' in title:
+        if 'data scientist' in title or 'data science' in title:
             ds_jobs.append(j)
         else:
             non_ds_jobs.append(j)
@@ -102,6 +105,42 @@ def dl_job_post(job_postings, num=0, path='test.html'):
         f.write(res.content)
 
 
+def get_info(info):
+    """
+    Extracts info from job-info block in html
+    """
+    if len(info) == 4:
+        skills = info[0].find('div', {'class':'iconsiblings'})
+        skills = clean_skills(skills)
+        emp_type = info[1].find('div', {'class':'iconsiblings'}).getText().strip('\n')
+        salary = info[2].find('div', {'class':'iconsiblings'}).getText().strip('\n')
+        tele_travel = info[3].find('div', {'class':'iconsiblings'}).getText()
+        tele_travel = tele_travel.split('\n')
+        tele_travel = [t.encode('ascii', 'ignore') for t in tele_travel if t != '']
+        return skills, emp_type, salary, tele_travel
+    else:
+        # sometimes some of the info is missing
+        skills = []
+        emp_type = ''
+        salary = ''
+        tele_travel = ''
+        for i in info:
+            icons = i.find('span', {'class':'icons'})
+            if 'icon-plugin-1' in icons:
+                skills = i.find('div', {'class':'iconsiblings'})
+                skills = clean_skills(skills)
+            elif 'icon-briefcase' in icons:
+                emp_type = i.find('div', {'class':'iconsiblings'}).getText().strip('\n')
+            elif 'icon-bank-note' in icons:
+                salary = i.find('div', {'class':'iconsiblings'}).getText().strip('\n')
+            elif 'icon-network-2' in icons:
+                tele_travel = i.find('div', {'class':'iconsiblings'}).getText()
+                tele_travel = tele_travel.split('\n')
+                tele_travel = [t.encode('ascii', 'ignore') for t in tele_travel if t != '']
+
+        return skills, emp_type, salary, tele_travel
+
+
 def scrape_a_job(job_url):
     """
     Scrapes important info from job posting.
@@ -116,21 +155,32 @@ def scrape_a_job(job_url):
 
     """
     res = req.get(job_url)
+    if not res.ok:
+        print 'uh-oh...'
+        print res.status
 
     soup = bs(res.content, 'lxml')
     info = soup.findAll('div', {'class':'row job-info'})
-    skills = info[0].find('div', {'class':'iconsiblings'})
-    skills = clean_skills(skills)
-    emp_type = info[1].find('div', {'class':'iconsiblings'}).getText().strip('\n')
-    salary = info[2].find('div', {'class':'iconsiblings'}).getText().strip('\n')
-    tele_travel = info[3].find('div', {'class':'iconsiblings'}).getText()
-    tele_travel = tele_travel.split('\n')
-    tele_travel = [t for t in tele_travel if t != '']
+    skills, emp_type, salary, tele_travel = get_info(info)
     # could do it this way, but there is also a unique id for this section
     # descr_xpath = '//*[@id="bd"]/div/div[1]/div[6]'
     # tree = html.fromstring(res.content)
     # descr = tree.xpath(descr_xpath)
     descr = soup.find('div', {'id':'jobdescSec'}).getText()
+    df = pd.DataFrame(data=np.array([', '.join(skills),
+                                    emp_type,
+                                    salary,
+                                    tele_travel[0],
+                                    tele_travel[1],
+                                    descr]).reshape(1, -1),
+                        columns=['csv_skills',
+                                'emp_type',
+                                'salary',
+                                'telecommute',
+                                'travel',
+                                'description'])
+
+    return df
 
 
 def clean_skills(skills):
@@ -148,27 +198,90 @@ def clean_skills(skills):
     skills: list
         cleaned-up list of skills, each is a string
     """
-    skills = skills.getText().strip('\n').strip('\t').strip('\n')
+    skills = str.lower(skills.getText().strip('\n').strip('\t').strip('\n').encode('ascii', 'ignore'))
     skills = skills.split(',')
+    # they are unicode, so convert to ascii strings (Python2 only)
     skills = [s.strip() for s in skills if s != 'etc']
     skills = [re.sub('\s*etc\s+', '', s) for s in skills]
     skills = [re.sub('\s+etc\s*', '', s) for s in skills]
     return skills
 
 
-if __name__ == "__main__":
-    res = req.get(create_url(search_term='data science'))
+def scrape_all_jobs(job_postings):
+    """
 
+    """
+    full_df = None
+    for i, j in enumerate(job_postings):
+        print i, j['jobTitle'], j['company']
+        df = scrape_a_job(j['detailUrl'])
+        if full_df is None:
+            full_df = df
+        else:
+            full_df = full_df.append(df)
+
+    return full_df
+
+
+def get_skills_tf(df):
+    skills_temp = df['csv_skills'].values
+    skills_temp = [str.lower(s.encode('ascii', 'ignore')).split(', ') for s in skills_temp]
+    skills_list = []
+    for s in skills_temp:
+        skills_list.extend(s)
+
+    skills_count = Counter(skills_list)
+    return skills_count
+
+def continuous_scrape(search_term='data science'):
+    res = req.get(create_url(search_term=search_term))
+    data = json.loads(res.content)
+    next_link = data['nextUrl']
+    job_postings = data['resultItemList']
+    all_ds_jobs, all_non_ds_jobs = segment_jobs(job_postings)
+    full_df = scrape_all_jobs(all_ds_jobs)
+    while next_link:
+        print ''
+        print '-'*20
+        print ''
+        print 'on page',
+        print ''
+        print '-'*20
+        print ''
+        try:
+            res = req.get(next_link)
+            data = json.loads(res.content)
+            next_link = data['nextUrl']
+            job_postings = data['resultItemList']
+            ds_jobs, non_ds_jobs = segment_jobs(job_postings)
+            all_ds_jobs.extend(ds_jobs)
+            all_non_ds_jobs.extend(all_non_ds_jobs)
+            full_df = full_df.append(scrape_all_jobs(ds_jobs))
+        except Exception as e:
+            print e
+            return full_df, all_ds_jobs, all_non_ds_jobs
+
+
+    return full_df, all_ds_jobs, all_non_ds_jobs
+
+
+def test_system(search_term='data science'):
+    res = req.get(create_url(search_term=search_term))
     data = json.loads(res.content)
     next_link = data['nextUrl']
     # returns a dict with [u'count', u'nextUrl', u'resultItemList', u'firstDocument', u'lastDocument']
     job_postings = data['resultItemList']
+    ds_jobs, non_ds_jobs = segment_jobs(job_postings)
+
+    df = scrape_all_jobs(ds_jobs)
+
+    skills_count = get_skills_tf(df)
+
+    return df, ds_josb, non_ds_jobs, skills_count
 
 
-
-    # -----------
-    # this will get a job and save the html as test.html
-
+if __name__ == "__main__":
+    full_df, all_ds_jobs, all_non_ds_jobs = continuous_scrape()
 
 
     # -----------
