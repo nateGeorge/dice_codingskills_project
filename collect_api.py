@@ -1,3 +1,5 @@
+# todo: check for job_json in mongodb; if it's there, don't even scrape the page
+
 import requests as req
 import json
 import re
@@ -6,11 +8,13 @@ from lxml import html
 import pandas as pd
 import numpy as np
 from collections import Counter
+from pymongo import MongoClient
+from datetime import datetime
 
 BASE_URL = 'http://service.dice.com/api/rest/jobsearch/v1/simple.json?text='
 page = 1 # page number, 1-indexed
 search_term = 'data science'
-
+DB_NAME = 'dice_jobs'
 
 def create_url(search_term, base_url=BASE_URL, page=1):
     """
@@ -125,7 +129,7 @@ def get_info(info):
         salary = ''
         tele_travel = ''
         for i in info:
-            icons = i.find('span', {'class':'icons'})
+            icons = i.find('span', {'class':'icons'}).get('class')
             if 'icon-plugin-1' in icons:
                 skills = i.find('div', {'class':'iconsiblings'})
                 skills = clean_skills(skills)
@@ -141,7 +145,7 @@ def get_info(info):
         return skills, emp_type, salary, tele_travel
 
 
-def scrape_a_job(job_url):
+def scrape_a_job(job_json, search_term=None, insert_mongo=True):
     """
     Scrapes important info from job posting.
 
@@ -149,12 +153,16 @@ def scrape_a_job(job_url):
     ----------
     job_url: string
         url to job posting
+    search_term: string
+        search term for dice job search; also the mongo db name
+    insert_mongo: boolean
+        if True, inserts data into mongo db
 
     Returns
     -------
 
     """
-    res = req.get(job_url)
+    res = req.get(job_json['detailUrl'])
     if not res.ok:
         print 'uh-oh...'
         print res.status
@@ -167,20 +175,38 @@ def scrape_a_job(job_url):
     # tree = html.fromstring(res.content)
     # descr = tree.xpath(descr_xpath)
     descr = soup.find('div', {'id':'jobdescSec'}).getText()
-    df = pd.DataFrame(data=np.array([', '.join(skills),
-                                    emp_type,
-                                    salary,
-                                    tele_travel[0],
-                                    tele_travel[1],
-                                    descr]).reshape(1, -1),
-                        columns=['csv_skills',
-                                'emp_type',
-                                'salary',
-                                'telecommute',
-                                'travel',
-                                'description'])
+    if insert_mongo:
+        client = MongoClient()
+        db = client[DB_NAME]
+        coll = db[search_term]
+        entry_dict = {'skills': skills,
+                        'emp_type': emp_type,
+                        'salary': salary,
+                        'telecommute': tele_travel[0],
+                        'travel': tele_travel[1],
+                        'description': descr}
+        entry_dict.update(job_json)
+        found = coll.find(entry_dict).count()
+        if found == 0:
+            entry_dict.update({'scraped_time': datetime.now()})
+            coll.insert_one(entry_dict)
+        client.close()
+        return None
+    else:
+        df = pd.DataFrame(data=np.array([', '.join(skills),
+                                        emp_type,
+                                        salary,
+                                        tele_travel[0],
+                                        tele_travel[1],
+                                        descr]).reshape(1, -1),
+                            columns=['csv_skills',
+                                    'emp_type',
+                                    'salary',
+                                    'telecommute',
+                                    'travel',
+                                    'description'])
 
-    return df
+        return df
 
 
 def clean_skills(skills):
@@ -207,18 +233,24 @@ def clean_skills(skills):
     return skills
 
 
-def scrape_all_jobs(job_postings):
+def scrape_all_jobs(job_postings, search_term=None, use_mongo=True):
     """
-
+    Loops through the list of job_postings and scrapes key info from each.
     """
     full_df = None
     for i, j in enumerate(job_postings):
         print i, j['jobTitle'], j['company']
-        df = scrape_a_job(j['detailUrl'])
-        if full_df is None:
-            full_df = df
+        if use_mongo:
+            scrape_a_job(j, search_term=search_term, insert_mongo=use_mongo)
         else:
-            full_df = full_df.append(df)
+            df = scrape_a_job(j, search_term=search_term, insert_mongo=use_mongo)
+            if full_df is None:
+                full_df = df
+            else:
+                full_df = full_df.append(df)
+
+    if use_mongo:
+        return None
 
     return full_df
 
@@ -233,40 +265,70 @@ def get_skills_tf(df):
     skills_count = Counter(skills_list)
     return skills_count
 
-def continuous_scrape(search_term='data science'):
+def continuous_scrape(search_term='data science', use_mongo=True):
+    """
+
+    Parameters
+    ----------
+    search_term: string
+        term to search for on dice api
+    use_mongo: boolean
+        if True,
+
+    Returns
+    -------
+    None if use_mongo is True
+
+    """
     res = req.get(create_url(search_term=search_term))
     data = json.loads(res.content)
     next_link = data['nextUrl']
     job_postings = data['resultItemList']
     all_ds_jobs, all_non_ds_jobs = segment_jobs(job_postings)
-    full_df = scrape_all_jobs(all_ds_jobs)
+    if use_mongo:
+        scrape_all_jobs(all_ds_jobs, search_term=search_term, use_mongo=use_mongo)
+    else:
+        full_df = scrape_all_jobs(all_ds_jobs, search_term=search_term, use_mongo=use_mongo)
     while next_link:
+        page = re.search('page=(\d+)', next_link).group(1).encode('ascii', 'ignore')
         print ''
         print '-'*20
         print ''
-        print 'on page',
+        print 'on page', page
         print ''
         print '-'*20
         print ''
         try:
-            res = req.get(next_link)
+            res = req.get('http://service.dice.com' + next_link)
             data = json.loads(res.content)
             next_link = data['nextUrl']
             job_postings = data['resultItemList']
             ds_jobs, non_ds_jobs = segment_jobs(job_postings)
             all_ds_jobs.extend(ds_jobs)
             all_non_ds_jobs.extend(all_non_ds_jobs)
-            full_df = full_df.append(scrape_all_jobs(ds_jobs))
+            if use_mongo:
+                scrape_all_jobs(ds_jobs, search_term=search_term, use_mongo=use_mongo)
+            else:
+                full_df = full_df.append(scrape_all_jobs(ds_jobs, search_term=search_term, use_mongo=use_mongo))
         except Exception as e:
             print e
+            if use_mongo:
+                return None
+
             return full_df, all_ds_jobs, all_non_ds_jobs
 
+    if use_mongo:
+        return None
 
     return full_df, all_ds_jobs, all_non_ds_jobs
 
 
-def test_system(search_term='data science'):
-    res = req.get(create_url(search_term=search_term))
+def test_system(search_term='data science', page=1):
+    """
+    This was how I first started the project.
+    It just runs a few basic tests of the API.
+    """
+    res = req.get(create_url(search_term=search_term, page=page))
     data = json.loads(res.content)
     next_link = data['nextUrl']
     # returns a dict with [u'count', u'nextUrl', u'resultItemList', u'firstDocument', u'lastDocument']
@@ -281,7 +343,9 @@ def test_system(search_term='data science'):
 
 
 if __name__ == "__main__":
-    full_df, all_ds_jobs, all_non_ds_jobs = continuous_scrape()
+    # test_url = 'http://www.dice.com/job/result/applecup/54281129?src=19'
+    # df = scrape_a_job(test_url)
+    continuous_scrape()#full_df, all_ds_jobs, all_non_ds_jobs = continuous_scrape()
 
 
     # -----------
