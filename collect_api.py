@@ -1,4 +1,9 @@
-#todo: get posting date
+# todo: get number of jobs in different categories with 'unspecified', etc
+# in salary field
+# todo: make classifier that predicts if wage is hourly or annual based on
+# features such as length of number, period in it, tfidf vector of
+# hr, hourly, hour, annual, annualy, etc
+
 import requests as req
 import json
 import re
@@ -6,9 +11,10 @@ from bs4 import BeautifulSoup as bs
 from lxml import html
 import pandas as pd
 import numpy as np
-from collections import Counter
+from collections import Counter, defaultdict
 from pymongo import MongoClient
 from datetime import datetime
+from scipy import stats
 
 BASE_URL = 'http://service.dice.com/api/rest/jobsearch/v1/simple.json?text='
 page = 1 # page number, 1-indexed
@@ -185,13 +191,17 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True):
     # tree = html.fromstring(res.content)
     # descr = tree.xpath(descr_xpath)
     descr = soup.find('div', {'id':'jobdescSec'}).getText()
+    posted_xpath = '//*[@id="header-wrap"]/div[2]/div/div[1]/ul/li[3]'
+    tree = html.fromstring(res.content)
+    posted = tree.xpath(posted_xpath)[0].text
     if insert_mongo:
         entry_dict = {'skills': skills,
                         'emp_type': emp_type,
                         'salary': salary,
                         'telecommute': tele_travel[0],
                         'travel': tele_travel[1],
-                        'description': descr}
+                        'description': descr,
+                        'posted_text': posted}
         entry_dict.update(job_json)
         found = coll.find(entry_dict).count()
         if found == 0:
@@ -276,7 +286,7 @@ def get_skills_tf(df):
     return skills_count
 
 
-def get_skills_tf_mongo():
+def get_skills_tf_mongo(search_term='data science'):
     """
     Calculated term-frequency for skills based on data in a mongoDB.
     """
@@ -297,6 +307,154 @@ def get_skills_tf_mongo():
     client.close()
     return skills_count
 
+
+def get_salaries_mongo(search_term='data science'):
+    """
+    Retrieves list of salaries from mongoDB.  Need to have full time etc
+    in order to filter them properly
+    """
+    client = MongoClient()
+    db = client[DB_NAME]
+    coll = db[search_term]
+    jobs = coll.find()
+    salary_dict = defaultdict(list)
+    for j in jobs:
+        sal = str.lower(j['salary'].encode('ascii', 'ignore'))
+        emp_type = str.lower(j['emp_type'].encode('ascii', 'ignore'))
+        # some are '', '-', '$' or something like 'top 20%'
+        if len(sal) < 2 or '%' in sal or j['emp_type'] == '':
+            continue
+        # first check if there is at least a number in the salary
+        if not any([str.isdigit(l) for l in sal]):
+            continue
+        elif 'c2h' in emp_type or 'contract to hire' in emp_type or 'contract-to-hire' in emp_type:
+            emp_type = 'contract_to_hire'
+        elif 'full time' in emp_type or 'fulltime' in emp_type or 'full-time' in emp_type:
+            emp_type = 'full_time'
+        elif 'contract' in emp_type:
+            emp_type = 'contract'
+        else:
+            emp_type = 'other'
+
+        salary_dict[emp_type].append(sal)
+
+    return salary_dict
+
+
+def get_salary_dist(salary_dict):
+    """
+    Takes dict of salaries (emp_type as keys) and gets range and other metrics.
+    """
+    new_sal_dict = {}
+    min_sals = []
+    max_sals = []
+    avg_sals = []
+    for t in salary_dict.keys(): # for each employment type, e.g. full_time, c2h
+        new_sal_dict[t] = {}
+        new_sal_dict[t]['mins'] = []
+        new_sal_dict[t]['maxs'] = []
+        new_sal_dict[t]['avgs'] = []
+        for s in salary_dict[t]:
+            print s
+            s = re.sub(',', '', s)
+            s = re.sub('\$', '', s)
+            # check if an hourly wage
+            try:
+                sal = float(s)
+                if sal < 1000:
+                    ishourly = True
+            except:
+                ishourly = False
+            if 'hour' in s or 'hourly' in s or 'hr' in s or len(s) < 4 or ishourly and 'k' not in s:
+                print 'guessing hourly'
+                if '-' in s:
+                    # probably a range
+                    sal_match = re.search('(\d+\.*\d*)\s*-\s*(\d+\.*\d*)', s)
+                    min_hr = float(sal_match.group(1))
+                    min_hr *= 37.5 * 52
+                    max_hr = float(sal_match.group(2))
+                    max_hr *= 37.5 * 52
+                    avg_hr = (min_hr + max_hr) / 2
+                    print 'hourly min, max, avg:', min_hr, max_hr, avg_hr
+                    # calculate yearly salary based on per hour
+                    new_sal_dict[t]['mins'].append(min_hr)
+                    new_sal_dict[t]['maxs'].append(max_hr)
+                    new_sal_dict[t]['avgs'].append(avg_hr)
+                else:
+                    sal_match = re.search('\d+\.*\d*', s)
+                    avg_hr = float(sal_match.group(0)) * 37.5 * 52
+                    if avg_hr > 10: # saw some as '00' etc
+                        new_sal_dict[t]['avgs'].append(avg_hr)
+                        print 'hourly avg:', avg_hr
+            else: # not hourly, probably annually
+                print 'guessing annual'
+                range_match = re.search('(\d+\.*\d*)\s*-+\s*(\d+\.*\d*)', s)
+                if range_match:
+                    min_sal = float(range_match.group(1))
+                    max_sal = float(range_match.group(2))
+                    # one entry was $0.00 - $1 per annum
+                    if min_sal < 10 and max_sal < 10:
+                        continue
+                    # sometimes written as 110k, etc
+                    if min_sal < 1000:
+                        min_sal *= 1000
+                    if max_sal < 1000:
+                        max_sal *= 1000
+                    avg_sal = float((min_sal + max_sal) / 2.0)
+                    new_sal_dict[t]['mins'].append(min_sal)
+                    new_sal_dict[t]['maxs'].append(max_sal)
+                    new_sal_dict[t]['avgs'].append(avg_sal)
+                    print 'annual min, max, avg:', min_sal, max_sal, avg_sal
+                else:
+                    avg_sal = float(re.search('\d+\.*\d*', s).group(0))
+                    if avg_sal < 1000:
+                        avg_sal *= 1000
+                    new_sal_dict[t]['avgs'].append(avg_sal)
+                    print 'annual avg:', avg_sal
+
+    return new_sal_dict
+
+def get_salary_dist(sal_dict, key='full_time'):
+    """
+    Assumes a Gaussian distribution of salaries, excludes outliers using
+    1.5 * IQR.
+
+    Parameters
+    ----------
+    sal_dict: dictionary
+        keys should be employment types ('full_time', etc), values are lists
+        of salaries
+    key: string
+        key for sal_dict to do anaylis on
+
+    Returns
+    -------
+
+    """
+    dist = sal_dict[key]['avgs']
+    iqr = stats.iqr(dist) # get interquartile range
+    q3 = np.percentile(dist, 75.0)
+    q1 = np.percentile(dist, 25.0)
+    # exclude outliers
+    inliers = [d for d in dist if d > q1 - 1.5 * iqr and d < q3 + 1.5 * iqr]
+    gauss = stats.norm(loc=np.mean(inliers), scale=np.std(inliers))
+    max_i = max(inliers) + 30000
+    min_i = min(inliers) - 30000
+    x = np.arange(min_i, max_i, int((max_i - min_i) / 100))
+    # double-checking gaussian dist
+    # pdf = map(gauss_pdf, x, np.repeat(np.mean(inliers), 100), np.repeat(np.std(inliers), 100))
+    unscaled_norm = gauss.pdf(x)
+    scaled_norm = unscaled_norm / max(unscaled_norm)
+    plt.plot(x, unscaled_norm)
+    plt.hist(inliers, bins=20, normed=True)
+    plt.show()
+
+
+def gauss_pdf(x, mu, std):
+    """
+    Double-checking gaussian plotting.
+    """
+    return np.exp(-(x - mu)**2/(2.0*std)**2)/(std*np.sqrt(2*np.pi))
 
 def continuous_scrape(search_term='data science', use_mongo=True):
     """
@@ -325,6 +483,7 @@ def continuous_scrape(search_term='data science', use_mongo=True):
         full_df = scrape_all_jobs(all_ds_jobs, search_term=search_term, use_mongo=use_mongo)
 
     page = 2
+    consecutive_blank_pages = 0
     while True:
         # used to get 'nextLink' from json object, but that seemed to end at 29
         # for some reason.  Changing to manually counting up pages
@@ -343,6 +502,10 @@ def continuous_scrape(search_term='data science', use_mongo=True):
             #next_link = data['nextUrl']
             job_postings = data['resultItemList']
             ds_jobs, non_ds_jobs = segment_jobs(job_postings)
+            if len(ds_jobs) == 0:
+                consecutive_blank_pages += 1
+            if consecutive_blank_pages == 10:
+                break
             #all_ds_jobs.extend(ds_jobs) # not sure but I think this may have been
             # taking up lots of memory
             #all_non_ds_jobs.extend(all_non_ds_jobs)
