@@ -1,5 +1,4 @@
-# todo: check for job_json in mongodb; if it's there, don't even scrape the page
-
+#todo: get posting date
 import requests as req
 import json
 import re
@@ -33,8 +32,9 @@ def create_url(search_term, base_url=BASE_URL, page=1):
     -------
     formatted url string
     """
-    search_term = re.sub('\s', '%20', search_term) # sub spaces with %20
-    return BASE_URL + search_term + '&page=' + str(page)
+    search_term = re.sub('\s', '%20AND%20', search_term) # sub spaces with %20
+    # AND means it must find all words
+    return BASE_URL + search_term + '&page=' + str(page)# + '&sort=2'# this last bit sorts by job title
 
 
 def segment_jobs(job_postings):
@@ -162,6 +162,16 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True):
     -------
 
     """
+    if insert_mongo:
+        # first check to see if the entry is already in the db
+        client = MongoClient()
+        db = client[DB_NAME]
+        coll = db[search_term]
+        in_db = coll.find(job_json).count()
+        if in_db > 0:
+            print 'already in db'
+            return None
+
     res = req.get(job_json['detailUrl'])
     if not res.ok:
         print 'uh-oh...'
@@ -176,9 +186,6 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True):
     # descr = tree.xpath(descr_xpath)
     descr = soup.find('div', {'id':'jobdescSec'}).getText()
     if insert_mongo:
-        client = MongoClient()
-        db = client[DB_NAME]
-        coll = db[search_term]
         entry_dict = {'skills': skills,
                         'emp_type': emp_type,
                         'salary': salary,
@@ -256,6 +263,9 @@ def scrape_all_jobs(job_postings, search_term=None, use_mongo=True):
 
 
 def get_skills_tf(df):
+    """
+    Calculates term-frequency for skills based on a pandas dataframe.
+    """
     skills_temp = df['csv_skills'].values
     skills_temp = [str.lower(s.encode('ascii', 'ignore')).split(', ') for s in skills_temp]
     skills_list = []
@@ -264,6 +274,29 @@ def get_skills_tf(df):
 
     skills_count = Counter(skills_list)
     return skills_count
+
+
+def get_skills_tf_mongo():
+    """
+    Calculated term-frequency for skills based on data in a mongoDB.
+    """
+    client = MongoClient()
+    db = client[DB_NAME]
+    coll = db[search_term]
+    jobs = coll.find()
+    skills = []
+    for j in jobs:
+        skills.extend(j['skills'])
+
+    skills_temp = [str.lower(s.encode('ascii', 'ignore')).split(', ') for s in skills]
+    skills_list = []
+    for s in skills_temp:
+        skills_list.extend(s)
+
+    skills_count = Counter(skills_list)
+    client.close()
+    return skills_count
+
 
 def continuous_scrape(search_term='data science', use_mongo=True):
     """
@@ -282,15 +315,20 @@ def continuous_scrape(search_term='data science', use_mongo=True):
     """
     res = req.get(create_url(search_term=search_term))
     data = json.loads(res.content)
-    next_link = data['nextUrl']
+    # manually counting up pages now
+    #next_link = data['nextUrl']
     job_postings = data['resultItemList']
     all_ds_jobs, all_non_ds_jobs = segment_jobs(job_postings)
     if use_mongo:
         scrape_all_jobs(all_ds_jobs, search_term=search_term, use_mongo=use_mongo)
     else:
         full_df = scrape_all_jobs(all_ds_jobs, search_term=search_term, use_mongo=use_mongo)
-    while next_link:
-        page = re.search('page=(\d+)', next_link).group(1).encode('ascii', 'ignore')
+
+    page = 2
+    while True:
+        # used to get 'nextLink' from json object, but that seemed to end at 29
+        # for some reason.  Changing to manually counting up pages
+        #page = re.search('page=(\d+)', next_link).group(1).encode('ascii', 'ignore')
         print ''
         print '-'*20
         print ''
@@ -299,13 +337,15 @@ def continuous_scrape(search_term='data science', use_mongo=True):
         print '-'*20
         print ''
         try:
-            res = req.get('http://service.dice.com' + next_link)
+            res = req.get(create_url(search_term=search_term, page=page))
+            page += 1
             data = json.loads(res.content)
-            next_link = data['nextUrl']
+            #next_link = data['nextUrl']
             job_postings = data['resultItemList']
             ds_jobs, non_ds_jobs = segment_jobs(job_postings)
-            all_ds_jobs.extend(ds_jobs)
-            all_non_ds_jobs.extend(all_non_ds_jobs)
+            #all_ds_jobs.extend(ds_jobs) # not sure but I think this may have been
+            # taking up lots of memory
+            #all_non_ds_jobs.extend(all_non_ds_jobs)
             if use_mongo:
                 scrape_all_jobs(ds_jobs, search_term=search_term, use_mongo=use_mongo)
             else:
