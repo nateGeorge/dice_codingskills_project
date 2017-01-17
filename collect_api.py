@@ -15,11 +15,21 @@ from collections import Counter, defaultdict
 from pymongo import MongoClient
 from datetime import datetime
 from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib import ticker
 
 BASE_URL = 'http://service.dice.com/api/rest/jobsearch/v1/simple.json?text='
 page = 1 # page number, 1-indexed
 search_term = 'data science'
 DB_NAME = 'dice_jobs'
+
+rc_dict = {'axes.labelsize':'xx-large',
+            'figure.titlesize':'xx-large',
+            'legend.fontsize':'large',
+            'xtick.labelsize':'large'}
+# rcParams['] = 'medium'
+plt.rcParams.update(rc_dict)
 
 def create_url(search_term, base_url=BASE_URL, page=1):
     """
@@ -280,7 +290,7 @@ def get_skills_tf(df):
     skills_temp = [str.lower(s.encode('ascii', 'ignore')).split(', ') for s in skills_temp]
     skills_list = []
     for s in skills_temp:
-        skills_list.extend(s)
+        skills_list.extend([sk.split('/') for sk in s])
 
     skills_count = Counter(skills_list)
     return skills_count
@@ -301,7 +311,10 @@ def get_skills_tf_mongo(search_term='data science'):
     skills_temp = [str.lower(s.encode('ascii', 'ignore')).split(', ') for s in skills]
     skills_list = []
     for s in skills_temp:
-        skills_list.extend(s)
+        for sk in s:
+            split_sk = sk.split('/')
+            for ssk in split_sk:
+                skills_list.extend([se.strip() for se in ssk.split('-')])
 
     skills_count = Counter(skills_list)
     client.close()
@@ -414,7 +427,8 @@ def get_salary_dist(salary_dict):
 
     return new_sal_dict
 
-def get_salary_dist(sal_dict, key='full_time'):
+
+def plot_salary_dist(sal_dict, key='full_time', search_term='data scientist'):
     """
     Assumes a Gaussian distribution of salaries, excludes outliers using
     1.5 * IQR.
@@ -426,6 +440,8 @@ def get_salary_dist(sal_dict, key='full_time'):
         of salaries
     key: string
         key for sal_dict to do anaylis on
+    search_term: string
+        search term associated with sal_dict; used for labeling plot
 
     Returns
     -------
@@ -436,7 +452,7 @@ def get_salary_dist(sal_dict, key='full_time'):
     q3 = np.percentile(dist, 75.0)
     q1 = np.percentile(dist, 25.0)
     # exclude outliers
-    inliers = [d for d in dist if d > q1 - 1.5 * iqr and d < q3 + 1.5 * iqr]
+    inliers = np.array([d for d in dist if d > q1 - 1.5 * iqr and d < q3 + 1.5 * iqr])
     gauss = stats.norm(loc=np.mean(inliers), scale=np.std(inliers))
     max_i = max(inliers) + 30000
     min_i = min(inliers) - 30000
@@ -445,9 +461,41 @@ def get_salary_dist(sal_dict, key='full_time'):
     # pdf = map(gauss_pdf, x, np.repeat(np.mean(inliers), 100), np.repeat(np.std(inliers), 100))
     unscaled_norm = gauss.pdf(x)
     scaled_norm = unscaled_norm / max(unscaled_norm)
-    plt.plot(x, unscaled_norm)
-    plt.hist(inliers, bins=20, normed=True)
+    # abondon matplotlib in favor of seaborn
+    # plt.hist(inliers, bins=20, normed=True)
+    f = plt.figure()
+    ax = plt.gca()
+    sns.distplot(inliers, norm_hist=True, kde=False, ax=ax)
+    sns.kdeplot(inliers, label='KDE', color='#4289f4', ax=ax)
+    ax.plot(x, unscaled_norm, label='Gaussian fit', color='#f48342')
+    ax.get_xaxis().set_major_formatter(ticker.FuncFormatter(salary_formatter))
+    f.suptitle('average ' + search_term + ' salary: ' + salary_formatter(np.mean(inliers), None))
+    plt.xlabel('salary')
+    plt.yticks([])
+    plt.legend()
+    plt.tight_layout()
+    plt.subplots_adjust(top=0.9)
     plt.show()
+
+    # trying to use bokeh for an interactive chart, but not currently worth it
+    # from bokeh.charts import Histogram
+    # from bokeh.models import HoverTool
+    # from bokeh.charts import defaults, vplot, hplot, show, output_file
+    # hover = HoverTool(
+    #         tooltips=[
+    #             ("index", "$index"),
+    #             ("(x,y)", "($x, $y)"),
+    #             ("desc", "@desc"),
+    #         ]
+    #     )
+    # TOOLS = ['pan', 'wheel_zoom', 'box_zoom', 'reset', hover]
+    # hist = Histogram(inliers, title="data science salaries", tools=TOOLS)
+    # output_file("histograms.html")
+    # show(hist)
+
+
+def salary_formatter(x, p):
+    return '$' + '%.0f' % (x / 1000) + 'k'
 
 
 def gauss_pdf(x, mu, std):
@@ -455,6 +503,7 @@ def gauss_pdf(x, mu, std):
     Double-checking gaussian plotting.
     """
     return np.exp(-(x - mu)**2/(2.0*std)**2)/(std*np.sqrt(2*np.pi))
+
 
 def continuous_scrape(search_term='data science', use_mongo=True):
     """
@@ -548,8 +597,12 @@ def test_system(search_term='data science', page=1):
 if __name__ == "__main__":
     # test_url = 'http://www.dice.com/job/result/applecup/54281129?src=19'
     # df = scrape_a_job(test_url)
-    continuous_scrape()#full_df, all_ds_jobs, all_non_ds_jobs = continuous_scrape()
-
+    #continuous_scrape()#full_df, all_ds_jobs, all_non_ds_jobs = continuous_scrape()
+    salary_dict = get_salaries_mongo()
+    sal_dists = get_salary_dist(salary_dict)
+    plot_salary_dist(sal_dists)
+    skills = get_skills_tf_mongo()
+    top_skills = [s for s in skills.most_common() if s[1] >= 5]
 
     # -----------
     # looking at a few postings, here are some things I've noticed
