@@ -18,6 +18,8 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib import ticker
+import word_vectors as wv
+from bokeh.charts import Bar, output_file, show
 
 BASE_URL = 'http://service.dice.com/api/rest/jobsearch/v1/simple.json?text='
 page = 1 # page number, 1-indexed
@@ -306,7 +308,10 @@ def get_skills_tf_mongo(search_term='data science'):
     jobs = coll.find()
     skills = []
     for j in jobs:
-        skills.extend(j['skills'])
+        temp_skills = re.sub('and', j['skills'], re.IGNORECASE)
+        temp_skills = re.sub('or', temp_skills, re.IGNORECASE)
+        temp_skills = re.sub('&', temp_skills, re.IGNORECASE)
+        skills.extend(temp_skills)
 
     skills_temp = [str.lower(s.encode('ascii', 'ignore')).split(', ') for s in skills]
     skills_list = []
@@ -314,11 +319,71 @@ def get_skills_tf_mongo(search_term='data science'):
         for sk in s:
             split_sk = sk.split('/')
             for ssk in split_sk:
-                skills_list.extend([se.strip() for se in ssk.split('-')])
+                skills_list.extend([se.strip() for se in ssk.split('-') if se.strip() != ''])
 
     skills_count = Counter(skills_list)
     client.close()
     return skills_count
+
+from bokeh.models import TickFormatter
+from bokeh.properties import Dict, Int, String
+
+class FixedTickFormatter(TickFormatter):
+
+    labels = Dict(Int, String, help="""
+    A mapping of integer ticks values to their labels.
+    """)
+
+    JS_CODE =  """
+    _ = require "underscore"
+    Model = require "model"
+    p = require "core/properties"
+    class FixedTickFormatter extends Model
+      type: 'FixedTickFormatter'
+      doFormat: (ticks) ->
+        labels = @get("labels")
+        return (labels[tick] ? "" for tick in ticks)
+      @define {
+        labels: [ p.Any ]
+      }
+    module.exports =
+      Model: FixedTickFormatter
+    """
+
+    __implementation__ = JS_CODE
+
+
+def plot_top_skills(top_skills_all):
+    """
+    Makes bar graph of top skills from a counter object.
+    """
+    top_skills = [(str.capitalize(s[0]), s[1]) for s in top_skills_all[:30]]
+    client = MongoClient()
+    db = client[DB_NAME]
+    coll = db[search_term]
+    total_jobs = float(coll.find().count())
+    client.close()
+    # get % counts for each skills
+    norm_counts = []
+    label_dict = {}
+    for i, s in enumerate(top_skills):
+        label_dict[i] = s[0]
+        norm_counts.append(s[1] / total_jobs)
+
+    df = pd.DataFrame({'skill':[s for s in top_skills], 'pct jobs with skill':norm_counts})
+
+    p = Bar(df, 'index', values='pct jobs with skill', title="Top skills for data science", legend=False, width=1000, height=1000)
+    p.xaxis[0].formatter = FixedTickFormatter(labels=label_dict)
+    p.xaxis.major_label_orientation = 89.0
+    p.xaxis.axis_label = 'skill'
+    p.xaxis.axis_label_text_font_size = "30pt"
+    p.xaxis.major_label_text_font_size = "20pt"
+    p.yaxis.axis_label = 'percent of jobs with skill'
+    p.yaxis.axis_label_text_font_size = "30pt"
+    p.yaxis.major_label_text_font_size = "20pt"
+    p.title_text_font_size = "30pt"
+    output_file("bar.html")
+    show(p)
 
 
 def get_salaries_mongo(search_term='data science'):
@@ -603,6 +668,15 @@ if __name__ == "__main__":
     plot_salary_dist(sal_dists)
     skills = get_skills_tf_mongo()
     top_skills = [s for s in skills.most_common() if s[1] >= 5]
+    vectors = wv.load_vectors()
+    for s in top_skills:
+        if s[0] not in vectors:
+            print s
+
+    # ways to check for similary of skills not in top_skills:
+    # check for presence of word/phrase in lower skills, and add to top_skills
+    # hash the values and check that way
+    # use GloVe vectors
 
     # -----------
     # looking at a few postings, here are some things I've noticed
