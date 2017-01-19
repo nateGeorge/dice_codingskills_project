@@ -777,14 +777,17 @@ def get_jobs_with_skills(skills_list):
     db = client[DB_NAME]
     coll = db[search_term]
     jobs = coll.find()
-    jobs_with_skills = []
+    all_jobs_with_skills = []
+    cur_jobs = []
     for j in jobs:
         skills = clean_db_skills(j['skills'])
         mask = [s in skills_list for s in skills]
         if any(mask):
-            jobs_with_skills.append(j)
+            all_jobs_with_skills.append(j)
+            if j['recent']:
+                cur_jobs.append(j)
 
-    return jobs_with_skills
+    return all_jobs_with_skills, cur_jobs
 
 
 def check_if_job_recent(job, search_term='data science'):

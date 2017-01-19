@@ -1,0 +1,3 @@
+.morphist > *:not(.animated) {
+    display: none;
+}
