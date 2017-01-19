@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>CannadviseMe</title>
+    <title>Advanced Job Search</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -43,7 +43,7 @@
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">CannadviseMe</a>
+                <a class="navbar-brand page-scroll" href="#page-top">Advanced Job Search</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -51,12 +51,6 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a class="page-scroll" href="#about">About</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#services">Old Site</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#portfolio">For Leafly Users</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#contact">Contact</a>
@@ -72,10 +66,11 @@
         <div class="header-content">
             <div class="header-content-inner">
                 <a class="btn btn-primary btn-xl" href="/find_best.html">
-                <h1 id="homeHeading">Find the best cannabis for<br />
+                <h1 id="homeHeading">Find jobs that need your skills in<br />
                 <ul style="list-style-type: none; display:inline-block; text-align: center; margin: auto; padding: 0;" id="js-rotating">
                 </ul><br /></h1></a>
                 <hr>
+                <a href="/search_jobs.html" class="page-scroll btn btn-default btn-xl sr-button">Go on, try it out!</a>
                 <a href="#about" class="btn btn-primary btn-xl page-scroll">Find Out More</a>
             </div>
         </div>
@@ -87,17 +82,13 @@
                 <div class="col-lg-8 col-lg-offset-2 text-center">
                     <h2 class="section-heading">Why does this exist?</h2>
                     <hr class="light">
-                    <p class="text-faded">I made this as a capstone project for the
-                    <a style="color:white; text-decoration:underline;" href=https://new.galvanize.com/denver/data-science
-                    target="_blank">Galvanize Data Science Immersive</a>.</p>
-                    <p>I was curious which strains people said were best for different conditions.
-                    So I scraped all of <a style="color:white; text-decoration:underline;"
-                    href="http://www.leafly.com" target="_blank">Leafly.com</a>'s reviews
-                    (not an easy task - it took thousands of lines of code),
-                    and I used word2vec and neural networks to classify sentiment towards targeted words in reviews.</p>
+                    <p>I was curious about what skills were most talked about for data science jobs.
+                    Salaries for data scientists also interested me, as well as locations of the jobs.</p>
+                    <p>So I wrote thousands of lines of code to scrape and analyze <a style="color:white; text-decoration:underline;"
+                    href="http://www.dice.com" target="_blank">dice.com</a>, and made it an app for others to use!</p>
 
-                    <p>You can search for the cannabis strain people have talked about the most for any particular word.</p>
-                    <a href="/find_best.html" class="page-scroll btn btn-default btn-xl sr-button">Go on, try it out!</a>
+                    <p>You can check out salary distributions, top-mentioned skills, and search jobs by skills/salary ranges.</p>
+                    <a href="/search_jobs.html" class="page-scroll btn btn-default btn-xl sr-button">Go on, try it out!</a>
                 </div>
             </div>
         </div>
@@ -292,7 +283,7 @@
     <script src="js/morphist.min.js"></script>
     <script type="text/javascript">
       $(window).load(function() {
-        var words = ['Sleep', 'PTSD', 'Creativity', 'Inspiration', 'Anything'];
+        var words = ['Python', 'SQL', 'Java', 'R', 'Hadoop'];
         for (var i = 0; i < words.length; i++) {
             $("#js-rotating").append('<li>' + words[i] + '</li>');
         };

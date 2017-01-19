@@ -763,7 +763,7 @@ def test_system(search_term='data science', page=1):
     return df, ds_josb, non_ds_jobs, skills_count
 
 
-def get_jobs_with_skills(skills_list):
+def get_jobs_with_skills(skills_list, all_skills=True):
     """
     Retrieves jobs from database with skills in the skills_list.
 
@@ -771,6 +771,8 @@ def get_jobs_with_skills(skills_list):
     ----------
     skills_list : list
         list of strings of skills
+    all_skills : boolean
+        if True, all skills must be present in jobs
 
     """
     client = MongoClient()
@@ -782,7 +784,11 @@ def get_jobs_with_skills(skills_list):
     for j in jobs:
         skills = clean_db_skills(j['skills'])
         mask = [s in skills_list for s in skills]
-        if any(mask):
+        if all_skills:
+            criterion = np.sum(mask) == len(skills)
+        else:
+            criterion = any(mask)
+        if criterion:
             all_jobs_with_skills.append(j)
             if j['recent']:
                 cur_jobs.append(j)

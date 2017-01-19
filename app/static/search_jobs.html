@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>CannadviseMe</title>
+    <title>Advanced Job Search</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -43,7 +43,7 @@
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="/index.html">CannadviseMe</a>
+                <a class="navbar-brand" href="/index.html">Advanced Job Search</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -51,12 +51,6 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a class="page-scroll" href="#about">About</a>
-                    </li>
-                    <li>
-                        <a href="#services">Old Site</a>
-                    </li>
-                    <li>
-                        <a href="#portfolio">For Leafly Users</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#contact">Contact</a>
@@ -70,20 +64,23 @@
 
     <header>
         <div class="header-content">
-          <button type="button" class="btn btn-primary btn-lg">Click on a word to show relevant reviews and top strains.</button><br /><br />
+          <h2 style="background-color: #000000; display: inline-block; border-radius: 25px; padding: 20px;">Click on a common job search phrase, or enter your own.</h2><br /><br />
           <div class="btn-toolbar pagination-centered" id="word-buttons" style="display:inline-block;">
           </div>
           <div class="form-group row">
             <br />
             <div class="col-lg-5"></div>
             <div class="col-lg-2">
-              <input class="form-control" type="text" value="or enter any word" id="example-text-input">
+              <!--  -->
+              <input class="form-control" type="text" value="or enter any phrase" id="example-text-input"
+              onblur="if (this.value == '') {this.value = 'or enter any phrase';}"
+              onfocus="if (this.value == 'or enter any phrase') {this.value = '';}" />
             </div>
             <div class="col-lg-5"></div>
           </div>
           <div class="row">
             <div class="col-lg-4"></div>
-          <div class="col-lg-4"><button type="button" class="btn btn-primary" style="display:inline-block;">Get reviews and strains</button></div>
+          <div class="col-lg-4"><button type="button" class="btn btn-primary" style="display:inline-block;">Search and analyze!</button></div>
           <div class="col-lg-4"></div>
         </div>
         </div>
@@ -93,19 +90,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <h2 class="section-heading">Why does this exist?</h2>
-                    <hr class="light">
-                    <p class="text-faded">I made this as a capstone project for the
-                    <a style="color:white; text-decoration:underline;" href=https://new.galvanize.com/denver/data-science
-                    target="_blank">Galvanize Data Science Immersive</a>.</p>
-                    <p>I was curious which strains people said were best for different conditions.
-                    So I scraped all of <a style="color:white; text-decoration:underline;"
-                    href="http://www.leafly.com" target="_blank">Leafly.com</a>'s reviews
-                    (not an easy task - it took thousands of lines of code),
-                    and I used word2vec and neural networks to classify sentiment towards targeted words in reviews.</p>
+                  <h2 class="section-heading">Why does this exist?</h2>
+                  <hr class="light">
+                  <p>I was curious about what skills were most talked about for data science jobs.
+                  Salaries for data scientists also interested me, as well as locations of the jobs.</p>
+                  <p>So I wrote thousands of lines of code to scrape and analyze <a style="color:white; text-decoration:underline;"
+                  href="http://www.dice.com" target="_blank">dice.com</a>, and made it an app for others to use!</p>
 
-                    <p>You can search for the cannabis strain people have talked about the most for any particular word.</p>
-                    <a href="#services" class="page-scroll btn btn-default btn-xl sr-button">Go on, try it out!</a>
+                  <p>You can check out salary distributions, top-mentioned skills, and search jobs by skills/salary ranges.</p>
                 </div>
             </div>
         </div>
@@ -300,7 +292,7 @@
     <script src="js/morphist.min.js"></script>
     <script type="text/javascript">
       $(window).load(function() {
-        var words = ['Sleep', 'PTSD', 'Creativity', 'Inspiration', 'Anything'];
+        var words = ['Data science', 'Analyst', 'Front end developer', 'Ruby on rails', 'Full stack'];
         for (var i = 0; i < words.length; i++) {
             $("#word-buttons").append('<button type="button" class="btn btn-primary">' + words[i] + '</button>');
         };
