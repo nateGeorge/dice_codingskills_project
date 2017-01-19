@@ -1,3 +1,7 @@
+// todo: if send a term that hasn't been searched for before, send back a response
+// that causes a progress bar to be shown
+// then check back again in a bit
+
 var post_main_addr = 'http://0.0.0.0:10001' // 'http://cannadvise.me' //'http://35.161.235.42:10001'; // address with flask api
 
 $.post(post_main_addr + '/get_job_stats', data = {
