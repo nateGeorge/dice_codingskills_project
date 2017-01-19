@@ -1,3 +1,9 @@
+# todo: map job locations, and allow selecting location to show jobs in that
+# location
+# also bar chart of top locations
+# selector for recent or all-time jobs
+# cluster jobs in bay area and denver, maybe suburbs of other cities
+
 # todo: get number of jobs in different categories with 'unspecified', etc
 # in salary field
 # todo: make classifier that predicts if wage is hourly or annual based on
@@ -20,6 +26,12 @@ import seaborn as sns
 from matplotlib import ticker
 import word_vectors as wv
 from bokeh.charts import Bar, output_file, show
+from bokeh.models import TickFormatter
+from bokeh.properties import Dict, Int, String
+import traceback
+from bokeh.models import (
+  GMapPlot, GMapOptions, ColumnDataSource, Circle, DataRange1d, PanTool, WheelZoomTool, BoxSelectTool
+)
 
 BASE_URL = 'http://service.dice.com/api/rest/jobsearch/v1/simple.json?text='
 page = 1 # page number, 1-indexed
@@ -104,25 +116,34 @@ def print_ds_jobs(ds_jobs, aspect='jobTitle'):
         print j[aspect]
 
 
-def dl_job_post(job_postings, num=0, path='test.html'):
+def dl_job_post(job_postings=None, url=None, num=0, path='test.html'):
     """
     Downloads one job posting to specified path.
 
     Parameters
     ----------
     job_postings : list
-        json job posting objects
+        json job posting objects -- if None, uses url
+    url : string
+        url to job posting -- if None, tries for job_postings list
     num : integer
         index of job posting
     path : string
         path to download file to
+
     Returns
     -------
 
 
     """
-    test_job = job_postings[num]
-    res = req.get(test_job['detailUrl'])
+    if job_postings is not None:
+        test_job = job_postings[num]
+        res = req.get(test_job['detailUrl'])
+    elif url is not None:
+        res = req.get(url)
+    else:
+        print 'either job_postings or url must be supplied as an argument'
+
     with open('test.html', 'w') as f:
         f.write(res.content)
 
@@ -133,7 +154,7 @@ def get_info(info):
     """
     if len(info) == 4:
         skills = info[0].find('div', {'class':'iconsiblings'})
-        skills = clean_skills(skills)
+        skills = clean_page_skills(skills)
         emp_type = info[1].find('div', {'class':'iconsiblings'}).getText().strip('\n')
         salary = info[2].find('div', {'class':'iconsiblings'}).getText().strip('\n')
         tele_travel = info[3].find('div', {'class':'iconsiblings'}).getText()
@@ -150,7 +171,7 @@ def get_info(info):
             icons = i.find('span', {'class':'icons'}).get('class')
             if 'icon-plugin-1' in icons:
                 skills = i.find('div', {'class':'iconsiblings'})
-                skills = clean_skills(skills)
+                skills = clean_page_skills(skills)
             elif 'icon-briefcase' in icons:
                 emp_type = i.find('div', {'class':'iconsiblings'}).getText().strip('\n')
             elif 'icon-bank-note' in icons:
@@ -188,21 +209,41 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True):
         in_db = coll.find(job_json).count()
         if in_db > 0:
             print 'already in db'
+            # don't think I want to update multi, but let's see how many there are
+            coll.update(job_json, {'$set': {'recent': True}})#, multi=True)
+            if in_db > 1:
+                print 'WARN: occurs', in_db, 'times'
             return None
 
     res = req.get(job_json['detailUrl'])
+    print job_json['detailUrl']
     if not res.ok:
         print 'uh-oh...'
         print res.status
 
     soup = bs(res.content, 'lxml')
+    f404 = soup.findAll('p', {'class':'err_p'})
+    if len(f404) > 0:
+        print 'found 404'
+        print f404[0].getText()
+        if f404[0].getText() == u"404 - The page you're looking for couldn't be found or it may have expired.":
+            return None
+
     info = soup.findAll('div', {'class':'row job-info'})
     skills, emp_type, salary, tele_travel = get_info(info)
     # could do it this way, but there is also a unique id for this section
     # descr_xpath = '//*[@id="bd"]/div/div[1]/div[6]'
     # tree = html.fromstring(res.content)
     # descr = tree.xpath(descr_xpath)
-    descr = soup.find('div', {'id':'jobdescSec'}).getText()
+    try:
+        descr = soup.find('div', {'id':'jobdescSec'}).getText()
+    except AttributeError:
+        descr = ''
+        print ''
+        print 'couldn\'t find description'
+        print ''
+        traceback.print_exc()
+
     posted_xpath = '//*[@id="header-wrap"]/div[2]/div/div[1]/ul/li[3]'
     tree = html.fromstring(res.content)
     posted = tree.xpath(posted_xpath)[0].text
@@ -217,8 +258,10 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True):
         entry_dict.update(job_json)
         found = coll.find(entry_dict).count()
         if found == 0:
-            entry_dict.update({'scraped_time': datetime.now()})
+            entry_dict.update({'scraped_time': datetime.now(), 'recent': True})
             coll.insert_one(entry_dict)
+        else:
+            coll.update(entry_dict, {'$set':{'recent': True}})
         client.close()
         return None
     else:
@@ -238,7 +281,7 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True):
         return df
 
 
-def clean_skills(skills):
+def clean_page_skills(skills):
     """
     Takes a string of skills from a dice job posting, cleans it, and returns
     the cleaned list of skills.
@@ -298,6 +341,44 @@ def get_skills_tf(df):
     return skills_count
 
 
+def split_skills(skills_list, char='-'):
+    """
+    Splits each skill in skills_list on char
+    """
+    clean_skills_list = []
+    for s in skills_list:
+        clean_skills_list.extend(s.split('/'))
+
+    return clean_skills_list
+
+
+def clean_db_skills(skills_list):
+    """
+    Cleans skills list from mongoDB entry.
+    """
+    # don't think I need this
+    #temp_skills = [str.lower(s.encode('ascii', 'ignore')).split(', ') for s in skills_list]
+    clean_skills_list = [s.lower().encode('ascii', 'ignore') for s in skills_list]
+    for char in ['-', '/', ' or ', ' & ', ' and ']:
+        clean_skills_list = split_skills(clean_skills_list, char=char)
+
+    # some weird bug I can't figure out where it can't find the '/'
+    # going to do this for everything else to be safe
+    for s in clean_skills_list:
+        if s == 'sql/nosql':
+            print 'sql/nosql in s (2):', s
+            print 'search:', re.search('/', s)
+            print orig
+            print clean_skills_list
+            print now
+        if re.search('^or ', s) is not None:
+            clean_skills_list.remove(s)
+            clean_skills_list.append(s[3:])
+    clean_skills_list = [s.strip() for s in clean_skills_list if s.strip() != '']
+
+    return clean_skills_list
+
+
 def get_skills_tf_mongo(search_term='data science'):
     """
     Calculated term-frequency for skills based on data in a mongoDB.
@@ -306,27 +387,15 @@ def get_skills_tf_mongo(search_term='data science'):
     db = client[DB_NAME]
     coll = db[search_term]
     jobs = coll.find()
-    skills = []
-    for j in jobs:
-        temp_skills = re.sub('and', j['skills'], re.IGNORECASE)
-        temp_skills = re.sub('or', temp_skills, re.IGNORECASE)
-        temp_skills = re.sub('&', temp_skills, re.IGNORECASE)
-        skills.extend(temp_skills)
-
-    skills_temp = [str.lower(s.encode('ascii', 'ignore')).split(', ') for s in skills]
     skills_list = []
-    for s in skills_temp:
-        for sk in s:
-            split_sk = sk.split('/')
-            for ssk in split_sk:
-                skills_list.extend([se.strip() for se in ssk.split('-') if se.strip() != ''])
+    for j in jobs:
+        skills_list.extend(clean_db_skills(j['skills']))
 
     skills_count = Counter(skills_list)
     client.close()
+
     return skills_count
 
-from bokeh.models import TickFormatter
-from bokeh.properties import Dict, Int, String
 
 class FixedTickFormatter(TickFormatter):
 
@@ -368,7 +437,7 @@ def plot_top_skills(top_skills_all):
     label_dict = {}
     for i, s in enumerate(top_skills):
         label_dict[i] = s[0]
-        norm_counts.append(s[1] / total_jobs)
+        norm_counts.append(s[1] / total_jobs * 100)
 
     df = pd.DataFrame({'skill':[s for s in top_skills], 'pct jobs with skill':norm_counts})
 
@@ -384,6 +453,36 @@ def plot_top_skills(top_skills_all):
     p.title_text_font_size = "30pt"
     output_file("bar.html")
     show(p)
+
+
+def get_locations_mongo(search_term='data science'):
+    """
+    Retrieves list of job locations from mongoDB.  Need to have full time etc
+    in order to filter them properly
+    """
+    client = MongoClient()
+    db = client[DB_NAME]
+    coll = db[search_term]
+    jobs = coll.find()
+    locs = defaultdict(list)
+    for j in jobs:
+        emp_type = str.lower(j['emp_type'].encode('ascii', 'ignore'))
+        if j['emp_type'] == '' or j['location'] == '':
+            continue
+        elif 'c2h' in emp_type or 'contract to hire' in emp_type or 'contract-to-hire' in emp_type:
+            emp_type = 'contract_to_hire'
+        elif 'full time' in emp_type or 'fulltime' in emp_type or 'full-time' in emp_type:
+            emp_type = 'full_time'
+        elif 'contract' in emp_type:
+            emp_type = 'contract'
+        else:
+            emp_type = 'other'
+
+        locs[emp_type].append(j['location'])
+
+    client.close()
+
+    return locs
 
 
 def get_salaries_mongo(search_term='data science'):
@@ -590,11 +689,16 @@ def continuous_scrape(search_term='data science', use_mongo=True):
     # manually counting up pages now
     #next_link = data['nextUrl']
     job_postings = data['resultItemList']
-    all_ds_jobs, all_non_ds_jobs = segment_jobs(job_postings)
+    relevant_jobs, non_relevant_jobs = segment_jobs(job_postings)
     if use_mongo:
-        scrape_all_jobs(all_ds_jobs, search_term=search_term, use_mongo=use_mongo)
+        client = MongoClient()
+        db = client[DB_NAME]
+        coll = db[search_term]
+        # first, set all entries to be expired, i.e. not recent
+        coll.update({}, {'$set':{'recent':False}}, multi=True)
+        scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo)
     else:
-        full_df = scrape_all_jobs(all_ds_jobs, search_term=search_term, use_mongo=use_mongo)
+        full_df = scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo)
 
     page = 2
     consecutive_blank_pages = 0
@@ -615,8 +719,8 @@ def continuous_scrape(search_term='data science', use_mongo=True):
             data = json.loads(res.content)
             #next_link = data['nextUrl']
             job_postings = data['resultItemList']
-            ds_jobs, non_ds_jobs = segment_jobs(job_postings)
-            if len(ds_jobs) == 0:
+            relevant_jobs, non_relevant_jobs = segment_jobs(job_postings)
+            if len(relevant_jobs) == 0:
                 consecutive_blank_pages += 1
             if consecutive_blank_pages == 10:
                 break
@@ -624,20 +728,20 @@ def continuous_scrape(search_term='data science', use_mongo=True):
             # taking up lots of memory
             #all_non_ds_jobs.extend(all_non_ds_jobs)
             if use_mongo:
-                scrape_all_jobs(ds_jobs, search_term=search_term, use_mongo=use_mongo)
+                scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo)
             else:
-                full_df = full_df.append(scrape_all_jobs(ds_jobs, search_term=search_term, use_mongo=use_mongo))
+                full_df = full_df.append(scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo))
         except Exception as e:
-            print e
+            traceback.print_exc()
             if use_mongo:
                 return None
 
-            return full_df, all_ds_jobs, all_non_ds_jobs
+            return full_df
 
     if use_mongo:
         return None
 
-    return full_df, all_ds_jobs, all_non_ds_jobs
+    return full_df
 
 
 def test_system(search_term='data science', page=1):
@@ -659,19 +763,76 @@ def test_system(search_term='data science', page=1):
     return df, ds_josb, non_ds_jobs, skills_count
 
 
+def get_jobs_with_skills(skills_list):
+    """
+    Retrieves jobs from database with skills in the skills_list.
+
+    Parameters
+    ----------
+    skills_list : list
+        list of strings of skills
+
+    """
+    client = MongoClient()
+    db = client[DB_NAME]
+    coll = db[search_term]
+    jobs = coll.find()
+    jobs_with_skills = []
+    for j in jobs:
+        skills = clean_db_skills(j['skills'])
+        mask = [s in skills_list for s in skills]
+        if any(mask):
+            jobs_with_skills.append(j)
+
+    return jobs_with_skills
+
+
+def check_if_job_recent(job, search_term='data science'):
+    """
+    Takes a job dictionary object and checks if is in the MongoDB.
+    If so, sets the status to 'recent'.
+    """
+    client = MongoClient()
+    db = client[DB_NAME]
+    coll = db[search_term]
+    # it's a generator so we have to convert to a list
+    jobs = list(coll.find(job))
+    if len(jobs) > 0:
+        coll.find(job)
+        client.close()
+        return True
+
+    client.close()
+    return False
+
+
+def get_recent_jobs(search_term='data science'):
+    client = MongoClient()
+    db = client[DB_NAME]
+    coll = db[search_term]
+    # it's a generator so we have to convert to a list
+    jobs = list(coll.find({'recent': True}))
+    client.close()
+    return jobs
+
+
 if __name__ == "__main__":
     # test_url = 'http://www.dice.com/job/result/applecup/54281129?src=19'
     # df = scrape_a_job(test_url)
-    #continuous_scrape()#full_df, all_ds_jobs, all_non_ds_jobs = continuous_scrape()
+    #continuous_scrape()#full_df = continuous_scrape()
     salary_dict = get_salaries_mongo()
     sal_dists = get_salary_dist(salary_dict)
     plot_salary_dist(sal_dists)
     skills = get_skills_tf_mongo()
     top_skills = [s for s in skills.most_common() if s[1] >= 5]
-    vectors = wv.load_vectors()
-    for s in top_skills:
-        if s[0] not in vectors:
-            print s
+    plot_top_skills(top_skills)
+
+    # -------------
+    # to see which skills are not in the GloVe vectors
+    # vectors = wv.load_vectors()
+    # for s in top_skills:
+    #     if s[0] not in vectors:
+    #         print s
 
     # ways to check for similary of skills not in top_skills:
     # check for presence of word/phrase in lower skills, and add to top_skills
