@@ -3,10 +3,11 @@
 // then check back again in a bit
 
 var post_main_addr = 'http://0.0.0.0:10001' // 'http://cannadvise.me' //'http://35.161.235.42:10001'; // address with flask api
-
+var jobs;
 $.post(post_main_addr + '/get_job_stats', data = {
-    job: 'data scientist'
+    job: 'data science'
 }, function(data, err) {
+    jobs = data;
     console.log(data);
     data = JSON.parse(data)
     // recs = data['recs'];

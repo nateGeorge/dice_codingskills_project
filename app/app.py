@@ -1,15 +1,20 @@
+# todo: figure out way of keeping track of when something is scraping
+
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 import json
 import cPickle as pk
 import re
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, jsonify
 import flask
-import code.collect_api as ca
+import dice_code.collect_api as ca
 app = Flask(__name__, static_url_path='')
 
 app.debug = True
+
+# dict for keeping track of what's already scraping
+scraping_dict = {}
 
 @app.route('/')
 def index():
@@ -23,10 +28,15 @@ def index():
 
 @app.route('/get_job_stats', methods=['POST'])
 def get_words():
-    job_text = request.form.getlist('job')
-    print job_text
-    # resp = flask.Response(json.dumps(word_dict))
-    resp = flask.Response(json.dumps({'testing':123}))
+    search_term = request.form.getlist('job')[0]
+    print search_term
+    fields = ['jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'skills']
+    jobs = ca.get_recent_jobs(search_term=search_term, fields=fields)
+    if jobs == 'updating db':
+        scraping_dict[search_term] = True
+    ret_dict = {}
+    ret_dict['jobs'] = jobs
+    resp = flask.Response(jsonify(result=ret_dict))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 
