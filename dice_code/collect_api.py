@@ -70,7 +70,7 @@ def create_url(search_term, base_url=BASE_URL, page=1):
     return BASE_URL + search_term + '&page=' + str(page)# + '&sort=2'# this last bit sorts by job title
 
 
-def segment_jobs(job_postings):
+def segment_jobs(job_postings, search_term='data science'):
     """
     Takes list of json job postings, and returns list of those
     containing 'data scientist', in the title, and a list of the rest.
@@ -86,18 +86,24 @@ def segment_jobs(job_postings):
     non_ds_jobs : list
         the remaining jobs
     """
-    ds_jobs = []
-    non_ds_jobs = []
+    relevant_jobs = []
+    non_relevant_jobs = []
     for j in job_postings:
         title = str.lower(j['jobTitle'].encode('ascii', 'ignore'))
-        if 'data scientist' in title or 'data science' in title:
-            ds_jobs.append(j)
+        if search_term in ['data science', 'data scientist']:
+            if 'data scientist' in title or 'data science' in title:
+                relevant_jobs.append(j)
+            else:
+                non_relevant_jobs.append(j)
         else:
-            non_ds_jobs.append(j)
+            if search term in title:
+                relevant_jobs.append(j)
+            else:
+                non_relevant_jobs.append(j)
         # doesn't seem to be any mle jobs, which is good
         # elif 'machine learning engineer' in title:
         #     mle_jobs.append(j)
-    return ds_jobs, non_ds_jobs
+    return relevant_jobs, non_relevant_jobs
 
 
 def print_ds_jobs(ds_jobs, aspect='jobTitle'):
@@ -959,7 +965,7 @@ def check_if_job_recent(job, search_term='data science'):
     return False
 
 
-def get_recent_jobs(search_term='data science', fields=None):
+def get_recent_jobs(search_term='data science', fields=None, callback=None):
     """
     Gets all jobs in db that have 'recent' == True.
     Can supply list of fields to only return those fields.
@@ -967,20 +973,18 @@ def get_recent_jobs(search_term='data science', fields=None):
     client = MongoClient()
     db = client[DB_NAME]
     coll = db[search_term]
-    if fields is not None:
-        field_dict = {}
-        field_dict['_id'] = 0
-        for f in fields:
-            field_dict[f] = 1
-        jobs = list(coll.find({'recent': True}, field_dict))
-    else:
-        jobs = list(coll.find({'recent': True}))
+    field_dict = {}
+    field_dict['_id'] = 0
+    for f in fields:
+        field_dict[f] = 1
+    jobs = list(coll.find({'recent': True}, field_dict))
     if len(jobs) == 0:
         continuous_scrape(search_term=search_term)
-        if fields is not None:
-            jobs = list(coll.find({'recent': True}, field_dict))
+        if callback is None:
+            return 'updating db'
         else:
-            jobs = list(coll.find({'recent': True}))
+            jobs = list(coll.find({'recent': True}, field_dict))
+            return jobs
     # it's a generator so we have to convert to a list
     client.close()
 

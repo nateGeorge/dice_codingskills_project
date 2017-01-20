@@ -34,9 +34,7 @@ def get_words():
     jobs = ca.get_recent_jobs(search_term=search_term, fields=fields)
     if jobs == 'updating db':
         scraping_dict[search_term] = True
-    ret_dict = {}
-    ret_dict['jobs'] = jobs
-    resp = flask.Response(jsonify(result=ret_dict))
+    resp = flask.Response(json.dumps(jobs))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 
