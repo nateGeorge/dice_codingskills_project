@@ -31,7 +31,7 @@ def get_words():
     search_term = request.form.getlist('job')[0]
     print search_term
     fields = ['jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'skills']
-    jobs = ca.get_recent_jobs(search_term=search_term, fields=fields)
+    jobs = 'updating db'#ca.get_recent_jobs(search_term=search_term, fields=fields)
     if jobs == 'updating db':
         resp = flask.Response(json.dumps({'updating db':True}))
     else:

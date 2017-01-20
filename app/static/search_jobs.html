@@ -72,7 +72,7 @@
             <div class="col-lg-5"></div>
             <div class="col-lg-2">
               <!--  -->
-              <input class="form-control" type="text" value="or enter any phrase" id="example-text-input"
+              <input class="form-control" type="text" value="or enter any phrase" defaultValue="or enter any phrase" id="job_search_input"
               onblur="if (this.value == '') {this.value = 'or enter any phrase';}"
               onfocus="if (this.value == 'or enter any phrase') {this.value = '';}" />
             </div>
@@ -80,11 +80,23 @@
           </div>
           <div class="row">
             <div class="col-lg-4"></div>
-          <div class="col-lg-4"><button type="button" class="btn btn-primary" style="display:inline-block;">Search and analyze!</button></div>
+          <div class="col-lg-4"><button id="search_analyze" type="button" class="btn btn-primary" style="display:inline-block;" onclick="get_job_stats_form()">Search and analyze!</button></div>
           <div class="col-lg-4"></div>
         </div>
         </div>
     </header>
+
+    <section class="bg-primary" id="results">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center" id="search_results">
+                </div>
+            </div>
+            <hr class="light">
+        </div>
+    </section>
+
+
 
     <section class="bg-primary" id="about">
         <div class="container">

@@ -91,13 +91,18 @@ def segment_jobs(job_postings, search_term='data science'):
     non_relevant_jobs = []
     for j in job_postings:
         title = str.lower(j['jobTitle'].encode('ascii', 'ignore'))
-        if search_term in ['data science', 'data scientist']:
+        if search_term == 'data science':
             if 'data scientist' in title or 'data science' in title:
                 relevant_jobs.append(j)
             else:
                 non_relevant_jobs.append(j)
-        elif search_term in ['front end developer', 'front-end developer', 'frontend developer']:
+        elif search_term == 'front end developer':
             if 'front end developer' in title or 'front-end developer' in title or 'frontend developer' in title:
+                relevant_jobs.append(j)
+            else:
+                non_relevant_jobs.append(j)
+        elif search_term == 'full stack':
+            if 'full stack' in title or 'fullstack' in title or 'full-stack' in title:
                 relevant_jobs.append(j)
             else:
                 non_relevant_jobs.append(j)
@@ -853,6 +858,10 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
     """
     if search_term == 'data scientist':
         search_term = 'data science'
+    elif search_term in ['fullstack', 'full-stack']:
+        search_term = 'full stack'
+    elif search_term in ['front-end developer', 'frontend developer']:
+        serach_term = 'front end developer' 
 
     res = req.get(create_url(search_term=search_term))
     data = json.loads(res.content)
