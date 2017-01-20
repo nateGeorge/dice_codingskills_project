@@ -32,6 +32,7 @@ from bokeh.models.callbacks import CustomJS
 from bokeh.properties import Dict, Int, String
 import traceback
 import collections
+import threading
 from bokeh.models import (
   GMapPlot, GMapOptions, ColumnDataSource, Circle, DataRange1d, PanTool, WheelZoomTool, BoxSelectTool
 )
@@ -95,8 +96,13 @@ def segment_jobs(job_postings, search_term='data science'):
                 relevant_jobs.append(j)
             else:
                 non_relevant_jobs.append(j)
+        elif search_term in ['front end developer', 'front-end developer', 'frontend developer']:
+            if 'front end developer' in title or 'front-end developer' in title or 'frontend developer' in title:
+                relevant_jobs.append(j)
+            else:
+                non_relevant_jobs.append(j)
         else:
-            if search term in title:
+            if search_term in title:
                 relevant_jobs.append(j)
             else:
                 non_relevant_jobs.append(j)
@@ -193,7 +199,7 @@ def get_info(info):
         return skills, emp_type, salary, tele_travel
 
 
-def scrape_a_job(job_json, search_term=None, insert_mongo=True):
+def scrape_a_job(job_json, search_term=None, insert_mongo=True, debug=False):
     """
     Scrapes important info from job posting.
 
@@ -210,6 +216,9 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True):
     -------
 
     """
+    if search_term == 'data scientist':
+        search_term = 'data science'
+
     if insert_mongo:
         # first check to see if the entry is already in the db
         client = MongoClient()
@@ -217,7 +226,8 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True):
         coll = db[search_term]
         in_db = coll.find(job_json).count()
         if in_db > 0:
-            print 'already in db'
+            if debug:
+                print 'already in db'
             # don't think I want to update multi, but let's see how many there are
             coll.update(job_json, {'$set': {'recent': True}})#, multi=True)
             if in_db > 1:
@@ -225,16 +235,19 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True):
             return None
 
     res = req.get(job_json['detailUrl'])
-    print job_json['detailUrl']
+    if debug:
+        print job_json['detailUrl']
     if not res.ok:
-        print 'uh-oh...'
-        print res.status
+        if debug:
+            print 'uh-oh...'
+            print res.status
 
     soup = bs(res.content, 'lxml')
     f404 = soup.findAll('p', {'class':'err_p'})
     if len(f404) > 0:
-        print 'found 404'
-        print f404[0].getText()
+        if debug:
+            print 'found 404'
+            print f404[0].getText()
         if f404[0].getText() == u"404 - The page you're looking for couldn't be found or it may have expired.":
             return None
 
@@ -247,11 +260,11 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True):
     try:
         descr = soup.find('div', {'id':'jobdescSec'}).getText()
     except AttributeError:
-        descr = ''
-        print ''
-        print 'couldn\'t find description'
-        print ''
-        traceback.print_exc()
+        if debug:
+            print ''
+            print 'couldn\'t find description'
+            print ''
+            traceback.print_exc()
         return None
 
     posted_xpath = '//*[@id="header-wrap"]/div[2]/div/div[1]/ul/li[3]'
@@ -315,17 +328,21 @@ def clean_page_skills(skills):
     return skills
 
 
-def scrape_all_jobs(job_postings, search_term=None, use_mongo=True):
+def scrape_all_jobs(job_postings, search_term=None, use_mongo=True, debug=False):
     """
     Loops through the list of job_postings and scrapes key info from each.
     """
+    if search_term == 'data scientist':
+        search_term = 'data science'
+
     full_df = None
     for i, j in enumerate(job_postings):
-        print i, j['jobTitle'], j['company']
+        if debug:
+            print i, j['jobTitle'], j['company']
         if use_mongo:
-            scrape_a_job(j, search_term=search_term, insert_mongo=use_mongo)
+            scrape_a_job(j, search_term=search_term, insert_mongo=use_mongo, debug=debug)
         else:
-            df = scrape_a_job(j, search_term=search_term, insert_mongo=use_mongo)
+            df = scrape_a_job(j, search_term=search_term, insert_mongo=use_mongo, debug=debug)
             if full_df is None:
                 full_df = df
             else:
@@ -819,7 +836,7 @@ def gauss_pdf(x, mu, std):
     return np.exp(-(x - mu)**2/(2.0*std)**2)/(std*np.sqrt(2*np.pi))
 
 
-def continuous_scrape(search_term='data science', use_mongo=True):
+def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
     """
 
     Parameters
@@ -834,21 +851,26 @@ def continuous_scrape(search_term='data science', use_mongo=True):
     None if use_mongo is True
 
     """
+    if search_term == 'data scientist':
+        search_term = 'data science'
+
     res = req.get(create_url(search_term=search_term))
     data = json.loads(res.content)
     # manually counting up pages now
     #next_link = data['nextUrl']
     job_postings = data['resultItemList']
-    relevant_jobs, non_relevant_jobs = segment_jobs(job_postings)
+    relevant_jobs, non_relevant_jobs = segment_jobs(job_postings, search_term=search_term)
+    # in case you want to look at which jobs are filtered out...
+    # print [j['jobTitle'] for j in non_relevant_jobs]
     if use_mongo:
         client = MongoClient()
         db = client[DB_NAME]
         coll = db[search_term]
         # first, set all entries to be expired, i.e. not recent
         coll.update({}, {'$set':{'recent':False}}, multi=True)
-        scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo)
+        scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo, debug=debug)
     else:
-        full_df = scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo)
+        full_df = scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo, debug=debug)
 
     page = 2
     consecutive_blank_pages = 0
@@ -856,20 +878,23 @@ def continuous_scrape(search_term='data science', use_mongo=True):
         # used to get 'nextLink' from json object, but that seemed to end at 29
         # for some reason.  Changing to manually counting up pages
         #page = re.search('page=(\d+)', next_link).group(1).encode('ascii', 'ignore')
-        print ''
-        print '-'*20
-        print ''
-        print 'on page', page
-        print ''
-        print '-'*20
-        print ''
+        if debug:
+            print ''
+            print '-'*20
+            print ''
+            print 'on page', page
+            print ''
+            print '-'*20
+            print ''
         try:
             res = req.get(create_url(search_term=search_term, page=page))
             page += 1
             data = json.loads(res.content)
             #next_link = data['nextUrl']
             job_postings = data['resultItemList']
-            relevant_jobs, non_relevant_jobs = segment_jobs(job_postings)
+            relevant_jobs, non_relevant_jobs = segment_jobs(job_postings, search_term=search_term)
+            # in case you want to look at which jobs are filtered out...
+            # print [j['jobTitle'] for j in non_relevant_jobs]
             if len(relevant_jobs) == 0:
                 consecutive_blank_pages += 1
             if consecutive_blank_pages == 10:
@@ -878,9 +903,9 @@ def continuous_scrape(search_term='data science', use_mongo=True):
             # taking up lots of memory
             #all_non_ds_jobs.extend(all_non_ds_jobs)
             if use_mongo:
-                scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo)
+                scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo, debug=debug)
             else:
-                full_df = full_df.append(scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo))
+                full_df = full_df.append(scrape_all_jobs(relevant_jobs, search_term=search_term, use_mongo=use_mongo, debug=debug))
         except Exception as e:
             traceback.print_exc()
             if use_mongo:
@@ -969,17 +994,25 @@ def get_recent_jobs(search_term='data science', fields=None, callback=None):
     """
     Gets all jobs in db that have 'recent' == True.
     Can supply list of fields to only return those fields.
+
+    Callback arg was abandoned, just there as a remnant now.
     """
+    search_term = search_term.lower()
+    if search_term == 'data scientist':
+        search_term = 'data science'
     client = MongoClient()
     db = client[DB_NAME]
     coll = db[search_term]
     field_dict = {}
     field_dict['_id'] = 0
-    for f in fields:
-        field_dict[f] = 1
+    if fields is not None:
+        for f in fields:
+            field_dict[f] = 1
     jobs = list(coll.find({'recent': True}, field_dict))
     if len(jobs) == 0:
-        continuous_scrape(search_term=search_term)
+        t1 = threading.Thread(target=continuous_scrape, kwargs={'search_term':search_term})
+        t1.start()
+        #t1.join()
         if callback is None:
             return 'updating db'
         else:

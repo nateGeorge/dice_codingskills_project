@@ -286,6 +286,9 @@
     <!-- Theme JavaScript -->
     <script src="js/creative.min.js"></script>
 
+    <!-- My custom JS -->
+    <script src="js/app.js"></script>
+
     <!-- Morphist -->
     <link rel="stylesheet" href="css/morphist.css">
     <link rel="stylesheet" href="css/animate.min.css">
@@ -294,7 +297,7 @@
       $(window).load(function() {
         var words = ['Data science', 'Analyst', 'Front end developer', 'Ruby on rails', 'Full stack'];
         for (var i = 0; i < words.length; i++) {
-            $("#word-buttons").append('<button type="button" class="btn btn-primary">' + words[i] + '</button>');
+            $("#word-buttons").append('<button type="button" class="btn btn-primary" onclick="get_job_stats(\'' + words[i] + '\')">' + words[i] + '</button>');
         };
       });
     </script>
