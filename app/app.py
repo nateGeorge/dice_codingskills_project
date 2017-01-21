@@ -9,12 +9,17 @@ import re
 from flask import Flask, request, make_response, jsonify
 import flask
 import dice_code.collect_api as ca
+from pymongo import MongoClient
+from werkzeug.datastructures import ImmutableMultiDict
+from datetime import datetime
 app = Flask(__name__, static_url_path='')
 
 app.debug = True
 
-# dict for keeping track of what's already scraping
-scraping_dict = {}
+# db for keeping track of scraping queue
+DB_NAME = 'dice_jobs'
+# db for user tracking
+IP_COLL_NAME = 'user_tracking'
 
 @app.route('/')
 def index():
@@ -31,13 +36,36 @@ def get_words():
     search_term = request.form.getlist('job')[0]
     print search_term
     fields = ['jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'skills']
-    jobs = 'updating db'#ca.get_recent_jobs(search_term=search_term, fields=fields)
+    jobs = ca.get_recent_jobs(search_term=search_term, fields=fields)
     if jobs == 'updating db':
+        insert_dict = {}
+        insert_dict['search_term'] = search_term
+        insert_dict['datetime'] = datetime.now()
+        client = MongoClient()
+        db = client[DB_NAME]
+        coll = db['scraping_queue']
+        coll.insert(insert_dict)
         resp = flask.Response(json.dumps({'updating db':True}))
     else:
         resp = flask.Response(json.dumps(jobs))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
+
+@app.route('/send_user_info', methods=['POST'])
+def log_info():
+    log_dict = request.form.to_dict()
+    log_dict = ca.convert(log_dict)
+    log_dict['datetime'] = datetime.now()
+    print log_dict
+    client = MongoClient()
+    db = client[DB_NAME]
+    coll = db[IP_COLL_NAME]
+    coll.insert(log_dict)
+    client.close()
+    resp = flask.Response('success!')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10001, debug=True, threaded=True)

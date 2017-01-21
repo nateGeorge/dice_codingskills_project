@@ -18,12 +18,16 @@ $("#job_search_input").keyup(function(event){
     }
 });
 
+var post_addr;
+
 var get_job_stats = function(search_term) {
     // first clear div
     $('#search_results').empty();
-    $.post(post_main_addr + '/get_job_stats', data = {
+    post_addr = '/get_job_stats';
+    $.post(post_main_addr + post_addr, data = {
       job: search_term
       }, function(data, err) {
+        log_user_info(post_addr, search_term);
       if (data.length == 21) {
         // the data hasn't ever been scraped.
         // display message that it is currently being scraped, and will be updated in 1.5 mins
@@ -47,3 +51,24 @@ var get_job_stats_form = function() {
     get_job_stats(input_val);
   }
 }
+
+// for user/device tracking
+var log_user_info = function(cur_page, search_term) {
+  $.getJSON('//freegeoip.net/json/?callback=?', null, function(ip_data) {
+    console.log(JSON.stringify(ip_data, null, 2));
+    if (cur_page == undefined) {
+      cur_page = window.location.href.split('/')[3];
+      console.log(cur_page);
+    }
+    if (search_term != undefined) {
+      ip_data.search_term = search_term;
+    }
+    ip_data.current_page = cur_page;
+    $.post(post_main_addr + '/send_user_info', data = ip_data, function(data, err) {
+        console.log(data);
+      });
+  });
+}
+
+// log user on page loads
+$(document).ready(log_user_info());
