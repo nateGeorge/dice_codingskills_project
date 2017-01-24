@@ -10,6 +10,10 @@
 # features such as length of number, period in it, tfidf vector of
 # hr, hourly, hour, annual, annualy, etc
 
+# need this for flask to work (multiprocessing issue)
+import matplotlib
+matplotlib.use('GtkAgg')
+
 import requests as req
 import json
 import re
@@ -26,10 +30,11 @@ import seaborn as sns
 from matplotlib import ticker
 import word_vectors as wv
 from bokeh.plotting import figure
-from bokeh.charts import Bar, output_file, show
+from bokeh.charts import Bar, output_file, show, save
 from bokeh.models import TickFormatter, HoverTool, GlyphRenderer, Range1d, TapTool
 from bokeh.models.callbacks import CustomJS
 from bokeh.properties import Dict, Int, String
+from bokeh.embed import components
 import traceback
 import collections
 import threading
@@ -66,6 +71,7 @@ def create_url(search_term, base_url=BASE_URL, page=1):
     -------
     formatted url string
     """
+    search_term = clean_search_term(search_term)
     search_term = re.sub('\s', '%20AND%20', search_term) # sub spaces with %20
     # AND means it must find all words
     return BASE_URL + search_term + '&page=' + str(page)# + '&sort=2'# this last bit sorts by job title
@@ -87,6 +93,7 @@ def segment_jobs(job_postings, search_term='data science'):
     non_ds_jobs : list
         the remaining jobs
     """
+    search_term = clean_search_term(search_term)
     relevant_jobs = []
     non_relevant_jobs = []
     for j in job_postings:
@@ -221,8 +228,7 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True, debug=False):
     -------
 
     """
-    if search_term == 'data scientist':
-        search_term = 'data science'
+    search_term = clean_search_term(search_term)
 
     if insert_mongo:
         # first check to see if the entry is already in the db
@@ -337,8 +343,7 @@ def scrape_all_jobs(job_postings, search_term=None, use_mongo=True, debug=False)
     """
     Loops through the list of job_postings and scrapes key info from each.
     """
-    if search_term == 'data scientist':
-        search_term = 'data science'
+    search_term = clean_search_term(search_term)
 
     full_df = None
     for i, j in enumerate(job_postings):
@@ -415,6 +420,7 @@ def get_skills_tf_mongo(search_term='data science'):
     """
     Calculated term-frequency for skills based on data in a mongoDB.
     """
+    search_term = clean_search_term(search_term)
     client = MongoClient()
     db = client[DB_NAME]
     coll = db[search_term]
@@ -457,7 +463,7 @@ class FixedTickFormatter(TickFormatter):
     __implementation__ = JS_CODE
 
 
-def plot_top_skills(top_skills_all=None, search_term='data science', live=False):
+def plot_top_skills(top_skills_all=None, search_term='data science', live=False, hw=None):
     """
     Makes bar graph of top skills from a counter object.
 
@@ -470,6 +476,10 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False)
     live: boolean
         if True, will show plot after saving it
     """
+    if hw is not None:
+        # scale factor for screen width
+        scale_factor = int(500 / 1366. * hw[1])
+    search_term = clean_search_term(search_term)
     if top_skills_all is None:
         if search_term is None:
             return 'search term or top_skills must be supplied'
@@ -522,7 +532,7 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False)
 
     # mid-level way to do it
     max_df = round(df['pct jobs with skill'].max() / 10 + 0.5) * 10
-    p = figure(title="Top skills for data science", width=1000, height=1000, tools='tap', y_range=Range1d(0, max_df), x_range=Range1d(-0.5, 29.5))
+    p = figure(title='Top skills for ' + search_term, width=scale_factor, height=scale_factor, tools='tap', y_range=Range1d(0, max_df), x_range=Range1d(-0.5, 29.5))
     taptool = p.select(type=TapTool)
     taptool.callback = CustomJS(args=dict(xr=p.x_range), code="""
     // JavaScript code goes here
@@ -551,7 +561,7 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False)
             // Use $ here...
             var arrpos = $.inArray(cb_obj['data']['skill'], skills);
             if (arrpos != -1) {
-                skills.splice(arrpos)
+                skills.splice(arrpos, 1); // remove one element from arrpos
             } else {
                 // need to first make the global skills array like var skills = [];
                 skills.push(cb_obj['data']['skill']);
@@ -576,8 +586,11 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False)
         source = ColumnDataSource(src)
         p.vbar(source=source, x='index', width=0.9, bottom=0,
             top='pct jobs with skill')#, color="firebrick")
-    hover = HoverTool(tooltips=[('skill', '@skill'), ('pct jobs with skill', '@{pct jobs with skill}')])
-    p.add_tools(hover)
+
+    # todo: fix hovertool.  works in standalone plot, but not embedded...hmmm
+    # hover = HoverTool(tooltips=[('skill', '@skill'), ('pct jobs with skill', '@{pct jobs with skill}')])
+    # p.add_tools(hover)
+
     # changes labels from 0, 1, 2 etc to Python, SQL, Hadoop, etc
     p.xaxis[0].formatter = FixedTickFormatter(labels=label_dict)
     #SingleIntervalTicker
@@ -603,15 +616,29 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False)
     p.xaxis.major_label_orientation = 89.0
     # I think we already know the xaxis is a skill...
     # p.xaxis.axis_label = 'skill'
-    p.xaxis.axis_label_text_font_size = "30pt"
-    p.xaxis.major_label_text_font_size = "15pt"
     p.yaxis.axis_label = 'percent of jobs with skill'
-    p.yaxis.axis_label_text_font_size = "30pt"
-    p.yaxis.major_label_text_font_size = "15pt"
-    p.title_text_font_size = "30pt"
-    output_file('app/static/img/' + search_term + 'skills.html')
+    # this is for a 1000x1000 plot
+    # p.xaxis.axis_label_text_font_size = "30pt"
+    # p.xaxis.major_label_text_font_size = "15pt"
+    # p.yaxis.axis_label_text_font_size = "30pt"
+    # p.yaxis.major_label_text_font_size = "15pt"
+    # p.title_text_font_size = "30pt"
+    # this is for 500x500
+    big = str(int(scale_factor / 500. * 15))
+    small = str(int(scale_factor / 500. * 8))
+    p.xaxis.axis_label_text_font_size = big + "pt"
+    p.xaxis.major_label_text_font_size = small + "pt"
+    p.yaxis.axis_label_text_font_size = big + "pt"
+    p.yaxis.major_label_text_font_size = small + "pt"
+    p.title_text_font_size = big + "pt"
     if live:
         show(p)
+    else:
+        script, div = components(p, wrap_script=False)
+        return script, div
+        # was saving it before, but that generates a complete html file
+        # output_file('app/static/img/' + re.sub('\s', '_', search_term) + '_skills.html')
+        # save(p)
 
 
 def get_locations_mongo(search_term='data science'):
@@ -619,6 +646,7 @@ def get_locations_mongo(search_term='data science'):
     Retrieves list of job locations from mongoDB.  Need to have full time etc
     in order to filter them properly
     """
+    search_term = clean_search_term(search_term)
     client = MongoClient()
     db = client[DB_NAME]
     coll = db[search_term]
@@ -649,6 +677,7 @@ def get_salaries_mongo(search_term='data science'):
     Retrieves list of salaries from mongoDB.  Need to have full time etc
     in order to filter them properly
     """
+    search_term = clean_search_term(search_term)
     client = MongoClient()
     db = client[DB_NAME]
     coll = db[search_term]
@@ -681,7 +710,7 @@ def get_salaries_mongo(search_term='data science'):
     return salary_dict
 
 
-def get_salary_dist(salary_dict):
+def get_salary_dist(salary_dict, debug=False):
     """
     Takes dict of salaries (emp_type as keys) and gets range and other metrics.
     """
@@ -695,7 +724,8 @@ def get_salary_dist(salary_dict):
         new_sal_dict[t]['maxs'] = []
         new_sal_dict[t]['avgs'] = []
         for s in salary_dict[t]:
-            print s
+            if debug:
+                print s
             s = re.sub(',', '', s)
             s = re.sub('\$', '', s)
             # check if an hourly wage
@@ -706,28 +736,37 @@ def get_salary_dist(salary_dict):
             except:
                 ishourly = False
             if 'hour' in s or 'hourly' in s or 'hr' in s or len(s) < 4 or ishourly and 'k' not in s:
-                print 'guessing hourly'
+                if debug:
+                    print 'guessing hourly'
                 if '-' in s:
+                    if debug:
+                        print s
                     # probably a range
-                    sal_match = re.search('(\d+\.*\d*)\s*-\s*(\d+\.*\d*)', s)
-                    min_hr = float(sal_match.group(1))
-                    min_hr *= 37.5 * 52
-                    max_hr = float(sal_match.group(2))
-                    max_hr *= 37.5 * 52
-                    avg_hr = (min_hr + max_hr) / 2
-                    print 'hourly min, max, avg:', min_hr, max_hr, avg_hr
-                    # calculate yearly salary based on per hour
-                    new_sal_dict[t]['mins'].append(min_hr)
-                    new_sal_dict[t]['maxs'].append(max_hr)
-                    new_sal_dict[t]['avgs'].append(avg_hr)
+                    sal_match = re.search('(\d+\.*\d*)[/hr]*\s*-\s*(\d+\.*\d*)', s)
+                    try:
+                        min_hr = float(sal_match.group(1))
+                        min_hr *= 37.5 * 52
+                        max_hr = float(sal_match.group(2))
+                        max_hr *= 37.5 * 52
+                        avg_hr = (min_hr + max_hr) / 2
+                        if debug:
+                            print 'hourly min, max, avg:', min_hr, max_hr, avg_hr
+                        # calculate yearly salary based on per hour
+                        new_sal_dict[t]['mins'].append(min_hr)
+                        new_sal_dict[t]['maxs'].append(max_hr)
+                        new_sal_dict[t]['avgs'].append(avg_hr)
+                    except:
+                        pass
                 else:
                     sal_match = re.search('\d+\.*\d*', s)
                     avg_hr = float(sal_match.group(0)) * 37.5 * 52
                     if avg_hr > 10: # saw some as '00' etc
                         new_sal_dict[t]['avgs'].append(avg_hr)
-                        print 'hourly avg:', avg_hr
+                        if debug:
+                            print 'hourly avg:', avg_hr
             else: # not hourly, probably annually
-                print 'guessing annual'
+                if debug:
+                    print 'guessing annual'
                 range_match = re.search('(\d+\.*\d*)\s*-+\s*(\d+\.*\d*)', s)
                 if range_match:
                     min_sal = float(range_match.group(1))
@@ -744,18 +783,20 @@ def get_salary_dist(salary_dict):
                     new_sal_dict[t]['mins'].append(min_sal)
                     new_sal_dict[t]['maxs'].append(max_sal)
                     new_sal_dict[t]['avgs'].append(avg_sal)
-                    print 'annual min, max, avg:', min_sal, max_sal, avg_sal
+                    if debug:
+                        print 'annual min, max, avg:', min_sal, max_sal, avg_sal
                 else:
                     avg_sal = float(re.search('\d+\.*\d*', s).group(0))
                     if avg_sal < 1000:
                         avg_sal *= 1000
                     new_sal_dict[t]['avgs'].append(avg_sal)
-                    print 'annual avg:', avg_sal
+                    if debug:
+                        print 'annual avg:', avg_sal
 
     return new_sal_dict
 
 
-def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist', live=False):
+def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist', live=False, debug=False, hw=None):
     """
     Assumes a Gaussian distribution of salaries, excludes outliers using
     1.5 * IQR.
@@ -772,13 +813,21 @@ def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist
     live: boolean
         if True, will call plt.show() to show locally, else will save to folder
 
+    hw: list of ints
+        [height, width] of web browser
+
     Returns
     -------
 
     """
+    if hw is not None:
+        # scale factor for screen width
+        scale_factor = 500 / 1366. * hw[1] / 100
+        print 'scale_factor:', scale_factor
+    search_term = clean_search_term(search_term)
     if sal_dict is None:
-        salary_dict = get_salaries_mongo()
-        sal_dict = get_salary_dist(salary_dict)
+        salary_dict = get_salaries_mongo(search_term=search_term)
+        sal_dict = get_salary_dist(salary_dict, debug=debug)
 
     dist = sal_dict[key]['avgs']
     iqr = stats.iqr(dist) # get interquartile range
@@ -796,7 +845,11 @@ def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist
     scaled_norm = unscaled_norm / max(unscaled_norm)
     # abondon matplotlib in favor of seaborn
     # plt.hist(inliers, bins=20, normed=True)
-    f = plt.figure()
+    if hw is not None:
+        # 80 dpi default, 500/1366 ratio by trial and error
+        f = plt.figure(figsize=(scale_factor, scale_factor))
+    else:
+        f = plt.figure()
     ax = plt.gca()
     sns.distplot(inliers, norm_hist=True, kde=False, ax=ax)
     sns.kdeplot(inliers, label='KDE', color='#4289f4', ax=ax)
@@ -811,7 +864,7 @@ def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist
     if live:
         plt.show()
     else:
-        plt.savefig('app/static/img/' + search_term + 'salary_dist.png')
+        plt.savefig('app/static/img/' + re.sub('\s', '_', search_term) + '_salary_dist.png')
 
     # trying to use bokeh for an interactive chart, but not currently worth it
     # from bokeh.charts import Histogram
@@ -856,12 +909,7 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
     None if use_mongo is True
 
     """
-    if search_term == 'data scientist':
-        search_term = 'data science'
-    elif search_term in ['fullstack', 'full-stack']:
-        search_term = 'full stack'
-    elif search_term in ['front-end developer', 'frontend developer']:
-        serach_term = 'front end developer'
+    search_term = clean_search_term(search_term)
 
     res = req.get(create_url(search_term=search_term))
     data = json.loads(res.content)
@@ -933,6 +981,7 @@ def test_system(search_term='data science', page=1):
     This was how I first started the project.
     It just runs a few basic tests of the API.
     """
+    search_term = clean_search_term(search_term)
     res = req.get(create_url(search_term=search_term, page=page))
     data = json.loads(res.content)
     next_link = data['nextUrl']
@@ -985,6 +1034,7 @@ def check_if_job_recent(job, search_term='data science'):
     Takes a job dictionary object and checks if is in the MongoDB.
     If so, sets the status to 'recent'.
     """
+    search_term = clean_search_term(search_term)
     client = MongoClient()
     db = client[DB_NAME]
     coll = db[search_term]
@@ -1006,9 +1056,7 @@ def get_recent_jobs(search_term='data science', fields=None, callback=None, forc
 
     Callback arg was abandoned, just there as a remnant now.
     """
-    search_term = search_term.lower()
-    if search_term == 'data scientist':
-        search_term = 'data science'
+    search_term = clean_search_term(search_term)
     client = MongoClient()
     db = client[DB_NAME]
     coll = db[search_term]
@@ -1036,6 +1084,7 @@ def get_recent_jobs(search_term='data science', fields=None, callback=None, forc
 
     return jobs
 
+
 def convert(data):
     """
     Converts all parts of dictionary from unicode to string.
@@ -1049,6 +1098,19 @@ def convert(data):
         return type(data)(map(convert, data))
     else:
         return data
+
+
+def clean_search_term(search_term):
+    search_term = re.sub('\s+', ' ', search_term) # replace multi space with one
+    search_term = search_term.lower() # always lower case
+    if search_term == 'data scientist':
+        search_term = 'data science'
+    elif search_term in ['fullstack', 'full-stack']:
+        search_term = 'full stack'
+    elif search_term in ['front-end developer', 'frontend developer']:
+        search_term = 'front end developer'
+
+    return search_term
 
 
 if __name__ == "__main__":

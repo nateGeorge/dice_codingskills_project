@@ -22,24 +22,36 @@ var post_addr;
 
 var get_job_stats = function(search_term) {
     // first clear div
-    $('#search_results').empty();
+    $('#search_results1').empty();
+    $('#search_results2').empty();
     post_addr = '/get_job_stats';
+    var hw = [window.screen.availHeight, window.screen.availWidth];
     $.post(post_main_addr + post_addr, data = {
-      job: search_term
+      job: search_term,
+      hw: hw
       }, function(data, err) {
         log_user_info(post_addr, search_term);
       if (data.length == 21) {
         // the data hasn't ever been scraped.
         // display message that it is currently being scraped, and will be updated in 1.5 mins
         console.log('updating db');
-        $('#search_results').append('<h1>We don\'t have that search term in our database yet.  Check back tomorrow, we\'ll probably have it!');
-        // $('#search_results').append('<h1>We\'re updating the db, this page will refresh in 1.5 mins when we have some results...');
+        $('#search_results').append('<h1>We don\'t have that search term in our database yet.  Check back tomorrow, we\'ll probably have it!</h1>');
+        // $('#search_results').append('<h1>We\'re updating the db, this page will refresh in 1.5 mins when we have some results...</h1>');
+      } else {
+        var json_data = JSON.parse(data);
+        var jobs = json_data['jobs']
+        $('#search_results1').append(json_data['div']);
+        var skills_script = json_data['script'];
+        eval(skills_script);
+        var clean_search = json_data['search_term']
+        var salary_plot = 'img/' + clean_search + '_salary_dist.png';
+        // make it refresh with each date
+        $('#search_results2').append('<img src="' + salary_plot + '?v=<?php echo Date(\'Y.m.d.G.i.s\')?>" />');
       }
-      // console.log(data);
-      jobs = JSON.parse(data);
 
       var offset = 20; //Offset of 20px
 
+      console.log('wtf?!?!');
       $('html, body').animate({
           scrollTop: $("#results").offset().top + offset
       }, 1000);

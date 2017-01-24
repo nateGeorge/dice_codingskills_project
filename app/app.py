@@ -33,8 +33,11 @@ def index():
 
 @app.route('/get_job_stats', methods=['POST'])
 def get_words():
+    print request.form
     search_term = request.form.getlist('job')[0]
-    print search_term
+    hw = request.form.getlist('hw[]')
+    hw[0] = int(str(hw[0]))
+    hw[1] = int(str(hw[1]))
     fields = ['jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'skills']
     jobs = ca.get_recent_jobs(search_term=search_term, fields=fields)
     if jobs == 'updating db':
@@ -47,7 +50,14 @@ def get_words():
         coll.insert(insert_dict)
         resp = flask.Response(json.dumps({'updating db':True}))
     else:
-        resp = flask.Response(json.dumps(jobs))
+        ca.plot_salary_dist(search_term=search_term, hw=hw)
+        script, div = ca.plot_top_skills(search_term=search_term, hw=hw)
+        jobs_dict = {}
+        jobs_dict['script'] = script.encode('ascii', 'ignore')
+        jobs_dict['div'] = div.encode('ascii', 'ignore')
+        jobs_dict['jobs'] = jobs
+        jobs_dict['search_term'] = re.sub('\s', '_', ca.clean_search_term(search_term))
+        resp = flask.Response(json.dumps(jobs_dict))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 

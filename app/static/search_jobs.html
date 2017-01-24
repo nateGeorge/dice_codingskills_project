@@ -11,6 +11,15 @@
 
     <title>Advanced Job Search</title>
 
+
+    <!-- bokeh stuff -->
+    <link
+    href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.css"
+    rel="stylesheet" type="text/css">
+    <link
+        href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.3.min.css"
+        rel="stylesheet" type="text/css">
+
     <!-- force refresh of favicon -->
     <link rel="icon" href="favicon.ico" />
     <!-- Bootstrap Core CSS -->
@@ -91,7 +100,9 @@
     <section class="bg-primary" id="results">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 text-center" id="search_results">
+              <div class="col-lg-6 text-center" id="search_results1">
+              </div>
+                <div class="col-lg-6 text-center" id="search_results2">
                 </div>
             </div>
             <hr class="light">
@@ -302,6 +313,11 @@
 
     <!-- My custom JS -->
     <script src="js/app.js"></script>
+
+    <!-- bokeh stuff -->
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.js"></script>
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.3.min.js"></script>
+    <script src="js/bokeh_style.js"></script>
 
     <!-- Morphist -->
     <link rel="stylesheet" href="css/morphist.css">
