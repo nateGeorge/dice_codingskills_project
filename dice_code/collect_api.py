@@ -861,7 +861,7 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
     elif search_term in ['fullstack', 'full-stack']:
         search_term = 'full stack'
     elif search_term in ['front-end developer', 'frontend developer']:
-        serach_term = 'front end developer' 
+        serach_term = 'front end developer'
 
     res = req.get(create_url(search_term=search_term))
     data = json.loads(res.content)
@@ -999,7 +999,7 @@ def check_if_job_recent(job, search_term='data science'):
     return False
 
 
-def get_recent_jobs(search_term='data science', fields=None, callback=None):
+def get_recent_jobs(search_term='data science', fields=None, callback=None, force=False):
     """
     Gets all jobs in db that have 'recent' == True.
     Can supply list of fields to only return those fields.
@@ -1019,9 +1019,11 @@ def get_recent_jobs(search_term='data science', fields=None, callback=None):
             field_dict[f] = 1
     jobs = list(coll.find({'recent': True}, field_dict))
     if len(jobs) == 0:
-        t1 = threading.Thread(target=continuous_scrape, kwargs={'search_term':search_term})
-        t1.start()
-        #t1.join()
+        # for now, disabling searching for new topics
+        if force:
+            t1 = threading.Thread(target=continuous_scrape, kwargs={'search_term':search_term})
+            t1.start()
+            t1.join()
         if callback is None:
             return 'updating db'
         else:

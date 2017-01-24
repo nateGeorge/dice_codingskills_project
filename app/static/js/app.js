@@ -32,7 +32,8 @@ var get_job_stats = function(search_term) {
         // the data hasn't ever been scraped.
         // display message that it is currently being scraped, and will be updated in 1.5 mins
         console.log('updating db');
-        $('#search_results').append('<h1>We\'re updating the db, this page will refresh in 1.5 mins when we have some results...');
+        $('#search_results').append('<h1>We don\'t have that search term in our database yet.  Check back tomorrow, we\'ll probably have it!');
+        // $('#search_results').append('<h1>We\'re updating the db, this page will refresh in 1.5 mins when we have some results...');
       }
       // console.log(data);
       jobs = JSON.parse(data);
