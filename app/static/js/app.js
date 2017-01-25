@@ -8,6 +8,8 @@
 
 var post_main_addr = 'http://0.0.0.0:10001' // 'http://cannadvise.me' //'http://35.161.235.42:10001'; // address with flask api
 var jobs;
+var bokeh_skills_list;
+var selected;
 var skills = []; // for skills chosen by clicking on the skills bar chart
 
 // click submit button when pressing enter from input form
@@ -19,9 +21,14 @@ $("#job_search_input").keyup(function(event){
 });
 
 var post_addr;
+var last_clicked; // to prevent clicking too frequently
 
 var get_job_stats = function(search_term) {
     // first clear div
+    if (last_clicked != undefined && new Date() - last_clicked < 1000) {
+      return;
+    }
+    last_clicked = new Date();
     $('#search_results1').empty();
     $('#search_results2').empty();
     post_addr = '/get_job_stats';
@@ -41,15 +48,28 @@ var get_job_stats = function(search_term) {
         var json_data = JSON.parse(data);
         var jobs = json_data['jobs']
         $('#search_results1').append(json_data['div']);
+        console.log(json_data['div']);
         var skills_script = json_data['script'];
+        skills_script = skills_script
         eval(skills_script);
+        // center the plot in the div
         var clean_search = json_data['search_term']
         var salary_plot = json_data['salary_file'];
         // make it refresh with each date
         var shebang = new Date().getTime();
-        console.log(shebang);
         console.log('<img src="' + salary_plot + '?' + shebang + ' />');
-        $('#search_results2').append('<img src="' + salary_plot + '?' + shebang + '" />');
+        $('#search_results2').append('<img id="salary_img" src="' + salary_plot + '?' + shebang + '" />');
+        $('#salary_img').css('display', 'inline-block');
+        var salaryrange = `
+        <input class="form-control" type="text" value="0" defaultValue="0" id="job_search_input"
+        onblur="if (this.value == '') {this.value = '0';}"
+        onfocus="if (this.value == '0') {this.value = '';}" />
+        <span class="input-group-addon">-</span>
+        <input class="form-control" type="text" value="1,000,000" defaultValue="1,000,000" id="job_search_input"
+        onblur="if (this.value == '') {this.value = '1,000,000';}"
+        onfocus="if (this.value == '1,000,000') {this.value = '';}" />
+        `;
+        $('#salary_range').append()
       }
 
       var offset = 20; //Offset of 20px
@@ -87,3 +107,31 @@ var log_user_info = function(cur_page, search_term) {
 
 // log user on page loads
 $(document).ready(log_user_info());
+
+// scroll to top on reload
+window.onbeforeunload = function () {
+  window.scrollTo(0, 0);
+}
+
+// for updating skills list if click outside of bars on skills chart
+// http://stackoverflow.com/questions/965601/how-to-detect-left-click-anywhere-on-the-document-using-jquery
+// IE might return 1 or 0 here, not sure
+// $(document).click(function(e) {
+//     // Check for left button
+//     if (e.button == 0) {
+//
+//     }
+// });
+
+var fn = function() {
+  console.log('mouseup');
+  $('#skills_list').empty();
+  skills = [];
+  // var idxs = selected['selected']['1d'].indices;
+  // for (var i = 0; i < idxs.length; i++) {
+  //     var cur_skill = bokeh_skills_list[idxs[i]];
+  //     skills.push(cur_skill);
+  // }
+}
+
+var click_set = false; // for setting the listening event in the taptool callback

@@ -20,6 +20,10 @@
         href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.3.min.css"
         rel="stylesheet" type="text/css">
 
+    <style>
+    .bk-plot-layout {display: inline-block;}
+    </style>
+
     <!-- force refresh of favicon -->
     <link rel="icon" href="favicon.ico" />
     <!-- Bootstrap Core CSS -->
@@ -106,9 +110,15 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-lg-6 text-center" id="skills_list">
+              <div class="col-lg-6 text-center">
+                <p>Shift+click on the bars in the chart to add skills to filter jobs below</p>
+                <p>Shift+click them again to remove</p>
+                <ul class="list-group" id="skills_list">
+                </ul>
               </div>
-              <div class="col-lg-6 text-center" id="salary_range">
+              <div class="col-lg-6 text-center">
+                <div class="input-group" id="salary_range">
+                </div>
               </div>
             </div>
             <hr class="light">

@@ -463,6 +463,210 @@ class FixedTickFormatter(TickFormatter):
     __implementation__ = JS_CODE
 
 
+def old_plot_top_skills(top_skills_all=None, search_term='data science', live=False, hw=None):
+    """
+    BACKUP OF PLOTTING THAT WORKS
+    Makes bar graph of top skills from a counter object.
+
+    Parameters
+    ----------
+    top_skills_all: Counter
+        if not None, used as skills Counter for plotting
+    search_term: string
+        if top_skills_all is None, this is used to get skills Counter object
+    live: boolean
+        if True, will show plot after saving it
+    """
+    if hw is not None:
+        # scale factor for screen width
+        scale_factor = int(500 / 1366. * hw[1])
+    search_term = clean_search_term(search_term)
+    if top_skills_all is None:
+        if search_term is None:
+            return 'search term or top_skills must be supplied'
+
+        skills = get_skills_tf_mongo(search_term=search_term)
+        top_skills_all = [s for s in skills.most_common() if s[1] >= 5]
+
+    top_skills = [(str.capitalize(s[0]), s[1]) for s in top_skills_all[:30]]
+    client = MongoClient()
+    db = client[DB_NAME]
+    coll = db[search_term]
+    total_jobs = float(coll.find().count())
+    client.close()
+    # get % counts for each skills
+    norm_counts = []
+    label_dict = {}
+    for i, s in enumerate(top_skills):
+        label_dict[i] = s[0]
+        norm_counts.append(s[1] / total_jobs * 100)
+
+    df = pd.DataFrame({'skill':[s for s in top_skills], 'pct jobs with skill':norm_counts})
+    # clean up df
+    df['skill'] = df['skill'].apply(lambda x: x[0])
+    df['pct jobs with skill'] = df['pct jobs with skill'].apply(lambda x: round(x, 0))
+    df['color'] = '#6999de'
+    # the @something is for a column of the dataframe
+    # hover = HoverTool(
+    #     tooltips=[
+    #         ("skill", "$skill"),
+    #         ("pct jobs with skill", "$pct jobs with skill")
+    #     ]
+    # )
+    # trying another way to input data for hovertool
+    # sourceData = ColumnDataSource(
+    #     data = Dict(df.to_dict())
+    #     )
+    tools = 'pan,lasso_select,box_select,reset,tap'.split(',')
+    #tools.append(hover)
+    src = df.to_dict(orient='list')
+    full_source = ColumnDataSource(src)
+    src.update({'index': range(df['skill'].shape[0])})
+    #src = ColumnDataSource(src)
+
+    # high-level way to do it, but can't label anything but the indices...
+    # p = Bar(data=df, label='index', tools=tools, values='pct jobs with skill', title="Top skills for data science", legend=False, width=1000, height=1000)
+    # p.select(dict(type=GlyphRenderer))
+    # hover = p.select(dict(type=HoverTool))
+    # hover.tooltips = [('skill', '@x'), ('test', '@y')]
+
+    # another way to set hover, but second step wasn't working
+    # hover.tooltips = [('Value of ID',' $x'),('Value of Total',' @y')]
+
+    # mid-level way to do it
+    max_df = round(df['pct jobs with skill'].max() / 10 + 0.5) * 10
+    p = figure(title='Top skills for ' + search_term, width=scale_factor, height=scale_factor, tools='tap', y_range=Range1d(0, max_df), x_range=Range1d(-0.5, 29.5))
+    # full_source = None
+    for i, r in df.iterrows():
+        src = r.to_dict()
+        for k, v in src.iteritems():
+            src[k] = [v]
+        src['index'] = [i]
+        source = ColumnDataSource(src)
+        # if full_source is None:
+        #     full_source = source
+        # else:
+        #     full_source.add(src)
+
+        p.vbar(source=source, x='index', width=0.9, bottom=0,
+            top='pct jobs with skill', color='color')
+
+    taptool = p.select(type=TapTool)
+    taptool.callback = CustomJS(args=dict(xr=p.x_range, source=full_source), code="""
+    // JavaScript code goes here
+
+    // load jquery if not already loaded
+    // Anonymous "self-invoking" function
+    (function() {
+        var bokeh_data = source.get('data');
+        console.log(source);
+        console.log(bokeh_data);
+        var data_skills = bokeh_data['skill'];
+        console.log(data_skills);
+        // Load the script
+        var script = document.createElement("SCRIPT");
+        script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js';
+        script.type = 'text/javascript';
+        document.getElementsByTagName("head")[0].appendChild(script);
+
+        // Poll for jQuery to come into existance
+        var checkReady = function(callback) {
+            if (window.jQuery) {
+                callback(jQuery);
+            }
+            else {
+                window.setTimeout(function() { checkReady(callback); }, 100);
+            }
+        };
+
+        // Start polling...
+        checkReady(function($) {
+            // Use $ here...
+            var cur_skill = cb_obj['data']['skill'][0];
+            var arrpos = $.inArray(cur_skill, skills);
+            console.log(cur_skill);
+            var datapos = $.inArray(cur_skill, data_skills)
+            console.log(datapos);
+            var skill = cb_obj['data']['skill']
+            if (arrpos != -1) {
+                skills.splice(arrpos, 1); // remove one element from arrpos
+                $("[id='" + skill + "']").remove();
+                bokeh_data.color[datapos] = '#6999de';
+                source.trigger('change');
+            } else {
+                // need to first make the global skills array like var skills = [];
+                skills.push(skill);
+                $('#skills_list').append('<li class="list-group-item" style="color:#000;" id="' + skill + '">' + skill + '</li>');
+                bokeh_data.color[datapos] = '#e20d0d';
+                source.trigger('change');
+            }
+        });
+    })();
+
+    console.log(cb_obj);
+    a = cb_obj;
+    console.log(cb_obj['data']['skill']);
+
+    // models passed as args are automagically available
+    // xr.start = a;
+    // xr.end = b;
+
+    """)
+
+    # todo: fix hovertool.  works in standalone plot, but not embedded...hmmm
+    # hover = HoverTool(tooltips=[('skill', '@skill'), ('pct jobs with skill', '@{pct jobs with skill}')])
+    # p.add_tools(hover)
+
+    # changes labels from 0, 1, 2 etc to Python, SQL, Hadoop, etc
+    p.xaxis[0].formatter = FixedTickFormatter(labels=label_dict)
+    #SingleIntervalTicker
+
+    # this is a way to set the hover tooltip when you can use a ColumnDataSource
+    # which you can't with high level (i.e. Bar()) charts right now
+    # p.select(dict(type=GlyphRenderer))
+    # hover = p.select(dict(type=HoverTool))
+    # hover.tooltips = [('skill', '@skill'), ('test', '@y')]
+
+    # this works but displays a number for index, not label
+    # hover.tooltips = [('index', '@index'), ('test', '@y')]
+
+    # set major/minor ticks to be same length
+    # p.xaxis[0].minor_tick_in = p.xaxis[0].major_tick_in
+    # p.xaxis[0].minor_tick_out = p.xaxis[0].major_tick_out
+    # better: just remove minor ticks
+    p.xaxis[0].ticker.num_minor_ticks = 0
+    p.xaxis[0].ticker.desired_num_ticks = df.shape[0]
+    # remove grid lines
+    p.xgrid.grid_line_color = None
+    p.ygrid.grid_line_color = None
+    p.xaxis.major_label_orientation = 89.0
+    # I think we already know the xaxis is a skill...
+    # p.xaxis.axis_label = 'skill'
+    p.yaxis.axis_label = 'percent of jobs with skill'
+    # this is for a 1000x1000 plot
+    # p.xaxis.axis_label_text_font_size = "30pt"
+    # p.xaxis.major_label_text_font_size = "15pt"
+    # p.yaxis.axis_label_text_font_size = "30pt"
+    # p.yaxis.major_label_text_font_size = "15pt"
+    # p.title_text_font_size = "30pt"
+    # this is for 500x500
+    big = str(int(scale_factor / 500. * 15))
+    small = str(int(scale_factor / 500. * 8))
+    p.xaxis.axis_label_text_font_size = big + "pt"
+    p.xaxis.major_label_text_font_size = small + "pt"
+    p.yaxis.axis_label_text_font_size = big + "pt"
+    p.yaxis.major_label_text_font_size = small + "pt"
+    p.title_text_font_size = big + "pt"
+    if live:
+        show(p)
+    else:
+        script, div = components(p, wrap_script=False)
+        return script, div
+        # was saving it before, but that generates a complete html file
+        # output_file('app/static/img/' + re.sub('\s', '_', search_term) + '_skills.html')
+        # save(p)
+
+
 def plot_top_skills(top_skills_all=None, search_term='data science', live=False, hw=None):
     """
     Makes bar graph of top skills from a counter object.
@@ -504,6 +708,7 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False,
     # clean up df
     df['skill'] = df['skill'].apply(lambda x: x[0])
     df['pct jobs with skill'] = df['pct jobs with skill'].apply(lambda x: round(x, 0))
+    df['color'] = '#6999de'
     # the @something is for a column of the dataframe
     # hover = HoverTool(
     #     tooltips=[
@@ -519,10 +724,11 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False,
     #tools.append(hover)
     src = df.to_dict(orient='list')
     src.update({'index': range(df['skill'].shape[0])})
+    full_source = ColumnDataSource(src)
     #src = ColumnDataSource(src)
 
     # high-level way to do it, but can't label anything but the indices...
-    # p = Bar(data=df, label='index', tools=tools, values='pct jobs with skill', title="Top skills for data science", legend=False, width=1000, height=1000)
+    # p = Bar(data=full_source, label='index', tools=['taptool'], values='pct jobs with skill', title="Top skills for data science", legend=False, width=scale_factor, height=scale_factor)
     # p.select(dict(type=GlyphRenderer))
     # hover = p.select(dict(type=HoverTool))
     # hover.tooltips = [('skill', '@x'), ('test', '@y')]
@@ -533,13 +739,33 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False,
     # mid-level way to do it
     max_df = round(df['pct jobs with skill'].max() / 10 + 0.5) * 10
     p = figure(title='Top skills for ' + search_term, width=scale_factor, height=scale_factor, tools='tap', y_range=Range1d(0, max_df), x_range=Range1d(-0.5, 29.5))
+    p.vbar(source=full_source, x='index', width=0.9, bottom=0,
+        top='pct jobs with skill', color='color')
+    # for i, r in df.iterrows():
+    #     src = r.to_dict()
+    #     for k, v in src.iteritems():
+    #         src[k] = [v]
+    #     src['index'] = [i]
+    #     source = ColumnDataSource(src)
+    #     if full_source is None:
+    #         full_source = source
+    #     else:
+    #         full_source.add(src)
+    #
+    #     p.vbar(source=source, x='index', width=0.9, bottom=0,
+    #         top='pct jobs with skill', color='color')
+
     taptool = p.select(type=TapTool)
-    taptool.callback = CustomJS(args=dict(xr=p.x_range), code="""
+    taptool.callback = CustomJS(args=dict(xr=p.x_range, source=full_source), code="""
     // JavaScript code goes here
 
     // load jquery if not already loaded
     // Anonymous "self-invoking" function
     (function() {
+        test = cb_obj;
+        var bokeh_data = source['data'];
+        var data_skills = bokeh_data['skill'];
+        bokeh_skills_list = data_skills;
         // Load the script
         var script = document.createElement("SCRIPT");
         script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js';
@@ -559,12 +785,30 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False,
         // Start polling...
         checkReady(function($) {
             // Use $ here...
-            var arrpos = $.inArray(cb_obj['data']['skill'], skills);
+            var cur_skill = cb_obj['data']['skill'];
+            selected = cb_obj; // need to declare selected as var earlier,
+            // use selected['selected']['1d'].indices to get selected elements
+            var arrpos = $.inArray(cur_skill, skills);
+            var datapos = $.inArray(cur_skill, data_skills);
+            var skill = cb_obj['data']['skill'];
+            $('#skills_list').empty();
+            var selected_idxs = selected['selected']['1d'].indices;
+            for (var i = 0; i < selected_idxs.length; i++) {
+                var cur_skill = bokeh_skills_list[selected_idxs[i]];
+                $('#skills_list').append('<li class="list-group-item" style="color:#000;" id="' + cur_skill + '">' + cur_skill + '</li>');
+                skills.push(cur_skill);
+            }
             if (arrpos != -1) {
-                skills.splice(arrpos, 1); // remove one element from arrpos
+                //skills.splice(arrpos, 1); // remove one element from arrpos
+                //$("[id='" + skill + "']").remove();
+                //bokeh_data.color[datapos] = '#6999de';
+                source.trigger('change');
             } else {
                 // need to first make the global skills array like var skills = [];
-                skills.push(cb_obj['data']['skill']);
+                //skills.push(skill);
+                //$('#skills_list').append('<li class="list-group-item" style="color:#000;" id="' + skill + '">' + skill + '</li>');
+                //bokeh_data.color[datapos] = '#e20d0d';
+                source.trigger('change');
             }
         });
     })();
@@ -576,16 +820,13 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False,
     // models passed as args are automagically available
     // xr.start = a;
     // xr.end = b;
+    // listen for click in div, and clear skills list accordingly
+    if (click_set == false) {
+        $('.bk-plot-layout').click(fn);
+        click_set = true;
+    }
 
     """)
-    for i, r in df.iterrows():
-        src = r.to_dict()
-        for k, v in src.iteritems():
-            src[k] = [v]
-        src['index'] = [i]
-        source = ColumnDataSource(src)
-        p.vbar(source=source, x='index', width=0.9, bottom=0,
-            top='pct jobs with skill')#, color="firebrick")
 
     # todo: fix hovertool.  works in standalone plot, but not embedded...hmmm
     # hover = HoverTool(tooltips=[('skill', '@skill'), ('pct jobs with skill', '@{pct jobs with skill}')])
