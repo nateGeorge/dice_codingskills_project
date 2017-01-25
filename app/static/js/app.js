@@ -45,8 +45,10 @@ var get_job_stats = function(search_term) {
         $('#search_results').append('<h1>We don\'t have that search term in our database yet.  Check back tomorrow, we\'ll probably have it!</h1>');
         // $('#search_results').append('<h1>We\'re updating the db, this page will refresh in 1.5 mins when we have some results...</h1>');
       } else {
+        $('#results').css('display', 'block');
         var json_data = JSON.parse(data);
         var jobs = json_data['jobs']
+        test = jobs;
         $('#search_results1').append(json_data['div']);
         console.log(json_data['div']);
         var skills_script = json_data['script'];
@@ -69,7 +71,12 @@ var get_job_stats = function(search_term) {
         onblur="if (this.value == '') {this.value = '1,000,000';}"
         onfocus="if (this.value == '1,000,000') {this.value = '';}" />
         `;
-        $('#salary_range').append()
+        $('#salary_range').append(salaryrange);
+        // un-hide filtering elements
+        $('#search_instructions1').css('display', 'block');
+        $('#search_instructions2').css('display', 'block');
+        $('#filter_jobs').css('display', 'block');
+        populate_jobs(jobs);
       }
 
       var offset = 20; //Offset of 20px
@@ -78,6 +85,22 @@ var get_job_stats = function(search_term) {
           scrollTop: $("#results").offset().top + offset
       }, 1000);
   });
+}
+
+var test;
+
+var populate_jobs = function(jobs) {
+  for (var i=0; i<jobs.length; i++) {
+    var job_link = '<h3><a href="' + jobs[i]['detailUrl'] + '" style="color: white; text-decoration: underline;">' + jobs[i]['jobTitle'] + '</a></h3>';
+    var job_salary = '<p>' + jobs[i]['salary'] + '</br>';
+    var job_location = jobs[i]['location'] + '</br> ';
+    var job_company = jobs[i]['company'] + '</br> ';
+    var job_skills = jobs[i]['skills'] + '</br> ';
+    var emp_type = jobs[i]['emp_type'] + '</br> ';
+    var job_tele = jobs[i]['telecommute'] + '</p>';
+    var job_text = job_link + job_salary + job_location + job_skills + emp_type;
+    $('#job_listings').append(job_text);
+  }
 }
 
 var get_job_stats_form = function() {

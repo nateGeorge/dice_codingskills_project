@@ -29,6 +29,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib import ticker
 import word_vectors as wv
+from bokeh.mpl import to_bokeh
 from bokeh.plotting import figure
 from bokeh.charts import Bar, output_file, show, save
 from bokeh.models import TickFormatter, HoverTool, GlyphRenderer, Range1d, TapTool
@@ -211,7 +212,7 @@ def get_info(info):
         return skills, emp_type, salary, tele_travel
 
 
-def scrape_a_job(job_json, search_term=None, insert_mongo=True, debug=False):
+def scrape_a_job(job_json=None, search_term='data science', insert_mongo=True, debug=False, url=None):
     """
     Scrapes important info from job posting.
 
@@ -230,7 +231,7 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True, debug=False):
     """
     search_term = clean_search_term(search_term)
 
-    if insert_mongo:
+    if insert_mongo and job_json is not None:
         # first check to see if the entry is already in the db
         client = MongoClient()
         db = client[DB_NAME]
@@ -245,7 +246,10 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True, debug=False):
                 print 'WARN: occurs', in_db, 'times'
             return None
 
-    res = req.get(job_json['detailUrl'])
+    if url is not None:
+        res = req.get(url)
+    else:
+        res = req.get(job_json['detailUrl'])
     if debug:
         print job_json['detailUrl']
     if not res.ok:
@@ -281,6 +285,9 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True, debug=False):
     posted_xpath = '//*[@id="header-wrap"]/div[2]/div/div[1]/ul/li[3]'
     tree = html.fromstring(res.content)
     posted = tree.xpath(posted_xpath)[0].text
+    contact_loc_xpath = '//*[@id="contact-location"]'
+    contact_location = tree.xpath(contact_loc_xpath)[0].text.strip()
+    return
     if insert_mongo:
         entry_dict = {'skills': skills,
                         'emp_type': emp_type,
@@ -288,7 +295,8 @@ def scrape_a_job(job_json, search_term=None, insert_mongo=True, debug=False):
                         'telecommute': tele_travel[0],
                         'travel': tele_travel[1],
                         'description': descr,
-                        'posted_text': posted}
+                        'posted_text': posted,
+                        'contact_location': contact_location}
         entry_dict.update(job_json)
         found = coll.find(entry_dict).count()
         if found == 0:
@@ -1064,6 +1072,15 @@ def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist
     if hw is not None:
         # scale factor for screen width
         scale_factor = 500 / 1366. * hw[1] / 100
+        # adjust fontsize for screen size
+        rc_dict = {'font.size':int(8*hw[1]/1366.)}
+        plt.rcParams.update(rc_dict)
+        # 80 dpi default, 500/1366 ratio by trial and error
+        f = plt.figure(figsize=(scale_factor, scale_factor))
+    else:
+        f = plt.figure()
+        scale_factor = 5
+
     search_term = clean_search_term(search_term)
     if sal_dict is None:
         salary_dict = get_salaries_mongo(search_term=search_term)
@@ -1085,15 +1102,6 @@ def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist
     scaled_norm = unscaled_norm / max(unscaled_norm)
     # abondon matplotlib in favor of seaborn
     # plt.hist(inliers, bins=20, normed=True)
-    # adjust fontsize for screen size
-    rc_dict = {'font.size':int(8*hw[1]/1366.)}
-    # rcParams['] = 'medium'
-    plt.rcParams.update(rc_dict)
-    if hw is not None:
-        # 80 dpi default, 500/1366 ratio by trial and error
-        f = plt.figure(figsize=(scale_factor, scale_factor))
-    else:
-        f = plt.figure()
     ax = plt.gca()
     sns.distplot(inliers, norm_hist=True, kde=False, ax=ax)
     sns.kdeplot(inliers, label='KDE', color='#4289f4', ax=ax)
@@ -1106,6 +1114,13 @@ def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist
     plt.tight_layout()
     plt.subplots_adjust(top=0.9)
     if live:
+        # attempt to convert to bokeh, but isn't working properly
+        # output_file('convert.html', title='test')
+        # p = to_bokeh(fig=f)
+        # show(p)
+        # mpld3 a little better but hard to make interactions
+        # import mpld3
+        # mpld3.show()
         plt.show()
     else:
         filename = 'app/static/img/' + re.sub('\s', '_', search_term) + '_scale_' + str(scale_factor) + '_salary_dist.png'
@@ -1295,7 +1310,7 @@ def check_if_job_recent(job, search_term='data science'):
     return False
 
 
-def get_recent_jobs(search_term='data science', fields=None, callback=None, force=False):
+def get_jobs(search_term='data science', fields=None, callback=None, force=False, recent=True):
     """
     Gets all jobs in db that have 'recent' == True.
     Can supply list of fields to only return those fields.
@@ -1311,7 +1326,11 @@ def get_recent_jobs(search_term='data science', fields=None, callback=None, forc
     if fields is not None:
         for f in fields:
             field_dict[f] = 1
-    jobs = list(coll.find({'recent': True}, field_dict))
+
+    if recent:
+        jobs = list(coll.find({'recent': True}, field_dict))
+    else:
+        jobs = list(coll.find({}, field_dict))
     if len(jobs) == 0:
         # for now, disabling searching for new topics
         if force:

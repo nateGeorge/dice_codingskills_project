@@ -38,8 +38,8 @@ def get_words():
     hw = request.form.getlist('hw[]')
     hw[0] = int(str(hw[0]))
     hw[1] = int(str(hw[1]))
-    fields = ['jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'skills']
-    jobs = ca.get_recent_jobs(search_term=search_term, fields=fields)
+    fields = ['jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'skills', 'company', 'telecommute']
+    jobs = ca.get_jobs(search_term=search_term, fields=fields)
     if jobs == 'updating db':
         insert_dict = {}
         insert_dict['search_term'] = search_term
