@@ -44,14 +44,16 @@ var get_job_stats = function(search_term) {
         var skills_script = json_data['script'];
         eval(skills_script);
         var clean_search = json_data['search_term']
-        var salary_plot = 'img/' + clean_search + '_salary_dist.png';
+        var salary_plot = json_data['salary_file'];
         // make it refresh with each date
-        $('#search_results2').append('<img src="' + salary_plot + '?v=<?php echo Date(\'Y.m.d.G.i.s\')?>" />');
+        var shebang = new Date().getTime();
+        console.log(shebang);
+        console.log('<img src="' + salary_plot + '?' + shebang + ' />');
+        $('#search_results2').append('<img src="' + salary_plot + '?' + shebang + '" />');
       }
 
       var offset = 20; //Offset of 20px
 
-      console.log('wtf?!?!');
       $('html, body').animate({
           scrollTop: $("#results").offset().top + offset
       }, 1000);

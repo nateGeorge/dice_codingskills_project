@@ -823,7 +823,6 @@ def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist
     if hw is not None:
         # scale factor for screen width
         scale_factor = 500 / 1366. * hw[1] / 100
-        print 'scale_factor:', scale_factor
     search_term = clean_search_term(search_term)
     if sal_dict is None:
         salary_dict = get_salaries_mongo(search_term=search_term)
@@ -845,6 +844,10 @@ def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist
     scaled_norm = unscaled_norm / max(unscaled_norm)
     # abondon matplotlib in favor of seaborn
     # plt.hist(inliers, bins=20, normed=True)
+    # adjust fontsize for screen size
+    rc_dict = {'font.size':int(8*hw[1]/1366.)}
+    # rcParams['] = 'medium'
+    plt.rcParams.update(rc_dict)
     if hw is not None:
         # 80 dpi default, 500/1366 ratio by trial and error
         f = plt.figure(figsize=(scale_factor, scale_factor))
@@ -864,7 +867,9 @@ def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist
     if live:
         plt.show()
     else:
-        plt.savefig('app/static/img/' + re.sub('\s', '_', search_term) + '_salary_dist.png')
+        filename = 'app/static/img/' + re.sub('\s', '_', search_term) + '_scale_' + str(scale_factor) + '_salary_dist.png'
+        plt.savefig(filename)
+        return filename[11:]
 
     # trying to use bokeh for an interactive chart, but not currently worth it
     # from bokeh.charts import Histogram
