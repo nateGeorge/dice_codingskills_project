@@ -1222,12 +1222,8 @@ def get_salaries_mongo(search_term='data science', debug=False):
         sal = str.lower(j['salary'].encode('ascii', 'ignore'))
         emp_type = str.lower(j['emp_type'].encode('ascii', 'ignore'))
         # some are '', '-', '$' or something like 'top 20%'
-        if len(sal) < 2 or '%' in sal or j['emp_type'] == '':
-            continue
         # first check if there is at least a number in the salary
-        if not any([str.isdigit(l) for l in sal]):
-            continue
-        elif 'c2h' in emp_type or 'contract to hire' in emp_type or 'contract-to-hire' in emp_type:
+        if 'c2h' in emp_type or 'contract to hire' in emp_type or 'contract-to-hire' in emp_type:
             emp_type = 'contract_to_hire'
         elif 'full time' in emp_type or 'fulltime' in emp_type or 'full-time' in emp_type:
             emp_type = 'full_time'
@@ -1236,10 +1232,18 @@ def get_salaries_mongo(search_term='data science', debug=False):
         else:
             emp_type = 'other'
 
+        avg_sal = 0
+        if not any([str.isdigit(l) for l in sal]):
+            coll.update_one(j, {'$set': {'clean_emp_type': emp_type, 'clean_sal': avg_sal}})
+            continue
+
+        if len(sal) < 2 or '%' in sal or j['emp_type'] == '':
+            coll.update_one(j, {'$set': {'clean_emp_type': emp_type, 'clean_sal': avg_sal}})
+            continue
+
         salary_dict[emp_type].append(sal)
 
         # clean up salary and put in db
-        avg_sal = 'unknown'
         s = re.sub(',', '', sal)
         s = re.sub('\$', '', sal)
         try:
@@ -1321,7 +1325,13 @@ def get_salary_dist(salary_dict, debug=False):
         new_sal_dict[t]['mins'] = []
         new_sal_dict[t]['maxs'] = []
         new_sal_dict[t]['avgs'] = []
+        if debug:
+            print t
         for s in salary_dict[t]:
+            if s == 0:
+                continue
+            if debug:
+                print s
             if debug:
                 print s
             s = re.sub(',', '', s)
@@ -1727,13 +1737,56 @@ def clean_search_term(search_term):
     return search_term
 
 
-def filter_jobs(jobs, salary_range=None, locations=None, skills=None):
+def filter_jobs(jobs, salary_range=None, locations=None, skills=None, fields=None):
     """
     Filters jobs according to given criteria.
+
+    Parameters
+    ----------
+
+    jobs: list
+        list of dictionaries from mongo db query
+
+    salary_range: list of floats/ints
+        [minimum, maximum] salary for range
+
+    locations: list of strings
+        list of ['City, State', 'State'] where state is capitalized and
+        exactly 2 letters
+
+    skills: list of strings
+        list of ['Python', 'R'] where strings are capitalized
+
+    Returns:
+    -------
+    filtered_jobs: list of dictionaries
+        list in same format of parameter 'jobs', but filtered with criteria
     """
     df = pd.DataFrame(jobs)
+    df['state'] = df['location'].apply(lambda x: extract_state(x))
+    # pretty sure I don't need that anymore
+    # df['clean_sal'] = df['clean_sal'].fillna(0)
     if salary_range is not None:
-        df = df[df['salary']]
+        df = df[df['clean_sal'] >= salary_range[0]]
+        df = df[df['clean_sal'] <= salary_range[1]]
+
+    if locations is not None:
+        # get seperate lists of states and cities, states
+        city_states = [l for l in locations if ',' in l]
+        states = [l for l in locations if len(l) == 2]
+        df = df[df['state'].isin(states) | df['location'].isin(city_states)]
+
+    if skills is not None:
+        skills = set(skills)
+        df['skills_diff'] = df['clean_skills'].apply(lambda x: len(skills.difference(set(x))))
+        df = df[df['skills_diff'] == 0]
+
+    if fields is not None:
+        df = df[fields]
+
+    filtered_jobs = df.to_dict(orient='index').values()
+
+    return filtered_jobs
 
 
 if __name__ == "__main__":

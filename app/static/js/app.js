@@ -32,6 +32,7 @@ var skills_div;
 
 var get_job_stats = function(search_term) {
     // first clear div
+    global_search_term = search_term;
     if (last_clicked != undefined && new Date() - last_clicked < 1000) {
       return;
     }
@@ -65,6 +66,7 @@ var get_job_stats = function(search_term) {
       } else {
         $('#results').css('display', 'block');
         var json_data = JSON.parse(data);
+        var num_jobs = json_data['num_jobs'];
         jobs = json_data['jobs']
         skills_div = json_data['skills_div'];
         var locs_div = json_data['locs_div'];
@@ -89,11 +91,11 @@ var get_job_stats = function(search_term) {
         $('#locs_plot').css('display', 'inline-block');
         $('#states_plot').css('display', 'inline-block');
         var salaryrange = `
-        <input class="form-control" type="text" value="0" defaultValue="0" id="job_search_input"
+        <input class="form-control" type="text" value="0" defaultValue="0" id="sal_min"
         onblur="if (this.value == '') {this.value = '0';}"
         onfocus="if (this.value == '0') {this.value = '';}" />
         <span class="input-group-addon">-</span>
-        <input class="form-control" type="text" value="1,000,000" defaultValue="1,000,000" id="job_search_input"
+        <input class="form-control" type="text" value="1,000,000" defaultValue="1,000,000" id="sal_max"
         onblur="if (this.value == '') {this.value = '1,000,000';}"
         onfocus="if (this.value == '1,000,000') {this.value = '';}" />
         `;
@@ -109,6 +111,7 @@ var get_job_stats = function(search_term) {
         $('#loc_form').keypress(function (e) {
           if (e.which == 13) {
             var new_loc = $('#loc_input').val();
+            // this section pretty much cleans/standardizes the location
             comma_idx = $.inArray(',', new_loc);
             if (comma_idx != -1) {
               var city = new_loc.slice(0, comma_idx);
@@ -118,6 +121,7 @@ var get_job_stats = function(search_term) {
                 if (state == undefined) {
                   new_loc = city;
                 } else {
+                  state = state.toUpperCase();
                   new_loc = city + ', ' + state;
               }
             } else if (state.length == 2) {
@@ -126,7 +130,10 @@ var get_job_stats = function(search_term) {
             } else {
               new_loc = city;
             }
-            }
+          } else if (new_loc.length == 2) {
+            new_loc = new_loc.toUpperCase();
+          }
+
             var idx = $.inArray(new_loc, locations);
             if (idx == -1){
               locations.push(new_loc);
@@ -149,6 +156,8 @@ var get_job_stats = function(search_term) {
         // $('#search_instructions2').css('display', 'block');
         // $('#filter_jobs').css('display', 'block');
         populate_jobs(jobs);
+        $('#num_jobs').remove();
+        $('#filter_button_row').append('<h3 class="text-center" id="num_jobs">' + num_jobs + ' jobs found!</h3>');
       }
 
       var offset = 20; //Offset of 20px
@@ -175,12 +184,14 @@ var populate_jobs = function(jobs) {
     var job_text = job_link + job_salary + job_location + job_skills + emp_type + job_tele;
     $('#job_listings').append(job_text);
   }
+  $('#job_listings').append('<hr class="light">');
 }
 
+
+// pretty sure this function is doing nothing...need to get rid of probably
 var get_job_stats_form = function() {
   var input_val = $('#job_search_input').val();
   if (input_val != $('#job_search_input').attr('defaultValue')) {
-    global_search_term = input_val;
     get_job_stats(input_val);
   }
 }
@@ -315,5 +326,29 @@ function abbrState(input, to){
 }
 
 var filter_jobs = function() {
-
+  var sal_range = [0, 1000000];
+  var sal_min = $('#sal_min').val();
+  var sal_max = $('#sal_max').val();
+  if (sal_min != '0') {
+    sal_range[0] = sal_min;
+  }
+  if (sal_max != '1,000,000') {
+    sal_range[1] = sal_max;
+  }
+  console.log(global_search_term);
+  $.post(post_main_addr + '/filter_jobs', data = {
+    job: global_search_term,
+    sal_range: sal_range,
+    skills: skills,
+    locations: locations
+    }, function(data, err) {
+      var json_data = JSON.parse(data);
+      var fjobs = json_data['filt_jobs'];
+      var orig_num = json_data['orig_jobs'];
+      var num_jobs = json_data['num_jobs'];
+      $('#job_listings').empty();
+      populate_jobs(fjobs);
+      $('#num_jobs').remove();
+      $('#filter_button_row').append('<h3 class="text-center" id="num_jobs">' + num_jobs + ' jobs found out of ' + orig_num + '.</h3>');
+    });
 }

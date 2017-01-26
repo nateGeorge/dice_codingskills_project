@@ -35,14 +35,12 @@ def index():
 def get_words():
     # print request.form
     search_term = request.form.getlist('job')[0]
-    print search_term
     hw = request.form.getlist('hw[]')
     hw[0] = int(str(hw[0]))
     hw[1] = int(str(hw[1]))
-    fields = ['jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'clean_skills', 'company', 'telecommute']
+    fields = ['clean_sal', 'jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'clean_skills', 'company', 'telecommute']
     jobs = ca.get_jobs(search_term=search_term, fields=fields)
     if jobs == 'updating db':
-        print jobs
         insert_dict = {}
         insert_dict['search_term'] = search_term
         insert_dict['datetime'] = datetime.now()
@@ -67,10 +65,38 @@ def get_words():
         jobs_dict['jobs'] = jobs
         jobs_dict['search_term'] = re.sub('\s', '_', ca.clean_search_term(search_term))
         jobs_dict['salary_file'] = filename
+        jobs_dict['num_jobs'] = len(jobs)
         print filename
         resp = flask.Response(json.dumps(jobs_dict))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
+
+@app.route('/filter_jobs', methods=['POST'])
+def filter_jobs():
+    search_term = request.form.getlist('job')[0]
+    jobs = ca.get_jobs(search_term)
+    sal_range = ca.convert(request.form.getlist('sal_range[]'))
+    skills = ca.convert(request.form.getlist('skills[]'))
+    locations = ca.convert(request.form.getlist('locations[]'))
+    sal_range = [int(re.sub(',', '', s)) for s in sal_range]
+    if len(locations) == 0:
+        locations = None
+    if len(skills) == 0:
+        skills = None
+    print ''
+    print search_term, sal_range, skills, locations
+    print type(sal_range[0])
+    print ''
+    fields = ['clean_sal', 'jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'clean_skills', 'company', 'telecommute']
+    fjobs = ca.filter_jobs(jobs, salary_range=sal_range, locations=locations, skills=skills, fields=fields)
+    jobs_dict = {}
+    jobs_dict['orig_jobs'] = len(jobs)
+    jobs_dict['num_jobs'] = len(fjobs)
+    jobs_dict['filt_jobs'] = ca.convert(fjobs)
+    resp = flask.Response(json.dumps(jobs_dict))
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
 
 @app.route('/send_user_info', methods=['POST'])
 def log_info():
