@@ -51,10 +51,13 @@ def get_words():
         resp = flask.Response(json.dumps({'updating db':True}))
     else:
         filename = ca.plot_salary_dist(search_term=search_term, hw=hw)
-        script, div = ca.plot_top_skills(search_term=search_term, hw=hw)
+        skills_script, skills_div = ca.plot_top_skills(search_term=search_term, hw=hw)
+        locs_script, locs_div = ca.plot_top_locs(search_term=search_term, hw=hw)
         jobs_dict = {}
-        jobs_dict['script'] = script.encode('ascii', 'ignore')
-        jobs_dict['div'] = div.encode('ascii', 'ignore')
+        jobs_dict['skills_script'] = skills_script.encode('ascii', 'ignore')
+        jobs_dict['skills_div'] = skills_div.encode('ascii', 'ignore')
+        jobs_dict['locs_script'] = locs_script.encode('ascii', 'ignore')
+        jobs_dict['locs_div'] = locs_div.encode('ascii', 'ignore')
         jobs_dict['jobs'] = jobs
         jobs_dict['search_term'] = re.sub('\s', '_', ca.clean_search_term(search_term))
         jobs_dict['salary_file'] = filename

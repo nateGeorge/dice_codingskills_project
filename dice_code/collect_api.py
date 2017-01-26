@@ -285,9 +285,12 @@ def scrape_a_job(job_json=None, search_term='data science', insert_mongo=True, d
     posted_xpath = '//*[@id="header-wrap"]/div[2]/div/div[1]/ul/li[3]'
     tree = html.fromstring(res.content)
     posted = tree.xpath(posted_xpath)[0].text
-    contact_loc_xpath = '//*[@id="contact-location"]'
-    contact_location = tree.xpath(contact_loc_xpath)[0].text.strip()
-    return
+    try:
+        contact_loc_xpath = '//*[@id="contact-location"]'
+        contact_location = tree.xpath(contact_loc_xpath)[0].text.strip()
+    except:
+        contact_location = ''
+
     if insert_mongo:
         entry_dict = {'skills': skills,
                         'emp_type': emp_type,
@@ -691,6 +694,7 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False,
     if hw is not None:
         # scale factor for screen width
         scale_factor = int(500 / 1366. * hw[1])
+
     search_term = clean_search_term(search_term)
     if top_skills_all is None:
         if search_term is None:
@@ -712,10 +716,11 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False,
         label_dict[i] = s[0]
         norm_counts.append(s[1] / total_jobs * 100)
 
-    df = pd.DataFrame({'skill':[s for s in top_skills], 'pct jobs with skill':norm_counts})
+    df = pd.DataFrame({'skill': [s for s in top_skills], 'pct jobs with skill': norm_counts})
     # clean up df
     df['skill'] = df['skill'].apply(lambda x: x[0])
-    df['pct jobs with skill'] = df['pct jobs with skill'].apply(lambda x: round(x, 0))
+    # don't think we want to do this
+    # df['pct jobs with skill'] = df['pct jobs with skill'].apply(lambda x: round(x, 0))
     df['color'] = '#6999de'
     # the @something is for a column of the dataframe
     # hover = HoverTool(
@@ -829,9 +834,9 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False,
     // xr.start = a;
     // xr.end = b;
     // listen for click in div, and clear skills list accordingly
-    if (click_set == false) {
-        $('.bk-plot-layout').click(fn);
-        click_set = true;
+    if (skills_click_set == false) {
+        $('#skills_plot').click(skills_fn);
+        skills_click_set = true;
     }
 
     """)
@@ -881,6 +886,167 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False,
     p.yaxis.major_label_text_font_size = small + "pt"
     p.title_text_font_size = big + "pt"
     if live:
+        show(p)
+    else:
+        script, div = components(p, wrap_script=False)
+        return script, div
+        # was saving it before, but that generates a complete html file
+        # output_file('app/static/img/' + re.sub('\s', '_', search_term) + '_skills.html')
+        # save(p)
+
+
+def plot_top_locs(search_term='data science', live=False, hw=None, recent=False):
+    """
+    Makes bar graph of top locations from a search term.
+
+    Parameters
+    ----------
+    top_skills_all: Counter
+        if not None, used as skills Counter for plotting
+    search_term: string
+        if top_skills_all is None, this is used to get skills Counter object
+    live: boolean
+        if True, will show plot after saving it
+    """
+    scale_factor = 500
+    if hw is not None:
+        # scale factor for screen width
+        scale_factor = int(500 / 1366. * hw[1])
+
+    search_term = clean_search_term(search_term)
+
+    jobs = get_jobs(search_term=search_term, recent=recent)
+    jobs_df = pd.DataFrame(jobs)
+    jobs_df = jobs_df[jobs_df['location'] != '']
+
+    top_locs = jobs_df['location'].value_counts()[:30]
+    locations = top_locs.index
+
+    total_jobs = jobs_df.shape[0]
+    # get % counts for each skills
+    norm_counts = []
+    label_dict = {}
+    for i, t, l in zip(range(top_locs.shape[0]), top_locs, locations):
+        label_dict[i] = l
+        norm_counts.append(float(t) / total_jobs * 100)
+
+    df = pd.DataFrame({'location': [l for l in locations], 'pct jobs at location': norm_counts, 'index': range(top_locs.shape[0])})
+    # clean up df
+    df['color'] = '#6999de'
+
+    src = df.to_dict(orient='list')
+    full_source = ColumnDataSource(src)
+
+    # mid-level way to do it
+    max_df = round(df['pct jobs at location'].max() / 10 + 0.5) * 10
+    p = figure(title='Top locations for ' + search_term, width=scale_factor, height=scale_factor, tools='tap', y_range=Range1d(0, max_df), x_range=Range1d(-0.5, 29.5))
+    p.vbar(source=full_source, x='index', width=0.9, bottom=0,
+        top='pct jobs at location', color='color')
+
+    taptool = p.select(type=TapTool)
+    taptool.callback = CustomJS(args=dict(xr=p.x_range, source=full_source), code="""
+    // JavaScript code goes here
+
+    // load jquery if not already loaded
+    // Anonymous "self-invoking" function
+    (function() {
+        test2 = cb_obj;
+        var bokeh_data = source['data'];
+        var data_locs = bokeh_data['location'];
+        bokeh_locs_list = data_locs;
+        // Load the script
+        var script = document.createElement("SCRIPT");
+        script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js';
+        script.type = 'text/javascript';
+        document.getElementsByTagName("head")[0].appendChild(script);
+
+        // Poll for jQuery to come into existance
+        var checkReady = function(callback) {
+            if (window.jQuery) {
+                callback(jQuery);
+            }
+            else {
+                window.setTimeout(function() { checkReady(callback); }, 100);
+            }
+        };
+
+        // Start polling...
+        checkReady(function($) {
+            // Use $ here...
+            var cur_loc = cb_obj['data']['locations'];
+            selected_loc = cb_obj; // need to declare selected as var earlier,
+            // use selected['selected']['1d'].indices to get selected elements
+            var arrpos = $.inArray(cur_loc, bokeh_locs_list);
+            var datapos = $.inArray(cur_loc, data_locs);
+            var loc = cb_obj['data']['location'];
+            $('#locs_list').empty();
+            var selected_idxs = selected_loc['selected']['1d'].indices;
+            for (var i = 0; i < selected_idxs.length; i++) {
+                var cur_loc = bokeh_locs_list[selected_idxs[i]];
+                $('#locs_list').append('<li class="list-group-item" style="color:#000;" id="' + cur_loc + '">' + cur_loc + '</li>');
+                locations.push(cur_loc);
+            }
+            source.trigger('change');
+        });
+    })();
+
+    // models passed as args are automagically available
+    // xr.start = a;
+    // xr.end = b;
+    // listen for click in div, and clear skills list accordingly
+    if (locs_click_set == false) {
+        $('#locs_plot').click(locs_fn);
+        locs_click_set = true;
+    }
+
+    """)
+
+    # todo: fix hovertool.  works in standalone plot, but not embedded...hmmm
+    # hover = HoverTool(tooltips=[('skill', '@skill'), ('pct jobs with skill', '@{pct jobs with skill}')])
+    # p.add_tools(hover)
+
+    # changes labels from 0, 1, 2 etc to Python, SQL, Hadoop, etc
+    p.xaxis[0].formatter = FixedTickFormatter(labels=label_dict)
+    #SingleIntervalTicker
+
+    # this is a way to set the hover tooltip when you can use a ColumnDataSource
+    # which you can't with high level (i.e. Bar()) charts right now
+    # p.select(dict(type=GlyphRenderer))
+    # hover = p.select(dict(type=HoverTool))
+    # hover.tooltips = [('skill', '@skill'), ('test', '@y')]
+
+    # this works but displays a number for index, not label
+    # hover.tooltips = [('index', '@index'), ('test', '@y')]
+
+    # set major/minor ticks to be same length
+    # p.xaxis[0].minor_tick_in = p.xaxis[0].major_tick_in
+    # p.xaxis[0].minor_tick_out = p.xaxis[0].major_tick_out
+    # better: just remove minor ticks
+    p.xaxis[0].ticker.num_minor_ticks = 0
+    p.xaxis[0].ticker.desired_num_ticks = df.shape[0]
+    # remove grid lines
+    p.xgrid.grid_line_color = None
+    p.ygrid.grid_line_color = None
+    p.xaxis.major_label_orientation = 89.0
+    # I think we already know the xaxis is a skill...
+    # p.xaxis.axis_label = 'skill'
+    p.yaxis.axis_label = 'percent of jobs at location'
+    # this is for a 1000x1000 plot
+    # p.xaxis.axis_label_text_font_size = "30pt"
+    # p.xaxis.major_label_text_font_size = "15pt"
+    # p.yaxis.axis_label_text_font_size = "30pt"
+    # p.yaxis.major_label_text_font_size = "15pt"
+    # p.title_text_font_size = "30pt"
+    # this is for 500x500
+    big = str(int(scale_factor / 500. * 15))
+    small = str(int(scale_factor / 500. * 8))
+    p.xaxis.axis_label_text_font_size = big + "pt"
+    p.xaxis.major_label_text_font_size = small + "pt"
+    p.yaxis.axis_label_text_font_size = big + "pt"
+    p.yaxis.major_label_text_font_size = small + "pt"
+    p.title_text_font_size = big + "pt"
+    if live:
+        output_file('top_locations.html', title='top locations plot')
         show(p)
     else:
         script, div = components(p, wrap_script=False)

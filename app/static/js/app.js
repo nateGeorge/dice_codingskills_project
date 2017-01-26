@@ -9,7 +9,12 @@
 var post_main_addr = 'http://0.0.0.0:10001' // 'http://cannadvise.me' //'http://35.161.235.42:10001'; // address with flask api
 var jobs;
 var bokeh_skills_list;
+var bokeh_locs_list;
+var test;
+var test2;
 var selected;
+var selected_loc;
+var locations = [];
 var skills = []; // for skills chosen by clicking on the skills bar chart
 
 // click submit button when pressing enter from input form
@@ -22,6 +27,7 @@ $("#job_search_input").keyup(function(event){
 
 var post_addr;
 var last_clicked; // to prevent clicking too frequently
+var skills_div;
 
 var get_job_stats = function(search_term) {
     // first clear div
@@ -31,6 +37,10 @@ var get_job_stats = function(search_term) {
     last_clicked = new Date();
     $('#search_results1').empty();
     $('#search_results2').empty();
+    $('#job_listings').empty();
+    $('#salary_range').empty();
+    Pace.restart();
+    // $('#skills_list').empty();
     post_addr = '/get_job_stats';
     var hw = [window.screen.availHeight, window.screen.availWidth];
     $.post(post_main_addr + post_addr, data = {
@@ -48,12 +58,18 @@ var get_job_stats = function(search_term) {
         $('#results').css('display', 'block');
         var json_data = JSON.parse(data);
         var jobs = json_data['jobs']
+        skills_div = json_data['skills_div'];
+        var locs_div = json_data['locs_div'];
+        console.log('locs_div:');
+        console.log(locs_div);
         test = jobs;
-        $('#search_results1').append(json_data['div']);
-        console.log(json_data['div']);
-        var skills_script = json_data['script'];
+        $('#search_results1').append($(skills_div).attr('id', 'skills_plot'));
+        $('#location_plot').append($(locs_div).attr('id', 'locs_plot'));
+        var skills_script = json_data['skills_script'];
+        var locs_script = json_data['locs_script'];
         skills_script = skills_script
         eval(skills_script);
+        eval(locs_script);
         // center the plot in the div
         var clean_search = json_data['search_term']
         var salary_plot = json_data['salary_file'];
@@ -73,9 +89,10 @@ var get_job_stats = function(search_term) {
         `;
         $('#salary_range').append(salaryrange);
         // un-hide filtering elements
-        $('#search_instructions1').css('display', 'block');
-        $('#search_instructions2').css('display', 'block');
-        $('#filter_jobs').css('display', 'block');
+        // actually don't need this since the entire div is hidden
+        // $('#search_instructions1').css('display', 'block');
+        // $('#search_instructions2').css('display', 'block');
+        // $('#filter_jobs').css('display', 'block');
         populate_jobs(jobs);
       }
 
@@ -86,8 +103,6 @@ var get_job_stats = function(search_term) {
       }, 1000);
   });
 }
-
-var test;
 
 var populate_jobs = function(jobs) {
   for (var i=0; i<jobs.length; i++) {
@@ -146,8 +161,8 @@ window.onbeforeunload = function () {
 //     }
 // });
 
-var fn = function() {
-  console.log('mouseup');
+var skills_fn = function() {
+  console.log('mousedown');
   $('#skills_list').empty();
   skills = [];
   // var idxs = selected['selected']['1d'].indices;
@@ -157,4 +172,15 @@ var fn = function() {
   // }
 }
 
-var click_set = false; // for setting the listening event in the taptool callback
+var locs_fn = function() {
+  console.log('mousedown');
+  locations = [];
+  // var idxs = selected['selected']['1d'].indices;
+  // for (var i = 0; i < idxs.length; i++) {
+  //     var cur_skill = bokeh_skills_list[idxs[i]];
+  //     skills.push(cur_skill);
+  // }
+}
+
+var skills_click_set = false; // for setting the listening event in the taptool callback
+var locs_click_set = false;
