@@ -10,7 +10,8 @@ var post_main_addr = 'http://0.0.0.0:10001' // 'http://cannadvise.me' //'http://
 var jobs;
 var bokeh_skills_list;
 var bokeh_locs_list;
-var test;
+var global_search_term;
+var jobs;
 var test2;
 var selected;
 var selected_loc;
@@ -39,6 +40,11 @@ var get_job_stats = function(search_term) {
     $('#search_results2').empty();
     $('#job_listings').empty();
     $('#salary_range').empty();
+    $('#location_plot1').empty();
+    $('#location_plot2').empty();
+    $('#add_locs').empty();
+    locs_fn();
+    skills_fn();
     Pace.restart();
     // $('#skills_list').empty();
     post_addr = '/get_job_stats';
@@ -51,17 +57,18 @@ var get_job_stats = function(search_term) {
       if (data.length == 21) {
         // the data hasn't ever been scraped.
         // display message that it is currently being scraped, and will be updated in 1.5 mins
-        console.log('updating db');
-        $('#search_results').append('<h1>We don\'t have that search term in our database yet.  Check back tomorrow, we\'ll probably have it!</h1>');
+        alert('We added "' + search_term + '" to the request list!  Check back in a day or two for results.');
+        Pace.stop();
+        return;
+        // $('#search_results').append('<h1>We don\'t have that search term in our database yet.  Check back tomorrow, we\'ll probably have it!</h1>');
         // $('#search_results').append('<h1>We\'re updating the db, this page will refresh in 1.5 mins when we have some results...</h1>');
       } else {
         $('#results').css('display', 'block');
         var json_data = JSON.parse(data);
-        var jobs = json_data['jobs']
+        jobs = json_data['jobs']
         skills_div = json_data['skills_div'];
         var locs_div = json_data['locs_div'];
         var states_div = json_data['states_div'];
-        test = jobs;
         $('#search_results1').append($(skills_div).attr('id', 'skills_plot'));
         $('#location_plot1').append($(locs_div).attr('id', 'locs_plot'));
         $('#location_plot2').append($(states_div).attr('id', 'states_plot'));
@@ -77,7 +84,6 @@ var get_job_stats = function(search_term) {
         var salary_plot = json_data['salary_file'];
         // make it refresh with each date
         var shebang = new Date().getTime();
-        console.log('<img src="' + salary_plot + '?' + shebang + ' />');
         $('#search_results2').append('<img id="salary_img" src="' + salary_plot + '?' + shebang + '" />');
         $('#salary_img').css('display', 'inline-block');
         $('#locs_plot').css('display', 'inline-block');
@@ -103,8 +109,29 @@ var get_job_stats = function(search_term) {
         $('#loc_form').keypress(function (e) {
           if (e.which == 13) {
             var new_loc = $('#loc_input').val();
-            locations.push(new_loc);
-            $('#locs_list').append('<li class="list-group-item" style="color:#000;" id="' + new_loc + '">' + new_loc + '</li>');
+            comma_idx = $.inArray(',', new_loc);
+            if (comma_idx != -1) {
+              var city = new_loc.slice(0, comma_idx);
+              var state = new_loc.slice(comma_idx + 1).replace(/ /g,'');
+              if (state.length > 2) {
+                state = abbrState(state, 'abbr');
+                if (state == undefined) {
+                  new_loc = city;
+                } else {
+                  new_loc = city + ', ' + state;
+              }
+            } else if (state.length == 2) {
+              state = state.toUpperCase();
+              new_loc = city + ', ' + state;
+            } else {
+              new_loc = city;
+            }
+            }
+            var idx = $.inArray(new_loc, locations);
+            if (idx == -1){
+              locations.push(new_loc);
+              $('#locs_list').append('<li class="list-group-item" style="color:#000;" id="' + new_loc + '">' + new_loc + '</li>');
+            }
             return false;    //<---- Add this line
           }
         });
@@ -113,7 +140,7 @@ var get_job_stats = function(search_term) {
         // });
 
         var reset_button = `
-        <button id="reset_locations" type="button" class="btn btn-primary center-block" style="background-color: #006d59; display: inline-block" onclick="locs_fn()">Reset locations</button>
+        <button id="reset_locations" type="button" class="btn btn-primary center-block" style="background-color: #006d59; display: inline-block" onclick="locs_fn()">Reset locations</button><br /><br />
         `
         $('#add_locs').append(reset_button);
         // un-hide filtering elements
@@ -138,7 +165,11 @@ var populate_jobs = function(jobs) {
     var job_salary = '<p>' + jobs[i]['salary'] + '</br> ';
     var job_location = jobs[i]['location'] + '</br> ';
     var job_company = jobs[i]['company'] + '</br> ';
-    var job_skills = jobs[i]['skills'] + '</br> ';
+    var job_skills = 'Skills: ' + jobs[i]['clean_skills'][0];
+    for (var j=1; j<jobs[i]['clean_skills'].length; j++) {
+      job_skills = job_skills + ', ' + jobs[i]['clean_skills'][j];
+    }
+    job_skills = job_skills + '</br> ';
     var emp_type = jobs[i]['emp_type'] + '</br> ';
     var job_tele = jobs[i]['telecommute'] + '</p>';
     var job_text = job_link + job_salary + job_location + job_skills + emp_type + job_tele;
@@ -149,6 +180,7 @@ var populate_jobs = function(jobs) {
 var get_job_stats_form = function() {
   var input_val = $('#job_search_input').val();
   if (input_val != $('#job_search_input').attr('defaultValue')) {
+    global_search_term = input_val;
     get_job_stats(input_val);
   }
 }
@@ -156,17 +188,15 @@ var get_job_stats_form = function() {
 // for user/device tracking
 var log_user_info = function(cur_page, search_term) {
   $.getJSON('//freegeoip.net/json/?callback=?', null, function(ip_data) {
-    console.log(JSON.stringify(ip_data, null, 2));
     if (cur_page == undefined) {
       cur_page = window.location.href.split('/')[3];
-      console.log(cur_page);
     }
     if (search_term != undefined) {
       ip_data.search_term = search_term;
     }
     ip_data.current_page = cur_page;
     $.post(post_main_addr + '/send_user_info', data = ip_data, function(data, err) {
-        console.log(data);
+        //
       });
   });
 }
@@ -190,7 +220,6 @@ window.onbeforeunload = function () {
 // });
 
 var skills_fn = function() {
-  console.log('mousedown');
   $('#skills_list').empty();
   skills = [];
   // var idxs = selected['selected']['1d'].indices;
@@ -201,7 +230,6 @@ var skills_fn = function() {
 }
 
 var locs_fn = function() {
-  console.log('mousedown');
   locations = [];
   $('#locs_list').empty();
   // var idxs = selected['selected']['1d'].indices;
@@ -213,3 +241,79 @@ var locs_fn = function() {
 
 var skills_click_set = false; // for setting the listening event in the taptool callback
 var locs_click_set = false;
+
+function abbrState(input, to){
+
+    var states = [
+        ['Arizona', 'AZ'],
+        ['Alabama', 'AL'],
+        ['Alaska', 'AK'],
+        ['Arkansas', 'AR'],
+        ['California', 'CA'],
+        ['Colorado', 'CO'],
+        ['Connecticut', 'CT'],
+        ['Delaware', 'DE'],
+        ['Florida', 'FL'],
+        ['Georgia', 'GA'],
+        ['Hawaii', 'HI'],
+        ['Idaho', 'ID'],
+        ['Illinois', 'IL'],
+        ['Indiana', 'IN'],
+        ['Iowa', 'IA'],
+        ['Kansas', 'KS'],
+        ['Kentucky', 'KY'],
+        ['Louisiana', 'LA'],
+        ['Maine', 'ME'],
+        ['Maryland', 'MD'],
+        ['Massachusetts', 'MA'],
+        ['Michigan', 'MI'],
+        ['Minnesota', 'MN'],
+        ['Mississippi', 'MS'],
+        ['Missouri', 'MO'],
+        ['Montana', 'MT'],
+        ['Nebraska', 'NE'],
+        ['Nevada', 'NV'],
+        ['New Hampshire', 'NH'],
+        ['New Jersey', 'NJ'],
+        ['New Mexico', 'NM'],
+        ['New York', 'NY'],
+        ['North Carolina', 'NC'],
+        ['North Dakota', 'ND'],
+        ['Ohio', 'OH'],
+        ['Oklahoma', 'OK'],
+        ['Oregon', 'OR'],
+        ['Pennsylvania', 'PA'],
+        ['Rhode Island', 'RI'],
+        ['South Carolina', 'SC'],
+        ['South Dakota', 'SD'],
+        ['Tennessee', 'TN'],
+        ['Texas', 'TX'],
+        ['Utah', 'UT'],
+        ['Vermont', 'VT'],
+        ['Virginia', 'VA'],
+        ['Washington', 'WA'],
+        ['West Virginia', 'WV'],
+        ['Wisconsin', 'WI'],
+        ['Wyoming', 'WY'],
+    ];
+
+    if (to == 'abbr'){
+        input = input.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        for(i = 0; i < states.length; i++){
+            if(states[i][0] == input){
+                return(states[i][1]);
+            }
+        }
+    } else if (to == 'name'){
+        input = input.toUpperCase();
+        for(i = 0; i < states.length; i++){
+            if(states[i][1] == input){
+                return(states[i][0]);
+            }
+        }
+    }
+}
+
+var filter_jobs = function() {
+
+}

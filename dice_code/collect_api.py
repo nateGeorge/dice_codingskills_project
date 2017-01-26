@@ -292,7 +292,10 @@ def scrape_a_job(job_json=None, search_term='data science', insert_mongo=True, d
         contact_location = ''
 
     if insert_mongo:
+        clean_skills = clean_db_skills(j['skills'])
+        clean_skills = [c.capitalize() for c in clean_skills]
         entry_dict = {'skills': skills,
+                        'clean_skills': clean_skills,
                         'emp_type': emp_type,
                         'salary': salary,
                         'telecommute': tele_travel[0],
@@ -398,6 +401,23 @@ def split_skills(skills_list, char='-'):
         clean_skills_list.extend(s.split('/'))
 
     return clean_skills_list
+
+
+def clean_skills_in_db(search_term='data science'):
+    """
+    Cleans skills for each entry in the db for the search term.
+    """
+    search_term = clean_search_term(search_term)
+    client = MongoClient()
+    db = client[DB_NAME]
+    coll = db[search_term]
+    jobs = list(coll.find())
+    for j in jobs:
+        clean_skills = clean_db_skills(j['skills'])
+        clean_skills = [c.capitalize() for c in clean_skills]
+        coll.update_one(j, {'$set': {'clean_skills': clean_skills}})
+
+    client.close()
 
 
 def clean_db_skills(skills_list):
@@ -1183,7 +1203,7 @@ def get_locations_mongo(search_term='data science'):
     return locs
 
 
-def get_salaries_mongo(search_term='data science'):
+def get_salaries_mongo(search_term='data science', debug=False):
     """
     Retrieves list of salaries from mongoDB.  Need to have full time etc
     in order to filter them properly
@@ -1217,6 +1237,73 @@ def get_salaries_mongo(search_term='data science'):
             emp_type = 'other'
 
         salary_dict[emp_type].append(sal)
+
+        # clean up salary and put in db
+        avg_sal = 'unknown'
+        s = re.sub(',', '', sal)
+        s = re.sub('\$', '', sal)
+        try:
+            sal = float(s)
+            if sal < 1000:
+                ishourly = True
+        except:
+            ishourly = False
+        if 'hour' in s or 'hourly' in s or 'hr' in s or len(s) < 4 or ishourly and 'k' not in s:
+            if debug:
+                print 'guessing hourly'
+            if '-' in s:
+                if debug:
+                    print s
+                # probably a range
+                sal_match = re.search('(\d+\.*\d*)[/hr]*\s*-\s*(\d+\.*\d*)', s)
+                try:
+                    min_hr = float(sal_match.group(1))
+                    min_hr *= 37.5 * 52
+                    max_hr = float(sal_match.group(2))
+                    max_hr *= 37.5 * 52
+                    avg_hr = (min_hr + max_hr) / 2
+                    if debug:
+                        print 'hourly min, max, avg:', min_hr, max_hr, avg_hr
+                    # calculate yearly salary based on per hour
+                    avg_sal = avg_hr
+                except:
+                    pass
+            else:
+                sal_match = re.search('\d+\.*\d*', s)
+                avg_hr = float(sal_match.group(0)) * 37.5 * 52
+                if avg_hr > 10: # saw some as '00' etc
+                    avg_sal = avg_hr
+                    if debug:
+                        print 'hourly avg:', avg_hr
+        else: # not hourly, probably annually
+            if debug:
+                print 'guessing annual'
+            range_match = re.search('(\d+\.*\d*)\s*-+\s*(\d+\.*\d*)', s)
+            if range_match:
+                min_sal = float(range_match.group(1))
+                max_sal = float(range_match.group(2))
+                # one entry was $0.00 - $1 per annum
+                if min_sal < 10 and max_sal < 10:
+                    continue
+                # sometimes written as 110k, etc
+                if min_sal < 1000:
+                    min_sal *= 1000
+                if max_sal < 1000:
+                    max_sal *= 1000
+                avg_sal = float((min_sal + max_sal) / 2.0)
+                if debug:
+                    print 'annual min, max, avg:', min_sal, max_sal, avg_sal
+            else:
+                avg_sal = float(re.search('\d+\.*\d*', s).group(0))
+                if avg_sal < 1000:
+                    avg_sal *= 1000
+                if debug:
+                    print 'annual avg:', avg_sal
+
+        coll.update_one(j, {'$set': {'clean_emp_type': emp_type, 'clean_sal': avg_sal}})
+
+
+    client.close()
 
     return salary_dict
 
@@ -1638,6 +1725,15 @@ def clean_search_term(search_term):
         search_term = 'front end developer'
 
     return search_term
+
+
+def filter_jobs(jobs, salary_range=None, locations=None, skills=None):
+    """
+    Filters jobs according to given criteria.
+    """
+    df = pd.DataFrame(jobs)
+    if salary_range is not None:
+        df = df[df['salary']]
 
 
 if __name__ == "__main__":

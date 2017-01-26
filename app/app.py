@@ -35,12 +35,14 @@ def index():
 def get_words():
     # print request.form
     search_term = request.form.getlist('job')[0]
+    print search_term
     hw = request.form.getlist('hw[]')
     hw[0] = int(str(hw[0]))
     hw[1] = int(str(hw[1]))
-    fields = ['jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'skills', 'company', 'telecommute']
+    fields = ['jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'clean_skills', 'company', 'telecommute']
     jobs = ca.get_jobs(search_term=search_term, fields=fields)
     if jobs == 'updating db':
+        print jobs
         insert_dict = {}
         insert_dict['search_term'] = search_term
         insert_dict['datetime'] = datetime.now()
@@ -48,6 +50,7 @@ def get_words():
         db = client[DB_NAME]
         coll = db['scraping_queue']
         coll.insert(insert_dict)
+        client.close()
         resp = flask.Response(json.dumps({'updating db':True}))
     else:
         filename = ca.plot_salary_dist(search_term=search_term, hw=hw)
