@@ -60,16 +60,18 @@ var get_job_stats = function(search_term) {
         var jobs = json_data['jobs']
         skills_div = json_data['skills_div'];
         var locs_div = json_data['locs_div'];
-        console.log('locs_div:');
-        console.log(locs_div);
+        var states_div = json_data['states_div'];
         test = jobs;
         $('#search_results1').append($(skills_div).attr('id', 'skills_plot'));
-        $('#location_plot').append($(locs_div).attr('id', 'locs_plot'));
+        $('#location_plot1').append($(locs_div).attr('id', 'locs_plot'));
+        $('#location_plot2').append($(states_div).attr('id', 'states_plot'));
         var skills_script = json_data['skills_script'];
         var locs_script = json_data['locs_script'];
+        var states_script = json_data['states_script'];
         skills_script = skills_script
         eval(skills_script);
         eval(locs_script);
+        eval(states_script);
         // center the plot in the div
         var clean_search = json_data['search_term']
         var salary_plot = json_data['salary_file'];
@@ -78,6 +80,8 @@ var get_job_stats = function(search_term) {
         console.log('<img src="' + salary_plot + '?' + shebang + ' />');
         $('#search_results2').append('<img id="salary_img" src="' + salary_plot + '?' + shebang + '" />');
         $('#salary_img').css('display', 'inline-block');
+        $('#locs_plot').css('display', 'inline-block');
+        $('#states_plot').css('display', 'inline-block');
         var salaryrange = `
         <input class="form-control" type="text" value="0" defaultValue="0" id="job_search_input"
         onblur="if (this.value == '') {this.value = '0';}"
@@ -88,6 +92,30 @@ var get_job_stats = function(search_term) {
         onfocus="if (this.value == '1,000,000') {this.value = '';}" />
         `;
         $('#salary_range').append(salaryrange);
+        var locationinput = `
+        <form id="loc_form" id="loc_form"><input class="form-control" type="text" value="enter locations to include" defaultValue="enter locations to include" id="loc_input"
+        onblur="if (this.value == '') {this.value = 'enter locations to include';}"
+        onfocus="if (this.value == 'enter locations to include') {this.value = '';}" /></form><br />
+        `;
+        $('#add_locs').append(locationinput);
+
+        // update locations list on press enter in field
+        $('#loc_form').keypress(function (e) {
+          if (e.which == 13) {
+            var new_loc = $('#loc_input').val();
+            locations.push(new_loc);
+            $('#locs_list').append('<li class="list-group-item" style="color:#000;" id="' + new_loc + '">' + new_loc + '</li>');
+            return false;    //<---- Add this line
+          }
+        });
+        // $('#loc_form').submit(function() {
+        //   locations.push($('#loc_input').val());
+        // });
+
+        var reset_button = `
+        <button id="reset_locations" type="button" class="btn btn-primary center-block" style="background-color: #006d59; display: inline-block" onclick="locs_fn()">Reset locations</button>
+        `
+        $('#add_locs').append(reset_button);
         // un-hide filtering elements
         // actually don't need this since the entire div is hidden
         // $('#search_instructions1').css('display', 'block');
@@ -107,13 +135,13 @@ var get_job_stats = function(search_term) {
 var populate_jobs = function(jobs) {
   for (var i=0; i<jobs.length; i++) {
     var job_link = '<h3><a href="' + jobs[i]['detailUrl'] + '" style="color: white; text-decoration: underline;">' + jobs[i]['jobTitle'] + '</a></h3>';
-    var job_salary = '<p>' + jobs[i]['salary'] + '</br>';
+    var job_salary = '<p>' + jobs[i]['salary'] + '</br> ';
     var job_location = jobs[i]['location'] + '</br> ';
     var job_company = jobs[i]['company'] + '</br> ';
     var job_skills = jobs[i]['skills'] + '</br> ';
     var emp_type = jobs[i]['emp_type'] + '</br> ';
     var job_tele = jobs[i]['telecommute'] + '</p>';
-    var job_text = job_link + job_salary + job_location + job_skills + emp_type;
+    var job_text = job_link + job_salary + job_location + job_skills + emp_type + job_tele;
     $('#job_listings').append(job_text);
   }
 }
@@ -175,6 +203,7 @@ var skills_fn = function() {
 var locs_fn = function() {
   console.log('mousedown');
   locations = [];
+  $('#locs_list').empty();
   // var idxs = selected['selected']['1d'].indices;
   // for (var i = 0; i < idxs.length; i++) {
   //     var cur_skill = bokeh_skills_list[idxs[i]];
