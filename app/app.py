@@ -2,6 +2,8 @@
 
 import sys
 import os
+print 'system path'
+print sys.path
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 import json
 import cPickle as pk
