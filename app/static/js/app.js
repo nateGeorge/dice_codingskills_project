@@ -6,7 +6,6 @@
 // display estimate of time to result if the result hasn't been scraped before
 // enable email subscription to when scrape is finished
 
-var post_main_addr = 'http://0.0.0.0:10001' // 'http://cannadvise.me' //'http://35.161.235.42:10001'; // address with flask api
 var jobs;
 var bokeh_skills_list;
 var bokeh_locs_list;
@@ -222,7 +221,10 @@ var log_user_info = function(cur_page, search_term) {
 }
 
 // log user on page loads
-$(document).ready(log_user_info());
+$(document).ready(function() {
+  log_user_info();
+  post_main_addr = 'http://' + window.location.href.split('/')[2];
+});
 
 // scroll to top on reload
 window.onbeforeunload = function () {
