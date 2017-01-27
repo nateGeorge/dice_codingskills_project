@@ -1430,7 +1430,9 @@ def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist
     """
     if hw is not None:
         # scale factor for screen width
-        scale_factor = 500 / 1366. * hw[1] / 100
+        # used to do it this way, but a problem on mobile
+        # scale_factor = 500 / 1366. * hw[1] / 100
+        scale_factor = 5
         # typical figsize is 6x8 with 80 dpi, so about 2 dpi/inch^2.
         # scale factor is in inches, about 5 in for my screen
         # so this will give about 96 dpi for a 5x5 figure

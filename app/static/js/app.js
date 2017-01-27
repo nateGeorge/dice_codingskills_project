@@ -85,7 +85,8 @@ var get_job_stats = function(search_term) {
         var salary_plot = json_data['salary_file'];
         // make it refresh with each date
         var shebang = new Date().getTime();
-        $('#search_results2').append('<img id="salary_img" src="' + salary_plot + '?' + shebang + '" />');
+        var im_height = 480 / 1366 * hw[1];
+        $('#search_results2').append('<img id="salary_img" src="' + salary_plot + '?' + shebang + '" height="' + im_height + '" width="' + im_height + '" />');
         $('#salary_img').css('display', 'inline-block');
         $('#locs_plot').css('display', 'inline-block');
         $('#states_plot').css('display', 'inline-block');
