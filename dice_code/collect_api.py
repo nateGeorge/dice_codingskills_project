@@ -292,7 +292,7 @@ def scrape_a_job(job_json=None, search_term='data science', insert_mongo=True, d
         contact_location = ''
 
     if insert_mongo:
-        clean_skills = clean_db_skills(j['skills'])
+        clean_skills = clean_db_skills(skills)
         clean_skills = [c.capitalize() for c in clean_skills]
         entry_dict = {'skills': skills,
                         'clean_skills': clean_skills,

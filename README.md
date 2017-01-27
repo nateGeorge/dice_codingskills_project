@@ -20,7 +20,7 @@ i.e.
 Import:
 `mongorestore -d <database_name> <directory_backup>`
 i.e.
-`mongorestore -d dice_jobs dice_jobs.db`
+`mongorestore -d dice_jobs dice_jobs.db/dice_jobs`
 
 Todo:  automate backup of db on S3 after scraping is finished (in daily_scrape.py)
 
@@ -29,3 +29,5 @@ You will have to redirect the port to port 80 (standard for browsers): `sudo ipt
 `sudo iptables -t nat -A OUTPUT -o lo -p tcp --dport 80 -j REDIRECT --to-port 10001`
 I think put those things in here:?
 `sudo nano /etc/rc.local`
+
+Run the install_script.sh script

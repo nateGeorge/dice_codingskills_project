@@ -75,6 +75,7 @@ def predict_salary(search_term='data science', show_diff_plot=False):
 
     df_known = df[df['clean_sal'] != 0]
     df_known = df_known[df_known['clean_sal'].notnull()]
+    df_known = df_known[df_known['clean_sal'] > 1000]
     df_known = df_known[df_known['clean_sal'] < 250000] # some outliers in there
     df_unknown = df[~df.index.isin(df_known.index)]
     df_unknown.drop('clean_sal', inplace=True, axis=1)
