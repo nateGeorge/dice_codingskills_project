@@ -5,6 +5,7 @@ import os
 print 'system path'
 print sys.path
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.append('/home/ubuntu/dice_codingskills_project') # hack for AWS
 import json
 import cPickle as pk
 import re
