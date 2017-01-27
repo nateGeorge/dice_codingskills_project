@@ -190,7 +190,7 @@ var populate_jobs = function(jobs_list) {
     } else {
       var job_tele = '';
     }
-    var job_text = job_link + job_salary + job_location + job_skills + emp_type + job_tele;
+    var job_text = job_link + job_salary + job_company + job_location + job_skills + emp_type + job_tele;
     $('#job_listings').append(job_text);
   }
   $('#job_listings').append('<hr class="light">');
