@@ -168,19 +168,28 @@ var get_job_stats = function(search_term) {
   });
 }
 
-var populate_jobs = function(jobs) {
-  for (var i=0; i<jobs.length; i++) {
-    var job_link = '<h3><a href="' + jobs[i]['detailUrl'] + '" style="color: white; text-decoration: underline;">' + jobs[i]['jobTitle'] + '</a></h3>';
-    var job_salary = '<p>' + jobs[i]['salary'] + '</br> ';
-    var job_location = jobs[i]['location'] + '</br> ';
-    var job_company = jobs[i]['company'] + '</br> ';
-    var job_skills = 'Skills: ' + jobs[i]['clean_skills'][0];
-    for (var j=1; j<jobs[i]['clean_skills'].length; j++) {
-      job_skills = job_skills + ', ' + jobs[i]['clean_skills'][j];
+var populate_jobs = function(jobs_list) {
+  for (var i=0; i<jobs_list.length; i++) {
+    var job_link = '<h3><a href="' + jobs_list[i]['detailUrl'] + '" style="color: white; text-decoration: underline;">' + jobs_list[i]['jobTitle'] + '</a></h3>';
+    if (jobs_list[i]['predicted_salary'] == undefined | jobs_list[i]['predicted_salary'] == 0) {
+      var job_salary = '<p>Salary: $' + Math.round(parseInt(jobs_list[i]['clean_sal'])/5000)*5000 + '</br> ';
+    }
+    else {
+      var job_salary = '<p>Salary: $' + Math.round(parseInt(jobs_list[i]['predicted_salary'])/5000)*5000 + ' (predicted)</br> ';
+    }
+    var job_location = jobs_list[i]['location'] + '</br> ';
+    var job_company = jobs_list[i]['company'] + '</br> ';
+    var job_skills = 'Skills: ' + jobs_list[i]['clean_skills'][0];
+    for (var j=1; j<jobs_list[i]['clean_skills'].length; j++) {
+      job_skills = job_skills + ', ' + jobs_list[i]['clean_skills'][j];
     }
     job_skills = job_skills + '</br> ';
-    var emp_type = jobs[i]['emp_type'] + '</br> ';
-    var job_tele = jobs[i]['telecommute'] + '</p>';
+    var emp_type = jobs_list[i]['emp_type'] + '</br> ';
+    if (jobs_list[i]['telecommute'] == 'Telecommuting available') {
+      var job_tele = jobs_list[i]['telecommute'] + '</p>';
+    } else {
+      var job_tele = '';
+    }
     var job_text = job_link + job_salary + job_location + job_skills + emp_type + job_tele;
     $('#job_listings').append(job_text);
   }
@@ -325,6 +334,8 @@ function abbrState(input, to){
     }
 }
 
+var fjobs;
+
 var filter_jobs = function() {
   var sal_range = [0, 1000000];
   var sal_min = $('#sal_min').val();
@@ -343,7 +354,7 @@ var filter_jobs = function() {
     locations: locations
     }, function(data, err) {
       var json_data = JSON.parse(data);
-      var fjobs = json_data['filt_jobs'];
+      fjobs = json_data['filt_jobs'];
       var orig_num = json_data['orig_jobs'];
       var num_jobs = json_data['num_jobs'];
       $('#job_listings').empty();

@@ -9,6 +9,7 @@ import re
 from flask import Flask, request, make_response, jsonify
 import flask
 import dice_code.collect_api as ca
+import dice_code.send_messages as sm
 from pymongo import MongoClient
 from werkzeug.datastructures import ImmutableMultiDict
 from datetime import datetime
@@ -38,7 +39,16 @@ def get_words():
     hw = request.form.getlist('hw[]')
     hw[0] = int(str(hw[0]))
     hw[1] = int(str(hw[1]))
-    fields = ['clean_sal', 'jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'clean_skills', 'company', 'telecommute']
+    fields = ['predicted_salary',
+                'clean_sal',
+                'jobTitle',
+                'detailUrl',
+                'location',
+                'emp_type',
+                'salary',
+                'clean_skills',
+                'company',
+                'telecommute']
     jobs = ca.get_jobs(search_term=search_term, fields=fields)
     if jobs == 'updating db':
         insert_dict = {}
@@ -49,6 +59,7 @@ def get_words():
         coll = db['scraping_queue']
         coll.insert(insert_dict)
         client.close()
+        sm.send_messages(search_term=search_term)
         resp = flask.Response(json.dumps({'updating db':True}))
     else:
         filename = ca.plot_salary_dist(search_term=search_term, hw=hw)
@@ -74,7 +85,17 @@ def get_words():
 @app.route('/filter_jobs', methods=['POST'])
 def filter_jobs():
     search_term = request.form.getlist('job')[0]
-    jobs = ca.get_jobs(search_term)
+    fields = ['predicted_salary',
+                'clean_sal',
+                'jobTitle',
+                'detailUrl',
+                'location',
+                'emp_type',
+                'salary',
+                'clean_skills',
+                'company',
+                'telecommute']
+    jobs = ca.get_jobs(search_term, fields=fields)
     sal_range = ca.convert(request.form.getlist('sal_range[]'))
     skills = ca.convert(request.form.getlist('skills[]'))
     locations = ca.convert(request.form.getlist('locations[]'))
@@ -83,11 +104,6 @@ def filter_jobs():
         locations = None
     if len(skills) == 0:
         skills = None
-    print ''
-    print search_term, sal_range, skills, locations
-    print type(sal_range[0])
-    print ''
-    fields = ['clean_sal', 'jobTitle', 'detailUrl', 'location', 'emp_type', 'salary', 'clean_skills', 'company', 'telecommute']
     fjobs = ca.filter_jobs(jobs, salary_range=sal_range, locations=locations, skills=skills, fields=fields)
     jobs_dict = {}
     jobs_dict['orig_jobs'] = len(jobs)

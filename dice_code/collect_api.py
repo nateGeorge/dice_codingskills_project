@@ -12,7 +12,10 @@
 
 # need this for flask to work (multiprocessing issue)
 import matplotlib
-matplotlib.use('GtkAgg')
+try:
+    matplotlib.use('GtkAgg')
+except:
+    matplotlib.use('GTKAgg') # fix for AWS ubuntu 16 server
 
 import requests as req
 import json
@@ -1590,6 +1593,8 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
 
             return full_df
 
+    _ = get_salaries_mongo(search_term=search_term)
+
     if use_mongo:
         return None
 
@@ -1763,12 +1768,14 @@ def filter_jobs(jobs, salary_range=None, locations=None, skills=None, fields=Non
         list in same format of parameter 'jobs', but filtered with criteria
     """
     df = pd.DataFrame(jobs)
+    df['clean_sal'] = df['clean_sal'].fillna(0)
+    df['predicted_salary'] = df['predicted_salary'].fillna(0)
     df['state'] = df['location'].apply(lambda x: extract_state(x))
     # pretty sure I don't need that anymore
     # df['clean_sal'] = df['clean_sal'].fillna(0)
     if salary_range is not None:
-        df = df[df['clean_sal'] >= salary_range[0]]
-        df = df[df['clean_sal'] <= salary_range[1]]
+        df = df[(df['clean_sal'] >= salary_range[0]) | (df['predicted_salary'] >= salary_range[0])]
+        df = df[(df['clean_sal'] <= salary_range[1]) | (df['predicted_salary'] <= salary_range[1])]
 
     if locations is not None:
         # get seperate lists of states and cities, states

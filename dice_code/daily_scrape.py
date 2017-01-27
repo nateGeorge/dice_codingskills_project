@@ -13,6 +13,7 @@ if not os.path.exists(main_dir):
 
 os.chdir(main_dir)
 import dice_code.collect_api as ca
+import dice_code.machine_learning as ml
 
 os.chdir(main_dir)
 
@@ -24,4 +25,5 @@ jobs = ['analyst',
 
 for j in jobs:
     ca.continuous_scrape(search_term=j, debug=True)
+    ml.predict_salary(search_term=search_term)
     time.sleep(120) # wait 2 minutes to avoid having ip blocked
