@@ -1488,7 +1488,7 @@ def plot_salary_dist(sal_dict=None, key='full_time', search_term='data scientist
         plt.show()
     else:
         filename = 'app/static/img/' + re.sub('\s', '_', search_term) + '_scale_' + str(scale_factor) + '_salary_dist.png'
-        plt.savefig(filename)
+        plt.savefig(filename, dpi=dpi)
         return filename[11:]
 
     # trying to use bokeh for an interactive chart, but not currently worth it
