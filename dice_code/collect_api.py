@@ -12,10 +12,7 @@
 
 # need this for flask to work (multiprocessing issue)
 import matplotlib
-try:
-    matplotlib.use('GtkAgg')
-except:
-    matplotlib.use('GTKAgg') # fix for AWS ubuntu 16 server
+matplotlib.use('gdk')
 
 import requests as req
 import json
