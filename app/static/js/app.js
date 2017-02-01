@@ -170,7 +170,7 @@ var get_job_stats = function(search_term) {
 
 var populate_jobs = function(jobs_list) {
   for (var i=0; i<jobs_list.length; i++) {
-    var job_link = '<h3><a href="' + jobs_list[i]['detailUrl'] + '" style="color: white; text-decoration: underline;">' + jobs_list[i]['jobTitle'] + '</a></h3>';
+    var job_link = '<h3><a target="_blank" href="' + jobs_list[i]['detailUrl'] + '" style="color: white; text-decoration: underline;">' + jobs_list[i]['jobTitle'] + '</a></h3>';
     if (jobs_list[i]['predicted_salary'] == undefined | jobs_list[i]['predicted_salary'] == 0) {
       var job_salary = '<p>Salary: $' + Math.round(parseInt(jobs_list[i]['clean_sal'])/5000)*5000 + '</br> ';
     }

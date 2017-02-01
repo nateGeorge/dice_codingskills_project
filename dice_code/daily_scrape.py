@@ -23,7 +23,8 @@ jobs = ['analyst',
         'data science',
         'front end developer',
         'full stack',
-        'ruby on rails']
+        'ruby on rails',
+        'php']
 
 for j in jobs:
     ca.continuous_scrape(search_term=j, debug=True)
