@@ -3,9 +3,21 @@ import os
 import sys
 sys.path.append('/home/ubuntu/dice_codingskills_project') # hack for AWS
 import time
+from datetime import time
+from pytz import timezone
+mtn = timezone('America/Denver')
 
 f = file('../daily_scrape_out.txt', 'a')
 sys.stdout = f
+sys.stderr = f
+
+for i in range(20):
+    print ''
+
+print '*' * 20
+print 'STARTING SCRAPE'
+print '*' * 20
+print datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time'
 
 # need to change directory to the main directory so we can import collect_api
 main_dir = '/media/nate/Windows/github/dice_codingskills_project/'
