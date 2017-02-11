@@ -4,6 +4,9 @@ import sys
 sys.path.append('/home/ubuntu/dice_codingskills_project') # hack for AWS
 import time
 
+f = file('../daily_scrape_out.txt', 'a')
+sys.stdout = f
+
 # need to change directory to the main directory so we can import collect_api
 main_dir = '/media/nate/Windows/github/dice_codingskills_project/'
 if not os.path.exists(main_dir):
