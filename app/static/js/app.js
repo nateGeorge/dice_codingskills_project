@@ -221,7 +221,8 @@ var log_user_info = function(cur_page, search_term) {
   });
 }
 
-// log user on page loads
+// log user on page loads and get base address of current site (either localhost
+// or ip/domain)
 $(document).ready(function() {
   log_user_info();
   post_main_addr = 'http://' + window.location.href.split('/')[2];
