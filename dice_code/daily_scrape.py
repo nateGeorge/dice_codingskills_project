@@ -7,9 +7,9 @@ from datetime import datetime
 from pytz import timezone
 mtn = timezone('America/Denver')
 
-# f = file('../daily_scrape_out.txt', 'a')
-# sys.stdout = f
-# sys.stderr = f
+f = file('../daily_scrape_out.txt', 'a')
+sys.stdout = f
+sys.stderr = f
 
 for i in range(20):
     print ''

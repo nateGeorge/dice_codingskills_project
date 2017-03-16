@@ -31,3 +31,6 @@ I think put those things in here:?
 `sudo nano /etc/rc.local`
 
 Run the install_script.sh script
+
+# MongoDB blues
+Some problems with MongoDB, to get it started upon startup I had to do `sudo mongod --dbpath=/var/lib/mongodb --smallfiles`
