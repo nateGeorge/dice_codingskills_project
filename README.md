@@ -34,3 +34,6 @@ Run the install_script.sh script
 
 # MongoDB blues
 Some problems with MongoDB, to get it started upon startup I had to do `sudo mongod --dbpath=/var/lib/mongodb --smallfiles`
+http://stackoverflow.com/questions/14584393/why-getting-error-mongod-dead-but-subsys-locked-and-insufficient-free-space-for
+http://stackoverflow.com/questions/24599119/mongodb-not-working-error-dbpath-data-db-does-not-exist
+http://askubuntu.com/questions/61503/how-to-start-mongodb-server-on-system-start
