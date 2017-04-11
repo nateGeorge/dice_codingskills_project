@@ -5,6 +5,8 @@ sys.path.append('/home/ubuntu/dice_codingskills_project') # hack for AWS
 import time
 from datetime import datetime
 from pytz import timezone
+import dice_code.collect_api as ca
+import dice_code.machine_learning as ml
 mtn = timezone('America/Denver')
 
 f = file('../daily_scrape_out.txt', 'a')
@@ -27,10 +29,6 @@ if not os.path.exists(main_dir):
         print 'path to', main_dir, 'does not exist.'
         print 'exiting now.'
         exit()
-
-os.chdir(main_dir)
-import dice_code.collect_api as ca
-import dice_code.machine_learning as ml
 
 os.chdir(main_dir)
 
