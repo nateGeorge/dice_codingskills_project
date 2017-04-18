@@ -15,6 +15,9 @@ Cron will run from the home directory, so right now the stdout redirect is going
 
 Install postfix: `sudo apt-get install postfix` and choose local configuration, so that any errors from crontab are sent to /var/mail/ubuntu.  Check the output with `tail -f /var/mail/ubuntu`
 
+To see what python scripts are currently running, do `ps aux | grep python`.
+
+
 You should also be able to do it like:
 `0 10 * * * /home/ubuntu/dice_codingskills_project/run_cron.sh`
 
