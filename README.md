@@ -6,17 +6,27 @@ to setup cronjob in ubuntu linux:
 `crontab -e`
 
 and enter the following at the end:
-`0 10 * * * /usr/bin/python /home/ubuntu/dice_codingskills_project/dice_code/daily_scrape.py`
+(min hr day month weekday file)
+`0 10 * * * /usr/bin/python /home/ubuntu/dice_codingskills_project/dice_code/daily_scrape.py >> /var/log/somelogfile.log`
 
 Do `which python` to make sure the python path is correct.
 
-Instead of `0 10 * * *`, you can also do
-(min hr day month weekday file)
-`@daily /home/`
+Install postfix: `sudo apt-get install postfix` and choose local configuration, so that any errors from crontab are sent to /var/mail/ubuntu.  Check the output with `tail -f /var/mail/ubuntu`
+
+You should also be able to do it like:
+`0 10 * * * /home/ubuntu/dice_codingskills_project/run_cron.sh`
+
+You will also have to do `sudo chmod a+x run_cron.sh` to make the file executable.
+
+I couldn't get that working, though.  To redirect errors, see [this](https://askubuntu.com/questions/222512/cron-info-no-mta-installed-discarding-output-error-in-the-syslog)
+
+Instead of `0 10 * * *`, you should also be able to do
+`@daily /home/...`
 although I'm not 100% sure this works.
 
 To check your system time do `date "+%H:%M:%S   %d/%m/%y"`.  Usually it should be UTC, so 10am UTC is 4am MST.
 
+To check the log of cron jobs, do: `grep CRON /var/log/syslog`.
 
 
 # Exporting MongoDB for transfer
