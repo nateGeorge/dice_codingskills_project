@@ -9,10 +9,11 @@ import dice_code.collect_api as ca
 import dice_code.machine_learning as ml
 mtn = timezone('America/Denver')
 
-f = file('../scrape_log.txt', 'a')
+f = file('scrape_log.txt', 'a')
 sys.stdout = f
 sys.stderr = f
 
+start = datetime.now(mtn)
 print '*' * 20
 print 'STARTING SCRAPE'
 print '*' * 20
@@ -52,3 +53,16 @@ for j in jobs:
     ca.continuous_scrape(search_term=j, debug=True)
     ml.predict_salary(search_term=j)
     time.sleep(120) # wait 2 minutes to avoid having ip blocked
+
+
+f = file('scrape_log.txt', 'a')
+sys.stdout = f
+sys.stderr = f
+
+print '*' * 20
+print 'FINISHED SCRAPE'
+print '*' * 20
+print datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time'
+end = datetime.now(mtn)
+diff = (end-start)
+print 'took this long:', str(diff)
