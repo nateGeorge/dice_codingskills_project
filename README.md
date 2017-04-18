@@ -6,11 +6,18 @@ to setup cronjob in ubuntu linux:
 `crontab -e`
 
 and enter the following at the end:
-`@daily /usr/bin/python /home/ubuntu/dice_codingskills_project/dice_code/daily_scrape.py`
+`0 10 * * * /usr/bin/python /home/ubuntu/dice_codingskills_project/dice_code/daily_scrape.py`
 
-Instead of `@daily`, you can also do
+Do `which python` to make sure the python path is correct.
+
+Instead of `0 10 * * *`, you can also do
 (min hr day month weekday file)
-`00 00 * * * /home/`
+`@daily /home/`
+although I'm not 100% sure this works.
+
+To check your system time do `date "+%H:%M:%S   %d/%m/%y"`.  Usually it should be UTC, so 10am UTC is 4am MST.
+
+
 
 # Exporting MongoDB for transfer
 http://stackoverflow.com/questions/11255630/how-to-export-all-collection-in-mongodb
