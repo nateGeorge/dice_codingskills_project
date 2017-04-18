@@ -11,6 +11,8 @@ and enter the following at the end:
 
 Do `which python` to make sure the python path is correct.
 
+Cron will run from the home directory, so right now the stdout redirect is going to /scrape_log.txt
+
 Install postfix: `sudo apt-get install postfix` and choose local configuration, so that any errors from crontab are sent to /var/mail/ubuntu.  Check the output with `tail -f /var/mail/ubuntu`
 
 You should also be able to do it like:
