@@ -1,6 +1,12 @@
 # dice_codingskills_project
 Data science project for Dice job application.
 
+# running on AWS
+need an elastic IP, and have to assign it to the instance
+enter the command `sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 10001` (doesn't seem to work in the /etc/rc.local file, maybe add to bashrc or something)
+navigate to the home dir of the repo and do `python app/app.py`
+yay!
+
 # Setup cronjob scraping
 to setup cronjob in ubuntu linux:
 `crontab -e`
@@ -66,4 +72,4 @@ http://askubuntu.com/questions/61503/how-to-start-mongodb-server-on-system-start
 # Restarting the server
 Upon restart, you may need to run:
 `sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 10001`
-`sudo mongod --dbpath=/var/lib/mongodb --smallfiles`
+`sudo mongod --dbpath=/var/lib/mongodb --smallfiles` (this takes a long time)
