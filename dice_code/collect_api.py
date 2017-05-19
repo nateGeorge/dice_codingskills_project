@@ -1337,6 +1337,7 @@ def get_salary_dist(salary_dict, debug=False):
             s = re.sub(',', '', s)
             s = re.sub('\$', '', s)
             # check if an hourly wage
+            ishourly = False
             try:
                 sal = float(s)
                 if sal < 1000:
