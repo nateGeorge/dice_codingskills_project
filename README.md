@@ -3,7 +3,13 @@ Data science project for Dice job application.
 
 # running on AWS
 need an elastic IP, and have to assign it to the instance
+need to start mongo: `sudo mongod --dbpath=/var/lib/mongodb --smallfiles`
 enter the command `sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 10001` (doesn't seem to work in the /etc/rc.local file, maybe add to bashrc or something)
+
+In the EC2 dashboard, navigate to network and security -> elastic IPs.  Choose 'allocate new address'.  Then choose the new address and go to 'actions -> associate address'.
+Then go to route 53, and set up the rest:  
+Follow this guide: http://techgenix.com/namecheap-aws-ec2-linux/
+
 navigate to the home dir of the repo and do `python app/app.py`
 yay!
 
@@ -13,7 +19,7 @@ to setup cronjob in ubuntu linux:
 
 and enter the following at the end:
 (min hr day month weekday file)
-`0 10 * * * /usr/bin/python /home/ubuntu/dice_codingskills_project/dice_code/daily_scrape.py >> /var/log/somelogfile.log`
+`0 10 * * * /usr/bin/python /home/ubuntu/dice_codingskills_project/dice_code/daily_scrape.py >> /home/ubuntu/dice_codingskills_project/scrape_log.log`
 
 Do `which python` to make sure the python path is correct.
 

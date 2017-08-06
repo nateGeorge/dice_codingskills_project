@@ -9,7 +9,7 @@ import dice_code.collect_api as ca
 import dice_code.machine_learning as ml
 mtn = timezone('America/Denver')
 
-f = file('scrape_log.txt', 'a')
+f = file('/home/ubuntu/dice_codingskills_project/scrape_log.txt', 'a')
 sys.stdout = f
 sys.stderr = f
 
@@ -18,10 +18,6 @@ print '*' * 20
 print 'STARTING SCRAPE'
 print '*' * 20
 print datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time'
-
-f = file('../daily_scrape_out.txt', 'a')
-sys.stdout = f
-sys.stderr = f
 
 for i in range(20):
     print ''
@@ -47,7 +43,12 @@ jobs = ['analyst',
         'front end developer',
         'full stack',
         'ruby on rails',
-        'php']
+        'php',
+        'quality assurance',
+        'mobile QE',
+        'javascript',
+        'C#',
+        'nodejs']
 
 for j in jobs:
     ca.continuous_scrape(search_term=j, debug=True)
