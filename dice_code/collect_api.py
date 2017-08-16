@@ -1248,10 +1248,12 @@ def get_salaries_mongo(search_term='data science', debug=False):
         s = re.sub('\$', '', sal)
         try:
             sal = float(s)
+            ishourly = False
             if sal < 1000:
                 ishourly = True
         except:
             ishourly = False
+        
         if 'hour' in s or 'hourly' in s or 'hr' in s or len(s) < 4 or ishourly and 'k' not in s:
             if debug:
                 print 'guessing hourly'
