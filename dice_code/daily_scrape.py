@@ -19,6 +19,10 @@ print 'STARTING SCRAPE'
 print '*' * 20
 print datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time'
 
+f = file('/home/ubuntu/dice_codingskills_project/scrape_log_everything.txt', 'a')
+sys.stdout = f
+sys.stderr = f
+
 for i in range(20):
     print ''
 
@@ -56,7 +60,7 @@ for j in jobs:
     time.sleep(120) # wait 2 minutes to avoid having ip blocked
 
 
-f = file('scrape_log.txt', 'a')
+f = file('/home/ubuntu/dice_codingskills_project/scrape_log.txt', 'a')
 sys.stdout = f
 sys.stderr = f
 
