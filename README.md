@@ -15,7 +15,7 @@ yay!
 
 # Setup cronjob scraping
 to setup cronjob in ubuntu linux:
-`crontab -e`
+`sudo crontab -e`
 
 and enter the following at the end:
 (min hr day month weekday file)
@@ -23,7 +23,7 @@ and enter the following at the end:
 
 Do `which python` to make sure the python path is correct.
 
-Cron will run from the home directory, so right now the stdout redirect is going to /scrape_log.txt
+Cron will run from the home directory (it used to be the stdout redirect is going to /scrape_log.txt)
 
 Install postfix: `sudo apt-get install postfix` and choose local configuration, so that any errors from crontab are sent to /var/mail/ubuntu.  Check the output with `tail -f /var/mail/ubuntu`
 
@@ -79,3 +79,8 @@ http://askubuntu.com/questions/61503/how-to-start-mongodb-server-on-system-start
 Upon restart, you may need to run:
 `sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 10001`
 `sudo mongod --dbpath=/var/lib/mongodb --smallfiles` (this takes a long time)
+
+# troubleshooting
+If the scraping isn't finishing, likely memory is running out.  I was trying to run this on a 8GB memory machine at first, and the scraping crashed for a while without me noticing.  I was able to find it was crashing from checking:
+`nano /var/log/kern.log`
+which I found out about from here: https://unix.stackexchange.com/questions/27461/how-can-i-know-when-a-cron-job-was-killed-or-it-crashed

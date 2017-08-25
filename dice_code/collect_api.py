@@ -14,6 +14,9 @@
 import matplotlib
 matplotlib.use('gdk')
 
+import os
+import psutil
+import gc
 import requests as req
 import json
 import re
@@ -1253,7 +1256,7 @@ def get_salaries_mongo(search_term='data science', debug=False):
                 ishourly = True
         except:
             ishourly = False
-        
+
         if 'hour' in s or 'hourly' in s or 'hr' in s or len(s) < 4 or ishourly and 'k' not in s:
             if debug:
                 print 'guessing hourly'
@@ -1533,7 +1536,7 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
     search_term: string
         term to search for on dice api
     use_mongo: boolean
-        if True,
+        if True, saves data to mongodb
 
     Returns
     -------
@@ -1563,6 +1566,10 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
     page = 2
     consecutive_blank_pages = 0
     while True:
+        gc.collect()
+        process = psutil.Process(os.getpid())
+        print 'memory use (GB):'
+        print process.memory_info().rss / 1000000000.0
         # used to get 'nextLink' from json object, but that seemed to end at 29
         # for some reason.  Changing to manually counting up pages
         #page = re.search('page=(\d+)', next_link).group(1).encode('ascii', 'ignore')
