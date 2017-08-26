@@ -2,6 +2,8 @@ import dice_code.collect_api as ca
 import pandas as pd
 import numpy as np
 import re
+import gc
+import psutil
 from sklearn.model_selection import train_test_split as tts
 from sklearn.metrics import mean_squared_error as mse
 import xgboost as xgb
