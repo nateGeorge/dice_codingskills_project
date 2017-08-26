@@ -15,7 +15,7 @@ yay!
 
 # Setup cronjob scraping
 to setup cronjob in ubuntu linux:
-`crontab -e`
+`sudo crontab -e`
 
 and enter the following at the end:
 (min hr day month weekday file)
