@@ -32,6 +32,7 @@ def predict_salary(search_term='data science', show_diff_plot=False):
     """
     jobs = ca.get_jobs(search_term=search_term, recent=False)
 
+
     keep_columns = ['clean_sal']
     df = pd.DataFrame(jobs)
     # df, top_n = dummy_top_n(df, 5, 'company')
@@ -73,13 +74,18 @@ def predict_salary(search_term='data science', show_diff_plot=False):
     keep_columns.extend(new_cols)
     df = dum_df[keep_columns]
 
-    df_known = df[df['clean_sal'] != 0]
+    df_known = df[df['clean_sal'] != 0].copy()
     df_known = df_known[df_known['clean_sal'].notnull()]
     df_known = df_known[df_known['clean_sal'] > 1000]
     df_known = df_known[df_known['clean_sal'] < 250000] # some outliers in there
-    df_unknown = df[~df.index.isin(df_known.index)]
+    df_unknown = df[~df.index.isin(df_known.index)].copy()
     df_unknown.drop('clean_sal', inplace=True, axis=1)
     target = df_known.pop('clean_sal').values
+    # analyzing memory use, seemed to crash around here
+    gc.collect()
+    process = psutil.Process(os.getpid())
+    print 'memory use (GB) after creating 2 dfs:'
+    print process.memory_info().rss / 1000000000.0
     for c in df_known.columns:
         print c
         df_known[c] = df_known[c].apply(lambda x: tf_to_10(x))
@@ -90,6 +96,10 @@ def predict_salary(search_term='data science', show_diff_plot=False):
 
     X_train, X_test, y_train, y_test = tts(
     features, target, test_size=0.33, random_state=42)
+    gc.collect()
+    process = psutil.Process(os.getpid())
+    print 'memory use (GB) after train/test split:'
+    print process.memory_info().rss / 1000000000.0
     # dtrain = xgb.DMatrix(X_train, label=y_train)#, missing=-999)
     # num_round = 200
     # param = {'max_depth':4,
@@ -100,6 +110,10 @@ def predict_salary(search_term='data science', show_diff_plot=False):
     #             'eval_metric':'rmse',
     #             "booster":"gblinear"}
     xgb_model = xgb.XGBRegressor(subsample=0.4).fit(X_train, y_train)
+    gc.collect()
+    process = psutil.Process(os.getpid())
+    print 'memory use (GB) after xgb first fit:'
+    print process.memory_info().rss / 1000000000.0
     # dtest = xgb.DMatrix(X_test, label=y_test)#, missing=-999)
     preds = xgb_model.predict(X_test)
     print mse(y_test, preds)
@@ -113,6 +127,10 @@ def predict_salary(search_term='data science', show_diff_plot=False):
         plt.show()
 
     xgb_final_model = xgb.XGBRegressor(subsample=0.4).fit(features, target)
+    gc.collect()
+    process = psutil.Process(os.getpid())
+    print 'memory use (GB) after 2nd xgb fit:'
+    print process.memory_info().rss / 1000000000.0
     predictions = xgb_final_model.predict(uk_feats)
     client = MongoClient()
     db = client[DB_NAME]
