@@ -42,8 +42,7 @@ if not os.path.exists(main_dir):
 
 os.chdir(main_dir)
 
-jobs = ['analyst',
-        'data science',
+jobs = ['data science',
         'front end developer',
         'full stack',
         'ruby on rails',
@@ -52,12 +51,16 @@ jobs = ['analyst',
         'mobile QE',
         'javascript',
         'C#',
-        'nodejs']
+        'nodejs',
+        'analyst']
 
 for j in jobs:
     ca.continuous_scrape(search_term=j, debug=True)
-    ml.predict_salary(search_term=j)
     time.sleep(120) # wait 2 minutes to avoid having ip blocked
+
+# do ML part separately, because it was causing server to crash sometimes
+for j in jobs:
+    ml.predict_salary(search_term=j)
 
 
 f = file('/home/ubuntu/dice_codingskills_project/scrape_log.txt', 'a')
