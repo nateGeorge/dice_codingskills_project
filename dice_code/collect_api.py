@@ -1566,6 +1566,8 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
 
     page = 2
     consecutive_blank_pages = 0
+    consecutive_same_page = 0
+    last_page = None
     while True:
         gc.collect()
         process = psutil.Process(os.getpid())
@@ -1593,8 +1595,23 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
             # print [j['jobTitle'] for j in non_relevant_jobs]
             if len(relevant_jobs) == 0:
                 consecutive_blank_pages += 1
-            if consecutive_blank_pages == 10:
+            else:
+                consecutive_blank_pages = 0
+            if consecutive_blank_pages == 6: # lower the limit, used to be 10
                 break
+
+            # also want to break if we keep seeing the same pages
+            # got to a point once where it was at page 7000 something and
+            # kept getting the same exact page...
+            if last_page is not None and last_page == job_postings:
+                consecutive_same_page += 1
+            else:
+                consecutive_same_page = 0
+
+            if consecutive_same_page == 3:
+                break
+
+
             #all_ds_jobs.extend(ds_jobs) # not sure but I think this may have been
             # taking up lots of memory
             #all_non_ds_jobs.extend(all_non_ds_jobs)
