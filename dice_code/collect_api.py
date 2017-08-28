@@ -1206,7 +1206,7 @@ def get_locations_mongo(search_term='data science'):
     return locs
 
 
-def get_salaries_mongo(search_term='data science', debug=False):
+def get_salaries_mongo(search_term='data science', debug=False, scrape=True):
     """
     Retrieves list of salaries from mongoDB.  Need to have full time etc
     in order to filter them properly
@@ -1216,7 +1216,8 @@ def get_salaries_mongo(search_term='data science', debug=False):
     db = client[DB_NAME]
     coll = db[search_term]
     jobs = list(coll.find())
-    if len(jobs) == 0:
+    # avoid circular function calls from continuous_scrape with scrape=False
+    if len(jobs) == 0 and scrape:
         continuous_scrape(search_term=search_term)
         jobs = coll.find()
 
@@ -1608,7 +1609,9 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
 
             return full_df
 
-    _ = get_salaries_mongo(search_term=search_term)
+    # re-calculates salaries and things, but we don't use the returned
+    # salary distribution so ignore it with _
+    _ = get_salaries_mongo(search_term=search_term, scrape=False)
 
     if use_mongo:
         return None
