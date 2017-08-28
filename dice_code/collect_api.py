@@ -1611,6 +1611,8 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
             if consecutive_same_page == 3:
                 break
 
+            last_page = job_postings
+
 
             #all_ds_jobs.extend(ds_jobs) # not sure but I think this may have been
             # taking up lots of memory
