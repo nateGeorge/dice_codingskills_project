@@ -49,6 +49,8 @@ To check the log of cron jobs, do: `grep CRON /var/log/syslog`.
 # Exporting MongoDB for transfer
 http://stackoverflow.com/questions/11255630/how-to-export-all-collection-in-mongodb
 
+(from within bash shell, not mongo)
+
 Export:
 `mongodump -d <database_name> -o <directory_backup>`
 i.e.
@@ -58,6 +60,10 @@ Import:
 `mongorestore -d <database_name> <directory_backup>`
 i.e.
 `mongorestore -d dice_jobs dice_jobs.db/dice_jobs`
+
+Then from local machine, you can get the data with scp:
+
+`scp -r -i ~/.ssh/ubuntu16lap.pem ubuntu@54.68.106.57:/home/ubuntu/dice_jobs_jan_2018.bkup /media/nate/data_lake/dice_jobs_backups`
 
 Todo:  automate backup of db on S3 after scraping is finished (in daily_scrape.py)
 
