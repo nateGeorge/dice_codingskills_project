@@ -14,8 +14,15 @@ It can take a while (up to 24 hours) for the nameservers to update, and for your
 Next, you need to start mongo: `sudo mongod --dbpath=/var/lib/mongodb --smallfiles`
 This can be run in a tmux shell, or sent to the background with ctrl+z, then typing `bg`.
 
+
 To be able to access the site, we have to make available port 80:  Enter the commands
+`sudo iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT`
+`sudo iptables -A INPUT -i eth0 -p tcp --dport 10001 -j ACCEPT`
+`sudo iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 10001`
+
+-- this one seemed to the the final key to making it work, after running the above 3
 `sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 10001`
+
 `sudo iptables -t nat -D PREROUTING 1`
 `sudo iptables -t nat -A OUTPUT -o lo -p tcp --dport 80 -j REDIRECT --to-port 10001`
 (doesn't seem to work in the /etc/rc.local file, maybe add to bashrc or something)
