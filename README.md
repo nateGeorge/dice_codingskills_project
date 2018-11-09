@@ -2,18 +2,30 @@
 Data science project for Dice job application.
 
 # running on AWS
-need an elastic IP, and have to assign it to the instance
-need to start mongo: `sudo mongod --dbpath=/var/lib/mongodb --smallfiles`
-enter the command `sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 10001` (doesn't seem to work in the /etc/rc.local file, maybe add to bashrc or something)
+Usually I spin up a spot instance because it's cheaper.  The m4.xlarge seems to be a decent choice right now.  Once the instance is up, you should ssh into it, and the repo should be cloned into it.
 
-In the EC2 dashboard, navigate to network and security -> elastic IPs.  Choose 'allocate new address'.  Then choose the new address and go to 'actions -> associate address'.
+## elastic IP
+Then you need an elastic IP, and have to assign it to the instance.  Create the elastic IP (Amazon pool), then choose 'actions' and 'associate address'.  The address needs to be associated with the server that was just spun up.  Once the IP is associated, you should use that IP to ssh into the instance.
 Then go to route 53, and set up the rest:  
 Follow this guide: http://techgenix.com/namecheap-aws-ec2-linux/
+It can take a while (up to 24 hours) for the nameservers to update, and for your web address to actually work.  You do not need the period after the DNS server names
 
-navigate to the home dir of the repo and do `python app/app.py`
-yay!
+# Starting the db and server
+Next, you need to start mongo: `sudo mongod --dbpath=/var/lib/mongodb --smallfiles`
+This can be run in a tmux shell, or sent to the background with ctrl+z, then typing `bg`.
+
+To be able to access the site, we have to make available port 80:  Enter the commands
+`sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 10001`
+`sudo iptables -t nat -D PREROUTING 1`
+`sudo iptables -t nat -A OUTPUT -o lo -p tcp --dport 80 -j REDIRECT --to-port 10001`
+(doesn't seem to work in the /etc/rc.local file, maybe add to bashrc or something)
+
+Next it's best to run this in a tmux session (`tmux new -s server` -- creates a tmux session called server), which will mean you can access the running server after logging out and the ssh-ing back in.  Navigate to the home dir of the repo and do `python app/app.py`.
+You should be able to access at your ip with port 10001, like so: 54.70.49.112:10001
+Yay!
 
 # Setup cronjob scraping
+TODO: create function in the scraping file so it runs periodically and can be run from within a tmux shell.
 to setup cronjob in ubuntu linux:
 `sudo crontab -e`
 
