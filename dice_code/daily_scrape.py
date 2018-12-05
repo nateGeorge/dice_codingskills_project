@@ -53,7 +53,8 @@ jobs = ['data science',
         'javascript',
         'C#',
         'nodejs',
-        'analyst']
+        'analyst',
+        'gis']
 
 for j in jobs:
     ca.continuous_scrape(search_term=j, debug=True)

@@ -109,3 +109,10 @@ Upon restart, you may need to run:
 If the scraping isn't finishing, likely memory is running out.  I was trying to run this on a 8GB memory machine at first, and the scraping crashed for a while without me noticing.  I was able to find it was crashing from checking:
 `nano /var/log/kern.log`
 which I found out about from here: https://unix.stackexchange.com/questions/27461/how-can-i-know-when-a-cron-job-was-killed-or-it-crashed
+
+# dependencies
+Use the requirements.txt to install dependencies.
+`pip install -r requirements.txt`
+
+I had to install matplotlib with the package manager on Ubuntu 16 to get it working properly:
+`sudo apt-get install python-matplotlib`

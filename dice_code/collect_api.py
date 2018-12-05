@@ -46,7 +46,7 @@ from bokeh.models import (
   GMapPlot, GMapOptions, ColumnDataSource, Circle, DataRange1d, PanTool, WheelZoomTool, BoxSelectTool
 )
 
-BASE_URL = 'http://service.dice.com/api/rest/jobsearch/v1/simple.json?text='
+BASE_URL = 'https://www.dice.com/jobs/q-{}-startPage-{}-jobs'
 page = 1 # page number, 1-indexed
 search_term = 'data science'
 DB_NAME = 'dice_jobs'
@@ -76,9 +76,9 @@ def create_url(search_term, base_url=BASE_URL, page=1):
     formatted url string
     """
     search_term = clean_search_term(search_term)
-    search_term = re.sub('\s', '%20AND%20', search_term) # sub spaces with %20
+    search_term = re.sub('\s', '_', search_term) # sub spaces with underscore
     # AND means it must find all words
-    return BASE_URL + search_term + '&page=' + str(page)# + '&sort=2'# this last bit sorts by job title
+    return BASE_URL.format(search_term, str(page))# + '&sort=2'# this last bit sorts by job title
 
 
 def segment_jobs(job_postings, search_term='data science'):
@@ -1529,6 +1529,26 @@ def gauss_pdf(x, mu, std):
     return np.exp(-(x - mu)**2/(2.0*std)**2)/(std*np.sqrt(2*np.pi))
 
 
+def convert_to_dict(job_postings_raw):
+    """
+    since dice removed their API, this converts the raw web scrape to the old format
+
+    job_postings_raw should be a list of BeautifulSoup HTML objects
+    """
+    job_postings = []
+    current_posting = {}
+    for j in job_postings_raw:
+        print(j)
+        link = j.find('a', {'class': ['dice-btn-link', 'loggedInVisited']})
+        current_posting['jobTitle'] = link.get('title')
+        current_posting['company'] = j.find('span', {'class': 'compName'}).text
+        current_posting['detailUrl'] = 'https://www.dice.com' + link.get('href')
+        job_postings.append(current_posting)
+        current_posting = {}
+
+    return job_postings
+
+
 def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
     """
 
@@ -1547,10 +1567,12 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
     search_term = clean_search_term(search_term)
 
     res = req.get(create_url(search_term=search_term))
-    data = json.loads(res.content)
+    soup = bs(res.content, 'lxml')
     # manually counting up pages now
     #next_link = data['nextUrl']
-    job_postings = data['resultItemList']
+    job_postings_raw = soup.find_all('div', {'class': 'complete-serp-result-div'})
+    job_postings = convert_to_dict(job_postings)  # converts format to match old API
+
     relevant_jobs, non_relevant_jobs = segment_jobs(job_postings, search_term=search_term)
     # in case you want to look at which jobs are filtered out...
     # print [j['jobTitle'] for j in non_relevant_jobs]
@@ -1769,7 +1791,7 @@ def convert(data):
 def clean_search_term(search_term):
     search_term = re.sub('\s+', ' ', search_term) # replace multi space with one
     search_term = search_term.lower() # always lower case
-    if search_term == 'data scientist':
+    if 'data scientist' in search_term:
         search_term = 'data science'
     elif search_term in ['fullstack', 'full-stack']:
         search_term = 'full stack'
