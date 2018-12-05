@@ -290,7 +290,16 @@ def scrape_a_job(job_json=None, search_term='data science', insert_mongo=True, d
     except:
         posted = ''
     try:
-        contact_location = soup.find('li', {'class': ['location']}).text.strip()
+        location = soup.find('li', {'class': ['location']}).text.strip()
+    except:
+        location = ''
+
+    # just in case this has a different contact location
+    tree = html.fromstring(res.content)
+    posted = tree.xpath(posted_xpath)[0].text
+    try:
+        contact_loc_xpath = '//*[@id="contact-location"]'
+        contact_location = tree.xpath(contact_loc_xpath)[0].text.strip()
     except:
         contact_location = ''
 
@@ -305,6 +314,7 @@ def scrape_a_job(job_json=None, search_term='data science', insert_mongo=True, d
                         'travel': tele_travel[1],
                         'description': descr,
                         'posted_text': posted,
+                        'location': location,
                         'contact_location': contact_location}
         entry_dict.update(job_json)
         found = coll.find(entry_dict).count()

@@ -130,7 +130,7 @@ show collections
 # find newest entries and look at location column
 db['data science'].find({}, {location: 1}).sort({scraped_time: -1}).limit(10);
 
-# count number of 
+# count number of entries and number of newest entries
 db['data science'].count();
 db['data science'].find({scraped_time: { $gte: ISODate('2018-12-05')}}).count()
 
