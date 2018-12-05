@@ -1794,6 +1794,8 @@ def clean_search_term(search_term):
     search_term = search_term.lower() # always lower case
     if 'data scientist' in search_term:
         search_term = 'data science'
+    elif 'data engineer' in search_term:
+        search_term = 'data engineer'
     elif search_term in ['fullstack', 'full-stack']:
         search_term = 'full stack'
     elif search_term in ['front-end developer', 'frontend developer']:

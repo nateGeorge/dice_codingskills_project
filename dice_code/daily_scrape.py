@@ -44,6 +44,7 @@ if not os.path.exists(main_dir):
 os.chdir(main_dir)
 
 jobs = ['data science',
+        'data engineer',
         'front end developer',
         'full stack',
         'ruby on rails',

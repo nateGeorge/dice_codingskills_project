@@ -116,3 +116,23 @@ Use the requirements.txt to install dependencies.
 
 I had to install matplotlib with the package manager on Ubuntu 16 to get it working properly:
 `sudo apt-get install python-matplotlib`
+
+# deleting mongo entries
+When fixing the scraping code, I had some issues and had to delete the newest scrapes.  This was done with some mongo commands:
+
+```javascript
+mongo
+
+show dbs
+use dice_jobs
+show collections
+
+# find newest entries and look at location column
+db['data science'].find({}, {location: 1}).sort({scraped_time: -1}).limit(10);
+
+# count number of 
+db['data science'].count();
+db['data science'].find({scraped_time: { $gte: ISODate('2018-12-05')}}).count()
+
+db['data science'].remove({scraped_time: { $gte: ISODate('2018-12-05')}});
+```
