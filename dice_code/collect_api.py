@@ -1538,7 +1538,6 @@ def convert_to_dict(job_postings_raw):
     job_postings = []
     current_posting = {}
     for j in job_postings_raw:
-        print(j)
         link = j.find('a', {'class': ['dice-btn-link', 'loggedInVisited']})
         current_posting['jobTitle'] = link.get('title')
         current_posting['company'] = j.find('span', {'class': 'compName'}).text
