@@ -9,7 +9,7 @@ import dice_code.collect_api as ca
 import dice_code.machine_learning as ml
 mtn = timezone('America/Denver')
 
-f = file('/home/ubuntu/dice_codingskills_project/scrape_log.txt', 'a')
+f = file('/home/ubuntu/dice_codingskills_project/scrape_log_2018_end.txt', 'a')
 sys.stdout = f
 sys.stderr = f
 
@@ -19,7 +19,7 @@ print 'STARTING SCRAPE'
 print '*' * 20
 print datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time'
 
-f = file('/home/ubuntu/dice_codingskills_project/scrape_log_everything.txt', 'a')
+f = file('/home/ubuntu/dice_codingskills_project/scrape_log_everything_2018_end.txt', 'a')
 sys.stdout = f
 sys.stderr = f
 
