@@ -1608,7 +1608,10 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
         try:
             res = req.get(create_url(search_term=search_term, page=page))
             page += 1
-            data = json.loads(res.content)
+
+            soup = bs(res.content, 'lxml')
+            job_postings_raw = soup.find_all('div', {'class': 'complete-serp-result-div'})
+            job_postings = convert_to_dict(job_postings_raw)  # converts format to match old API
             #next_link = data['nextUrl']
             job_postings = data['resultItemList']
             relevant_jobs, non_relevant_jobs = segment_jobs(job_postings, search_term=search_term)
