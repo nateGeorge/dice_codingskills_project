@@ -285,12 +285,12 @@ def scrape_a_job(job_json=None, search_term='data science', insert_mongo=True, d
             traceback.print_exc()
         return None
 
-    posted_xpath = '//*[@id="header-wrap"]/div[2]/div/div[1]/ul/li[3]'
-    tree = html.fromstring(res.content)
-    posted = tree.xpath(posted_xpath)[0].text
     try:
-        contact_loc_xpath = '//*[@id="contact-location"]'
-        contact_location = tree.xpath(contact_loc_xpath)[0].text.strip()
+        posted = soup.find('li', {'class': ['posted']}).text.strip()
+    except:
+        posted = ''
+    try:
+        contact_location = soup.find('li', {'class': ['location']}).text.strip()
     except:
         contact_location = ''
 
