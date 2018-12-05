@@ -1571,7 +1571,7 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
     # manually counting up pages now
     #next_link = data['nextUrl']
     job_postings_raw = soup.find_all('div', {'class': 'complete-serp-result-div'})
-    job_postings = convert_to_dict(job_postings)  # converts format to match old API
+    job_postings = convert_to_dict(job_postings_raw)  # converts format to match old API
 
     relevant_jobs, non_relevant_jobs = segment_jobs(job_postings, search_term=search_term)
     # in case you want to look at which jobs are filtered out...
