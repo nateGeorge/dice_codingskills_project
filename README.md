@@ -14,7 +14,7 @@ It can take a while (up to 24 hours) for the nameservers to update, and for your
 Next, you need to start mongo: `sudo mongod --dbpath=/var/lib/mongodb --smallfiles`
 This can be run in a tmux shell, or sent to the background with ctrl+z, then typing `bg`.
 
-
+TODO: these next 4 commands should be added to the startup routine of the server, since they need to be added every time.
 To be able to access the site, we have to make available port 80:  Enter the commands
 `sudo iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT`
 `sudo iptables -A INPUT -i eth0 -p tcp --dport 10001 -j ACCEPT`
