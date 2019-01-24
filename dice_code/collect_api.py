@@ -725,7 +725,8 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False,
     """
     if hw is not None:
         # scale factor for screen width
-        scale_factor = int(500 / 1366. * hw[1])
+        # seems like hw is no longer a great estimate of screen width
+        scale_factor = int(500 / 1366. * hw[1] * 0.75)
 
     search_term = clean_search_term(search_term)
     if top_skills_all is None:
@@ -943,7 +944,7 @@ def plot_top_locs(search_term='data science', live=False, hw=None, recent=False)
     scale_factor = 500
     if hw is not None:
         # scale factor for screen width
-        scale_factor = int(500 / 1366. * hw[1])
+        scale_factor = int(500 / 1366. * hw[1] * 0.75)
 
     search_term = clean_search_term(search_term)
 
@@ -1115,7 +1116,7 @@ def plot_top_states(search_term='data science', live=False, hw=None, recent=Fals
     scale_factor = 500
     if hw is not None:
         # scale factor for screen width
-        scale_factor = int(500 / 1366. * hw[1])
+        scale_factor = int(500 / 1366. * hw[1] * 0.75)
 
     search_term = clean_search_term(search_term)
 
