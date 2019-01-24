@@ -33,6 +33,7 @@ def predict_salary(search_term='data science', show_diff_plot=False):
     jobs: list of dicts
         list of dictionaries of job listings from mongodb
     """
+    # TODO: only use most recent job postings so it uses less memory (maybe those from the last month)
     jobs = ca.get_jobs(search_term=search_term, recent=False)
 
 
