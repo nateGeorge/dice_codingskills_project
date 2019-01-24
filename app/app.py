@@ -2,12 +2,12 @@
 
 import sys
 import os
-print 'system path'
-print sys.path
+print('system path')
+print(sys.path)
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 sys.path.append('/home/ubuntu/dice_codingskills_project') # hack for AWS
 import json
-import cPickle as pk
+import pickle as pk
 import re
 from flask import Flask, request, make_response, jsonify
 import flask
@@ -80,7 +80,7 @@ def get_words():
         jobs_dict['search_term'] = re.sub('\s', '_', ca.clean_search_term(search_term))
         jobs_dict['salary_file'] = filename
         jobs_dict['num_jobs'] = len(jobs)
-        print filename
+        print(filename)
         resp = flask.Response(json.dumps(jobs_dict))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp

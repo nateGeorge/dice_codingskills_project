@@ -8,7 +8,7 @@ from datetime import datetime
 
 from pytz import timezone
 
-from . import db_functions as dbf
+import db_functions as dbf
 import dice_code.collect_api as ca
 import dice_code.machine_learning as ml
 mtn = timezone('America/Denver')
@@ -20,30 +20,30 @@ def full_scrape():
     # sys.stderr = f
 
     start = datetime.now(mtn)
-    print('*' * 20)
-    print('STARTING SCRAPE')
-    print('*' * 20)
-    print(datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time')
+    print '*' * 20
+    print 'STARTING SCRAPE'
+    print '*' * 20
+    print datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time'
 
     # f = file('/home/ubuntu/dice_codingskills_project/scrape_log_everything_2018_end.txt', 'a')
     # sys.stdout = f
     # sys.stderr = f
 
     for i in range(20):
-        print('')
+        print ''
 
-    print('*' * 20)
-    print('STARTING SCRAPE')
-    print('*' * 20)
-    print(datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time')
+    print '*' * 20
+    print 'STARTING SCRAPE'
+    print '*' * 20
+    print datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time'
 
     # need to change directory to the main directory so we can import collect_api
     main_dir = '/media/nate/Windows/github/dice_codingskills_project/'
     if not os.path.exists(main_dir):
         main_dir = '/home/ubuntu/dice_codingskills_project/'
         if not os.path.exists(main_dir):
-            print('path to', main_dir, 'does not exist.')
-            print('exiting now.')
+            print 'path to', main_dir, 'does not exist.'
+            print 'exiting now.'
             exit()
 
     os.chdir(main_dir)
@@ -69,7 +69,7 @@ def full_scrape():
 
     # do ML part separately, because it was causing server to crash sometimes
     for j in jobs:
-        print(('running ml on', j))
+        print('running ml on', j)
         ml.predict_salary(search_term=j)
 
 
@@ -77,13 +77,13 @@ def full_scrape():
     sys.stdout = f
     sys.stderr = f
 
-    print('*' * 20)
-    print('FINISHED SCRAPE')
-    print('*' * 20)
-    print(datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time')
+    print '*' * 20
+    print 'FINISHED SCRAPE'
+    print '*' * 20
+    print datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time'
     end = datetime.now(mtn)
     diff = (end-start)
-    print('took this long:', str(diff))
+    print 'took this long:', str(diff)
 
     dbf.write_backup_file()
     gc.collect()

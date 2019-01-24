@@ -46,7 +46,7 @@ def send_messages(search_term, text=False):
     if text:
         to = [phone_email, email_addr]
     email_text = compose_email(from_addr=gmail_user, to=to, search_term=search_term)
-    print(email_text)
+    print email_text
     try:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.ehlo()
@@ -55,5 +55,5 @@ def send_messages(search_term, text=False):
         server.sendmail(gmail_user, to, email_text)
         server.close()
     except:
-        print('Something went wrong...')
-        print('Couldn\'t email')
+        print 'Something went wrong...'
+        print 'Couldn\'t email'

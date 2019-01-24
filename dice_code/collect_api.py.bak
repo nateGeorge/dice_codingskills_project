@@ -31,7 +31,7 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib import ticker
-from . import word_vectors as wv
+import word_vectors as wv
 from bokeh.mpl import to_bokeh
 from bokeh.plotting import figure
 from bokeh.charts import Bar, output_file, show, save
@@ -144,7 +144,7 @@ def print_ds_jobs(ds_jobs, aspect='jobTitle'):
     None
     """
     for j in ds_jobs:
-        print(j[aspect])
+        print j[aspect]
 
 
 def dl_job_post(job_postings=None, url=None, num=0, path='test.html'):
@@ -173,7 +173,7 @@ def dl_job_post(job_postings=None, url=None, num=0, path='test.html'):
     elif url is not None:
         res = req.get(url)
     else:
-        print('either job_postings or url must be supplied as an argument')
+        print 'either job_postings or url must be supplied as an argument'
 
     with open('test.html', 'w') as f:
         f.write(res.content)
@@ -242,11 +242,11 @@ def scrape_a_job(job_json=None, search_term='data science', insert_mongo=True, d
         in_db = coll.find(job_json).count()
         if in_db > 0:
             if debug:
-                print('already in db')
+                print 'already in db'
             # don't think I want to update multi, but let's see how many there are
             coll.update(job_json, {'$set': {'recent': True}})#, multi=True)
             if in_db > 1:
-                print('WARN: occurs', in_db, 'times')
+                print 'WARN: occurs', in_db, 'times'
             return None
 
     if url is not None:
@@ -254,19 +254,19 @@ def scrape_a_job(job_json=None, search_term='data science', insert_mongo=True, d
     else:
         res = req.get(job_json['detailUrl'])
     if debug:
-        print(job_json['detailUrl'])
+        print job_json['detailUrl']
     if not res.ok:
         if debug:
-            print('uh-oh...')
-            print(res.status)
+            print 'uh-oh...'
+            print res.status
 
     soup = bs(res.content, 'lxml')
     f404 = soup.findAll('p', {'class':'err_p'})
     if len(f404) > 0:
         if debug:
-            print('found 404')
-            print(f404[0].getText())
-        if f404[0].getText() == "404 - The page you're looking for couldn't be found or it may have expired.":
+            print 'found 404'
+            print f404[0].getText()
+        if f404[0].getText() == u"404 - The page you're looking for couldn't be found or it may have expired.":
             return None
 
     info = soup.findAll('div', {'class':'row job-info'})
@@ -279,9 +279,9 @@ def scrape_a_job(job_json=None, search_term='data science', insert_mongo=True, d
         descr = soup.find('div', {'id':'jobdescSec'}).getText()
     except AttributeError:
         if debug:
-            print('')
-            print('couldn\'t find description')
-            print('')
+            print ''
+            print 'couldn\'t find description'
+            print ''
             traceback.print_exc()
         return None
 
@@ -374,7 +374,7 @@ def scrape_all_jobs(job_postings, search_term=None, use_mongo=True, debug=False)
     full_df = None
     for i, j in enumerate(job_postings):
         if debug:
-            print(i, j['jobTitle'], j['company'])
+            print i, j['jobTitle'], j['company']
         if use_mongo:
             scrape_a_job(j, search_term=search_term, insert_mongo=use_mongo, debug=debug)
         else:
@@ -446,11 +446,11 @@ def clean_db_skills(skills_list):
     # going to do this for everything else to be safe
     for s in clean_skills_list:
         if s == 'sql/nosql':
-            print('sql/nosql in s (2):', s)
-            print('search:', re.search('/', s))
-            print(orig)
-            print(clean_skills_list)
-            print(now)
+            print 'sql/nosql in s (2):', s
+            print 'search:', re.search('/', s)
+            print orig
+            print clean_skills_list
+            print now
         if re.search('^or ', s) is not None:
             clean_skills_list.remove(s)
             clean_skills_list.append(s[3:])
@@ -564,7 +564,7 @@ def old_plot_top_skills(top_skills_all=None, search_term='data science', live=Fa
     #tools.append(hover)
     src = df.to_dict(orient='list')
     full_source = ColumnDataSource(src)
-    src.update({'index': list(range(df['skill'].shape[0]))})
+    src.update({'index': range(df['skill'].shape[0])})
     #src = ColumnDataSource(src)
 
     # high-level way to do it, but can't label anything but the indices...
@@ -582,7 +582,7 @@ def old_plot_top_skills(top_skills_all=None, search_term='data science', live=Fa
     # full_source = None
     for i, r in df.iterrows():
         src = r.to_dict()
-        for k, v in src.items():
+        for k, v in src.iteritems():
             src[k] = [v]
         src['index'] = [i]
         source = ColumnDataSource(src)
@@ -769,7 +769,7 @@ def plot_top_skills(top_skills_all=None, search_term='data science', live=False,
     tools = 'pan,lasso_select,box_select,reset,tap'.split(',')
     #tools.append(hover)
     src = df.to_dict(orient='list')
-    src.update({'index': list(range(df['skill'].shape[0]))})
+    src.update({'index': range(df['skill'].shape[0])})
     full_source = ColumnDataSource(src)
     #src = ColumnDataSource(src)
 
@@ -959,11 +959,11 @@ def plot_top_locs(search_term='data science', live=False, hw=None, recent=False)
     # get % counts for each skills
     norm_counts = []
     label_dict = {}
-    for i, t, l in zip(list(range(top_locs.shape[0])), top_locs, locations):
+    for i, t, l in zip(range(top_locs.shape[0]), top_locs, locations):
         label_dict[i] = l
         norm_counts.append(float(t) / total_jobs * 100)
 
-    df = pd.DataFrame({'location': [l for l in locations], 'pct jobs at location': norm_counts, 'index': list(range(top_locs.shape[0]))})
+    df = pd.DataFrame({'location': [l for l in locations], 'pct jobs at location': norm_counts, 'index': range(top_locs.shape[0])})
     # clean up df
     df['color'] = '#6999de'
 
@@ -1132,11 +1132,11 @@ def plot_top_states(search_term='data science', live=False, hw=None, recent=Fals
     # get % counts for each skills
     norm_counts = []
     label_dict = {}
-    for i, t, l in zip(list(range(top_states.shape[0])), top_states, states):
+    for i, t, l in zip(range(top_states.shape[0]), top_states, states):
         label_dict[i] = l
         norm_counts.append(float(t) / total_jobs * 100)
 
-    df = pd.DataFrame({'location': [s for s in states], 'pct jobs in state': norm_counts, 'index': list(range(top_states.shape[0]))})
+    df = pd.DataFrame({'location': [s for s in states], 'pct jobs in state': norm_counts, 'index': range(top_states.shape[0])})
     # clean up df
     df['color'] = '#6999de'
 
@@ -1270,10 +1270,10 @@ def get_salaries_mongo(search_term='data science', debug=False, scrape=True):
 
         if 'hour' in s or 'hourly' in s or 'hr' in s or len(s) < 4 or ishourly and 'k' not in s:
             if debug:
-                print('guessing hourly')
+                print 'guessing hourly'
             if '-' in s:
                 if debug:
-                    print(s)
+                    print s
                 # probably a range
                 sal_match = re.search('(\d+\.*\d*)[/hr]*\s*-\s*(\d+\.*\d*)', s)
                 try:
@@ -1283,7 +1283,7 @@ def get_salaries_mongo(search_term='data science', debug=False, scrape=True):
                     max_hr *= 37.5 * 52
                     avg_hr = (min_hr + max_hr) / 2
                     if debug:
-                        print('hourly min, max, avg:', min_hr, max_hr, avg_hr)
+                        print 'hourly min, max, avg:', min_hr, max_hr, avg_hr
                     # calculate yearly salary based on per hour
                     avg_sal = avg_hr
                 except:
@@ -1294,10 +1294,10 @@ def get_salaries_mongo(search_term='data science', debug=False, scrape=True):
                 if avg_hr > 10: # saw some as '00' etc
                     avg_sal = avg_hr
                     if debug:
-                        print('hourly avg:', avg_hr)
+                        print 'hourly avg:', avg_hr
         else: # not hourly, probably annually
             if debug:
-                print('guessing annual')
+                print 'guessing annual'
             range_match = re.search('(\d+\.*\d*)\s*-+\s*(\d+\.*\d*)', s)
             if range_match:
                 min_sal = float(range_match.group(1))
@@ -1312,13 +1312,13 @@ def get_salaries_mongo(search_term='data science', debug=False, scrape=True):
                     max_sal *= 1000
                 avg_sal = float((min_sal + max_sal) / 2.0)
                 if debug:
-                    print('annual min, max, avg:', min_sal, max_sal, avg_sal)
+                    print 'annual min, max, avg:', min_sal, max_sal, avg_sal
             else:
                 avg_sal = float(re.search('\d+\.*\d*', s).group(0))
                 if avg_sal < 1000:
                     avg_sal *= 1000
                 if debug:
-                    print('annual avg:', avg_sal)
+                    print 'annual avg:', avg_sal
 
         coll.update_one(j, {'$set': {'clean_emp_type': emp_type, 'clean_sal': avg_sal}})
 
@@ -1336,20 +1336,20 @@ def get_salary_dist(salary_dict, debug=False):
     min_sals = []
     max_sals = []
     avg_sals = []
-    for t in list(salary_dict.keys()): # for each employment type, e.g. full_time, c2h
+    for t in salary_dict.keys(): # for each employment type, e.g. full_time, c2h
         new_sal_dict[t] = {}
         new_sal_dict[t]['mins'] = []
         new_sal_dict[t]['maxs'] = []
         new_sal_dict[t]['avgs'] = []
         if debug:
-            print(t)
+            print t
         for s in salary_dict[t]:
             if s == 0:
                 continue
             if debug:
-                print(s)
+                print s
             if debug:
-                print(s)
+                print s
             s = re.sub(',', '', s)
             s = re.sub('\$', '', s)
             # check if an hourly wage
@@ -1362,10 +1362,10 @@ def get_salary_dist(salary_dict, debug=False):
                 ishourly = False
             if 'hour' in s or 'hourly' in s or 'hr' in s or len(s) < 4 or ishourly and 'k' not in s:
                 if debug:
-                    print('guessing hourly')
+                    print 'guessing hourly'
                 if '-' in s:
                     if debug:
-                        print(s)
+                        print s
                     # probably a range
                     sal_match = re.search('(\d+\.*\d*)[/hr]*\s*-\s*(\d+\.*\d*)', s)
                     try:
@@ -1375,7 +1375,7 @@ def get_salary_dist(salary_dict, debug=False):
                         max_hr *= 37.5 * 52
                         avg_hr = (min_hr + max_hr) / 2
                         if debug:
-                            print('hourly min, max, avg:', min_hr, max_hr, avg_hr)
+                            print 'hourly min, max, avg:', min_hr, max_hr, avg_hr
                         # calculate yearly salary based on per hour
                         new_sal_dict[t]['mins'].append(min_hr)
                         new_sal_dict[t]['maxs'].append(max_hr)
@@ -1388,10 +1388,10 @@ def get_salary_dist(salary_dict, debug=False):
                     if avg_hr > 10: # saw some as '00' etc
                         new_sal_dict[t]['avgs'].append(avg_hr)
                         if debug:
-                            print('hourly avg:', avg_hr)
+                            print 'hourly avg:', avg_hr
             else: # not hourly, probably annually
                 if debug:
-                    print('guessing annual')
+                    print 'guessing annual'
                 range_match = re.search('(\d+\.*\d*)\s*-+\s*(\d+\.*\d*)', s)
                 if range_match:
                     min_sal = float(range_match.group(1))
@@ -1409,14 +1409,14 @@ def get_salary_dist(salary_dict, debug=False):
                     new_sal_dict[t]['maxs'].append(max_sal)
                     new_sal_dict[t]['avgs'].append(avg_sal)
                     if debug:
-                        print('annual min, max, avg:', min_sal, max_sal, avg_sal)
+                        print 'annual min, max, avg:', min_sal, max_sal, avg_sal
                 else:
                     avg_sal = float(re.search('\d+\.*\d*', s).group(0))
                     if avg_sal < 1000:
                         avg_sal *= 1000
                     new_sal_dict[t]['avgs'].append(avg_sal)
                     if debug:
-                        print('annual avg:', avg_sal)
+                        print 'annual avg:', avg_sal
 
     return new_sal_dict
 
@@ -1602,19 +1602,19 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
     while True:
         gc.collect()
         process = psutil.Process(os.getpid())
-        print('memory use (GB):')
-        print(process.memory_info().rss / 1000000000.0)
+        print 'memory use (GB):'
+        print process.memory_info().rss / 1000000000.0
         # used to get 'nextLink' from json object, but that seemed to end at 29
         # for some reason.  Changing to manually counting up pages
         #page = re.search('page=(\d+)', next_link).group(1).encode('ascii', 'ignore')
         if debug:
-            print('')
-            print('-'*20)
-            print('')
-            print('on page', page)
-            print('')
-            print('-'*20)
-            print('')
+            print ''
+            print '-'*20
+            print ''
+            print 'on page', page
+            print ''
+            print '-'*20
+            print ''
         try:
             res = req.get(create_url(search_term=search_term, page=page))
             page += 1
@@ -1789,12 +1789,12 @@ def convert(data):
     Converts all parts of dictionary from unicode to string.
     From here: http://stackoverflow.com/questions/1254454/fastest-way-to-convert-a-dicts-keys-values-from-unicode-to-str
     """
-    if isinstance(data, str):
+    if isinstance(data, basestring):
         return str(data)
     elif isinstance(data, collections.Mapping):
-        return dict(list(map(convert, iter(data.items()))))
+        return dict(map(convert, data.iteritems()))
     elif isinstance(data, collections.Iterable):
-        return type(data)(list(map(convert, data)))
+        return type(data)(map(convert, data))
     else:
         return data
 
@@ -1863,7 +1863,7 @@ def filter_jobs(jobs, salary_range=None, locations=None, skills=None, fields=Non
     if fields is not None:
         df = df[fields]
 
-    filtered_jobs = list(df.to_dict(orient='index').values())
+    filtered_jobs = df.to_dict(orient='index').values()
 
     return filtered_jobs
 
