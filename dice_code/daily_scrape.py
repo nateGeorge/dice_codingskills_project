@@ -2,13 +2,14 @@
 import os
 import gc
 import sys
-sys.path.append('/home/ubuntu/dice_codingskills_project') # hack for AWS
+sys.path.append('/home/ubuntu/dice_codingskills_project')
+sys.path.append('/home/nate/github/dice_codingskills_project')
 import time
 from datetime import datetime
 
 from pytz import timezone
 
-from . import db_functions as dbf
+import dice_code.db_functions as dbf
 import dice_code.collect_api as ca
 import dice_code.machine_learning as ml
 mtn = timezone('America/Denver')
@@ -38,7 +39,7 @@ def full_scrape():
     print(datetime.now(mtn).strftime("%Y-%m-%d %H:%M"), 'mountain time')
 
     # need to change directory to the main directory so we can import collect_api
-    main_dir = '/media/nate/Windows/github/dice_codingskills_project/'
+    main_dir = '/home/nate/github/dice_codingskills_project'
     if not os.path.exists(main_dir):
         main_dir = '/home/ubuntu/dice_codingskills_project/'
         if not os.path.exists(main_dir):

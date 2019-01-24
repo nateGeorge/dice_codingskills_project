@@ -12,7 +12,10 @@
 
 # need this for flask to work (multiprocessing issue)
 import matplotlib
-matplotlib.use('gdk')
+try:
+    matplotlib.use('gdk')
+except:
+    pass
 
 import os
 import psutil
@@ -32,12 +35,17 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib import ticker
 from . import word_vectors as wv
-from bokeh.mpl import to_bokeh
+try:
+    from bokeh.mpl import to_bokeh
+    from bokeh.charts import Bar, output_file, show, save
+    from bokeh.properties import Dict, Int, String
+except:
+    print('no bokeh.mpl, bokeh.charts, or bokeh.properties in latest bokeh, use earlier version or fix code')
 from bokeh.plotting import figure
-from bokeh.charts import Bar, output_file, show, save
+
 from bokeh.models import TickFormatter, HoverTool, GlyphRenderer, Range1d, TapTool
 from bokeh.models.callbacks import CustomJS
-from bokeh.properties import Dict, Int, String
+
 from bokeh.embed import components
 import traceback
 import collections
@@ -101,7 +109,7 @@ def segment_jobs(job_postings, search_term='data science'):
     relevant_jobs = []
     non_relevant_jobs = []
     for j in job_postings:
-        title = str.lower(j['jobTitle'].encode('ascii', 'ignore'))
+        title = str.lower(j['jobTitle']) # .encode('ascii', 'ignore')
         if search_term == 'data science':
             if 'data scientist' in title or 'data science' in title:
                 relevant_jobs.append(j)
@@ -190,7 +198,7 @@ def get_info(info):
         salary = info[2].find('div', {'class':'iconsiblings'}).getText().strip('\n')
         tele_travel = info[3].find('div', {'class':'iconsiblings'}).getText()
         tele_travel = tele_travel.split('\n')
-        tele_travel = [t.encode('ascii', 'ignore') for t in tele_travel if t != '']
+        tele_travel = [t for t in tele_travel if t != '']  # .encode('ascii', 'ignore')
         return skills, emp_type, salary, tele_travel
     else:
         # sometimes some of the info is missing
@@ -210,7 +218,7 @@ def get_info(info):
             elif 'icon-network-2' in icons:
                 tele_travel = i.find('div', {'class':'iconsiblings'}).getText()
                 tele_travel = tele_travel.split('\n')
-                tele_travel = [t.encode('ascii', 'ignore') for t in tele_travel if t != '']
+                tele_travel = [t for t in tele_travel if t != '']  # .encode('ascii', 'ignore')
 
         return skills, emp_type, salary, tele_travel
 
@@ -356,7 +364,7 @@ def clean_page_skills(skills):
     skills: list
         cleaned-up list of skills, each is a string
     """
-    skills = str.lower(skills.getText().strip('\n').strip('\t').strip('\n').encode('ascii', 'ignore'))
+    skills = str.lower(skills.getText().strip('\n').strip('\t').strip('\n'))  # .encode('ascii', 'ignore')
     skills = skills.split(',')
     # they are unicode, so convert to ascii strings (Python2 only)
     skills = [s.strip() for s in skills if s != 'etc']
@@ -395,7 +403,7 @@ def get_skills_tf(df):
     Calculates term-frequency for skills based on a pandas dataframe.
     """
     skills_temp = df['csv_skills'].values
-    skills_temp = [str.lower(s.encode('ascii', 'ignore')).split(', ') for s in skills_temp]
+    skills_temp = [str.lower(s).split(', ') for s in skills_temp]  # .encode('ascii', 'ignore')
     skills_list = []
     for s in skills_temp:
         skills_list.extend([sk.split('/') for sk in s])
@@ -438,7 +446,7 @@ def clean_db_skills(skills_list):
     """
     # don't think I need this
     #temp_skills = [str.lower(s.encode('ascii', 'ignore')).split(', ') for s in skills_list]
-    clean_skills_list = [s.lower().encode('ascii', 'ignore') for s in skills_list]
+    clean_skills_list = [s.lower() for s in skills_list]  # .encode('ascii', 'ignore')
     for char in ['-', '/', ' or ', ' & ', ' and ']:
         clean_skills_list = split_skills(clean_skills_list, char=char)
 
@@ -482,10 +490,12 @@ def get_skills_tf_mongo(search_term='data science'):
 
 
 class FixedTickFormatter(TickFormatter):
-
-    labels = Dict(Int, String, help="""
-    A mapping of integer ticks values to their labels.
-    """)
+    try:
+        labels = Dict(Int, String, help="""
+        A mapping of integer ticks values to their labels.
+        """)
+    except:
+        print('Dict not loaded from bokeh')
 
     JS_CODE =  """
     _ = require "underscore"
@@ -1197,7 +1207,7 @@ def get_locations_mongo(search_term='data science'):
     jobs = coll.find()
     locs = defaultdict(list)
     for j in jobs:
-        emp_type = str.lower(j['emp_type'].encode('ascii', 'ignore'))
+        emp_type = str.lower(j['emp_type'])  # .encode('ascii', 'ignore')
         if j['emp_type'] == '' or j['location'] == '':
             continue
         elif 'c2h' in emp_type or 'contract to hire' in emp_type or 'contract-to-hire' in emp_type:
@@ -1233,8 +1243,8 @@ def get_salaries_mongo(search_term='data science', debug=False, scrape=True):
 
     salary_dict = defaultdict(list)
     for j in jobs:
-        sal = str.lower(j['salary'].encode('ascii', 'ignore'))
-        emp_type = str.lower(j['emp_type'].encode('ascii', 'ignore'))
+        sal = str.lower(j['salary'])  # .encode('ascii', 'ignore')
+        emp_type = str.lower(j['emp_type'])  # .encode('ascii', 'ignore')
         # some are '', '-', '$' or something like 'top 20%'
         # first check if there is at least a number in the salary
         if 'c2h' in emp_type or 'contract to hire' in emp_type or 'contract-to-hire' in emp_type:
