@@ -69,6 +69,7 @@ def full_scrape():
 
     # do ML part separately, because it was causing server to crash sometimes
     for j in jobs:
+        print('running ml on', j)
         ml.predict_salary(search_term=j)
 
 
@@ -98,7 +99,8 @@ def daily_scrape():
             last_scrape = time.time()
             full_scrape()
         else:
-            sleep(600)
+            print('not time to scrape yet; sleeping 60min')
+            sleep(3600)
 
 
 if __name__ == "__main__":
