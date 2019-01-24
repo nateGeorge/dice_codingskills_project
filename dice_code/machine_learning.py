@@ -35,6 +35,9 @@ def predict_salary(search_term='data science', show_diff_plot=False):
     """
     # TODO: only use most recent job postings so it uses less memory (maybe those from the last month)
     jobs = ca.get_jobs(search_term=search_term, recent=False)
+    if jobs == 'updating db':
+        print('no entries for ', search_term, 'exiting')
+        return
 
 
     keep_columns = ['clean_sal']
