@@ -74,7 +74,7 @@ def full_scrape():
         ml.predict_salary(search_term=j)
 
 
-    f = file(main_dir + '/scrape_log.txt', 'a')
+    f = open(main_dir + '/scrape_log.txt', 'a')
     sys.stdout = f
     sys.stderr = f
 
