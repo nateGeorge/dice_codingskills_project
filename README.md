@@ -1,5 +1,6 @@
 # dice_codingskills_project
 Data science project for Dice job application.
+[Here's a video overview of the app.](https://youtu.be/BEW_s9EalyU)
 
 # running on AWS
 Usually I spin up a spot instance because it's cheaper.  The m4.xlarge seems to be a decent choice right now.  Once the instance is up, you should ssh into it, and the repo should be cloned into it.
