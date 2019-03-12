@@ -1,0 +1,659 @@
+********************
+FINISHED SCRAPE
+********************
+2019-01-25 14:01 mountain time
+took this long: 1:01:21.082448
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+
+
+
+
+
+Do you really want to exit ([y]/n)? 
+Error in atexit._run_exitfuncs:
+Traceback (most recent call last):
+  File "/home/nate/.local/lib/python3.7/site-packages/IPython/core/history.py", line 578, in end_session
+    len(self.input_hist_parsed)-1, self.session_number))
+sqlite3.OperationalError: database or disk is full
+********************
+FINISHED SCRAPE
+********************
+2019-01-29 09:10 mountain time
+took this long: 0:55:48.184151
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+
+Do you really want to exit ([y]/n)? 
+********************
+FINISHED SCRAPE
+********************
+2019-01-29 17:06 mountain time
+took this long: 0:47:06.611857
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+
+Do you really want to exit ([y]/n)? 
+********************
+FINISHED SCRAPE
+********************
+2019-01-30 13:38 mountain time
+took this long: 0:48:29.885760
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+********************
+FINISHED SCRAPE
+********************
+2019-02-04 13:10 mountain time
+took this long: 1:14:26.991811
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+
+Do you really want to exit ([y]/n)? 
+********************
+FINISHED SCRAPE
+********************
+2019-02-05 16:36 mountain time
+took this long: 0:58:05.003829
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+********************
+FINISHED SCRAPE
+********************
+2019-02-07 11:34 mountain time
+took this long: 1:05:44.512757
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+
+
+
+Do you really want to exit ([y]/n)? 
+********************
+FINISHED SCRAPE
+********************
+2019-02-07 13:26 mountain time
+took this long: 0:46:02.218895
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+********************
+FINISHED SCRAPE
+********************
+2019-02-09 22:49 mountain time
+took this long: 0:58:56.445111
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+********************
+FINISHED SCRAPE
+********************
+2019-02-11 17:23 mountain time
+took this long: 0:51:03.679993
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+
+
+
+
+
+
+Do you really want to exit ([y]/n)? 
+********************
+FINISHED SCRAPE
+********************
+2019-02-12 21:49 mountain time
+took this long: 0:57:38.473560
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+********************
+FINISHED SCRAPE
+********************
+2019-02-16 00:41 mountain time
+took this long: 1:11:45.432269
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+********************
+FINISHED SCRAPE
+********************
+2019-02-18 21:28 mountain time
+took this long: 0:59:30.698153
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+
+Do you really want to exit ([y]/n)? 
+********************
+FINISHED SCRAPE
+********************
+2019-02-24 21:54 mountain time
+took this long: 0:39:46.015955
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+********************
+FINISHED SCRAPE
+********************
+2019-02-25 18:10 mountain time
+took this long: 0:38:23.249758
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+********************
+FINISHED SCRAPE
+********************
+2019-02-26 14:26 mountain time
+took this long: 0:35:58.165819
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+
+
+
+
+Do you really want to exit ([y]/n)? 
+********************
+FINISHED SCRAPE
+********************
+2019-02-26 21:04 mountain time
+took this long: 0:37:02.794997
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+
+
+
+
+
+
+Do you really want to exit ([y]/n)? 
+********************
+FINISHED SCRAPE
+********************
+2019-03-01 22:52 mountain time
+took this long: 0:54:09.701149
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    106[0m [0;34m[0m[0m
+[1;32m    107[0m [0;32mif[0m [0m__name__[0m [0;34m==[0m [0;34m"__main__"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 108[0;31m     [0mdaily_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mdaily_scrape[0;34m()[0m
+[1;32m     99[0m         [0;32mif[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m [0;34m-[0m [0mlast_scrape[0m [0;34m>[0m [0mseconds_in_day[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    100[0m             [0mlast_scrape[0m [0;34m=[0m [0mtime[0m[0;34m.[0m[0mtime[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 101[0;31m             [0mfull_scrape[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    102[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    103[0m             [0mprint[0m[0;34m([0m[0;34m'not time to scrape yet; sleeping 60min'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/media/nate/nates/github/dice_codingskills_project/dice_code/daily_scrape.py[0m in [0;36mfull_scrape[0;34m()[0m
+[1;32m     87[0m     [0mprint[0m[0;34m([0m[0;34m'took this long:'[0m[0;34m,[0m [0mstr[0m[0;34m([0m[0mdiff[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     88[0m [0;34m[0m[0m
+[0;32m---> 89[0;31m     [0mdbf[0m[0;34m.[0m[0mwrite_backup_file[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     90[0m     [0mgc[0m[0;34m.[0m[0mcollect[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     91[0m [0;34m[0m[0m
+
+[0;32m~/github/dice_codingskills_project/dice_code/db_functions.py[0m in [0;36mwrite_backup_file[0;34m(backup_dir)[0m
+[1;32m     22[0m         [0;31m# list all files, and remove all but most recent[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     23[0m         [0mlist_of_files[0m [0;34m=[0m [0mglob[0m[0;34m.[0m[0mglob[0m[0;34m([0m[0;34m'../db_backups/*.gz'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 24[0;31m         [0mlatest_file[0m [0;34m=[0m [0mmax[0m[0;34m([0m[0mlist_of_files[0m[0;34m,[0m [0mkey[0m[0;34m=[0m[0mos[0m[0;34m.[0m[0mpath[0m[0;34m.[0m[0mgetctime[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     25[0m         [0;32mfor[0m [0mf[0m [0;32min[0m [0mlist_of_files[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     26[0m             [0;32mif[0m [0mf[0m [0;34m!=[0m [0mfilename[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mValueError[0m: max() arg is an empty sequence
+
+
+
+
+Do you really want to exit ([y]/n)? 
