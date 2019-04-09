@@ -129,6 +129,25 @@ def segment_jobs(job_postings, search_term='data science'):
                 relevant_jobs.append(j)
             else:
                 non_relevant_jobs.append(j)
+        elif search_term == 'data engineer':
+            de_terms = ['data engineer',
+                        'data warehouse engineer',
+                        'data platform engineer',
+                        'big data software engineer',
+                        'data science engineer',
+                        'hadoop developer',
+                        'big data',
+                        'data platform engineer',
+                        'data warehouse engineer']
+            non_relevant = True
+            for term in de_terms:
+                if term in title:
+                    relevant_jobs.append(j)
+                    non_relevant = False
+                    break
+
+            if non_relevant:
+                non_relevant_jobs.append(j)
         else:
             if search_term in title:
                 relevant_jobs.append(j)
