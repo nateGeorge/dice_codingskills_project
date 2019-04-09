@@ -58,7 +58,7 @@ from bokeh.models import (
   GMapPlot, GMapOptions, ColumnDataSource, Circle, DataRange1d, PanTool, WheelZoomTool, BoxSelectTool
 )
 
-BASE_URL = 'https://www.dice.com/jobs/q-{}-startPage-{}-jobs'
+BASE_URL = 'https://www.dice.com/jobs/q-{}-jobs?p={}'
 page = 1 # page number, 1-indexed
 search_term = 'data science'
 DB_NAME = 'dice_jobs'
@@ -88,7 +88,7 @@ def create_url(search_term, base_url=BASE_URL, page=1):
     formatted url string
     """
     search_term = clean_search_term(search_term)
-    search_term = re.sub('\s', '_', search_term) # sub spaces with underscore
+    search_term = re.sub('\s', '%20', search_term) # sub spaces with url space symbol
     # AND means it must find all words
     return BASE_URL.format(search_term, str(page))# + '&sort=2'# this last bit sorts by job title
 
@@ -1642,6 +1642,7 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
             # print [j['jobTitle'] for j in non_relevant_jobs]
             if len(relevant_jobs) == 0:
                 consecutive_blank_pages += 1
+                print('no relevant jobs with job title found in page')
             else:
                 consecutive_blank_pages = 0
             if consecutive_blank_pages == 6: # lower the limit, used to be 10
@@ -1656,6 +1657,7 @@ def continuous_scrape(search_term='data science', use_mongo=True, debug=False):
                 consecutive_same_page = 0
 
             if consecutive_same_page == 3:
+                print('3 consecutive same pages')
                 break
 
             last_page = job_postings
