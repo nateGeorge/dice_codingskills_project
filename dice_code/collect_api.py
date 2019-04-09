@@ -38,7 +38,7 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib import ticker
-from . import word_vectors as wv
+#from . import word_vectors as wv
 try:
     from bokeh.mpl import to_bokeh
     from bokeh.charts import Bar, output_file, show, save
