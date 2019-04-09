@@ -101,7 +101,7 @@ Bar chart of top desired skills.
 df.plot.bar(x='skill', y='pct jobs with skill', figsize=(20, 20), legend=False)
 plt.xlabel('skill')
 plt.ylabel('percent of job with skill')
-plt.title('indeed.com "data engineering" top skills')
+plt.title('indeed.com "data engineer" top skills')
 plt.tight_layout()
 plt.show()
 
