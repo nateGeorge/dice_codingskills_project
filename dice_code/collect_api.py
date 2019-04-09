@@ -11,11 +11,15 @@
 # hr, hourly, hour, annual, annualy, etc
 
 # need this for flask to work (multiprocessing issue)
-import matplotlib
-try:
-    matplotlib.use('gdk')
-except:
-    pass
+import sys
+if sys.version_info[0] == 2:
+    import matplotlib
+    try:
+        # only for python2
+        # was a fix for plots not working
+        matplotlib.use('gdk')
+    except:
+        pass
 
 import os
 import psutil
