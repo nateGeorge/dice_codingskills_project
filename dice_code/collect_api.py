@@ -135,10 +135,8 @@ def segment_jobs(job_postings, search_term='data science'):
                         'data platform engineer',
                         'big data software engineer',
                         'data science engineer',
-                        'hadoop developer',
-                        'big data',
-                        'data platform engineer',
-                        'data warehouse engineer']
+                        'hadoop developer']
+                        #'big data',  # too many results for 'big data'...made it it's own category.
             non_relevant = True
             for term in de_terms:
                 if term in title:

@@ -62,7 +62,9 @@ def full_scrape():
             'C#',
             'nodejs',
             'analyst',
-            'gis']
+            'gis',
+            'big data',
+            'hadoop developer']
 
     for j in jobs:
         ca.continuous_scrape(search_term=j, debug=True)
