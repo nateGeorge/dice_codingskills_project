@@ -28,6 +28,16 @@ def write_backup_file(backup_dir='/home/nate/Dropbox/data/dice_jobs/'):
 
 
 def restore_backup_file(backup_dir='/home/nate/Dropbox/data/dice_jobs/'):
+    """
+    gets latest file from backup directory and restores to mongodb
+    """
     list_of_files = glob.glob(backup_dir + '*.gz')
     latest_file = max(list_of_files, key=os.path.getctime)
     os.system('mongorestore --gzip --archive={} --db dice_jobs'.format(latest_file))
+
+
+def export_to_csv(search_term='data science'):
+    """
+    exports data from a search term to a csv
+    """
+    pass
