@@ -334,12 +334,17 @@ def scrape_a_job(job_json=None, search_term='data science', insert_mongo=True, d
     if insert_mongo:
         clean_skills = clean_db_skills(skills)
         clean_skills = [c.capitalize() for c in clean_skills]
+        if len(tele_travel) == 1:
+            travel = None
+        elif len(tele_travel) == 2:
+            travel = tele_travel[1]
+
         entry_dict = {'skills': skills,
                         'clean_skills': clean_skills,
                         'emp_type': emp_type,
                         'salary': salary,
                         'telecommute': tele_travel[0],
-                        'travel': tele_travel[1],
+                        'travel': travel,
                         'description': descr,
                         'posted_text': posted,
                         'location': location,
