@@ -21,7 +21,10 @@ def write_backup_file(backup_dir='/home/nate/Dropbox/data/dice_jobs/'):
     if os.path.exists(filename):
         # list all files, and remove all but most recent
         list_of_files = glob.glob('../db_backups/*.gz')
-        latest_file = max(list_of_files, key=os.path.getctime)
+        try:
+            latest_file = max(list_of_files, key=os.path.getctime)
+        except:
+            pass
         for f in list_of_files:
             if f != filename:
                 os.remove(f)
